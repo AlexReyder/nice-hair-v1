@@ -33,7 +33,7 @@ $nh_has_how_to_use_text = (bool) ($nh_how_to_use['has_text'] ?? false);
 $nh_has_how_to_use = (bool) ($nh_how_to_use['has_content'] ?? false);
 $nh_how_to_use_drawer_id = 'ready-how-to-use-' . (string) $product->get_id();
 
-$nh_shop_url = get_permalink(wc_get_page_id('shop'));
+$nh_shop_url = trailingslashit((string) get_permalink(wc_get_page_id('shop'))) . '#catalog';
 $nh_ready_term = get_term_by('slug', 'ready-to-install', 'product_cat');
 $nh_ready_term = $nh_ready_term instanceof WP_Term ? $nh_ready_term : null;
 $nh_product_terms = wp_get_post_terms($product->get_id(), 'product_cat');

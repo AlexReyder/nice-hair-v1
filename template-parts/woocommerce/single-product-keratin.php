@@ -13,7 +13,7 @@ global $product;
 
 $nh_sku       = $product->get_sku();
 $nh_video_url = function_exists('get_field') ? get_field('nh_product_video_url') : '';
-$nh_shop_url  = get_permalink(wc_get_page_id('shop'));
+$nh_shop_url = trailingslashit((string) get_permalink(wc_get_page_id('shop'))) . '#catalog';
 
 $nh_product_terms = wp_get_post_terms($product->get_id(), 'product_cat');
 $nh_product_terms = is_array($nh_product_terms) ? $nh_product_terms : [];

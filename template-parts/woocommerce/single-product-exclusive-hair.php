@@ -32,7 +32,7 @@ $nh_has_how_to_use_text = (bool) ($nh_how_to_use['has_text'] ?? false);
 $nh_has_how_to_use = (bool) ($nh_how_to_use['has_content'] ?? false);
 $nh_how_to_use_drawer_id = 'exclusive-how-to-use-' . (string) $product->get_id();
 
-$nh_shop_url = get_permalink(wc_get_page_id('shop'));
+$nh_shop_url = trailingslashit((string) get_permalink(wc_get_page_id('shop'))) . '#catalog';
 
 $nh_exclusive_term = get_term_by('slug', 'exclusive-hair', 'product_cat');
 $nh_exclusive_term = $nh_exclusive_term instanceof WP_Term ? $nh_exclusive_term : null;

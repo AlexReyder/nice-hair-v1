@@ -32,7 +32,7 @@ $nh_price_decimals = wc_get_price_decimals();
 $nh_currency_symbol = get_woocommerce_currency_symbol();
 
 // URLs for breadcrumb.
-$nh_shop_url  = get_permalink(wc_get_page_id('shop'));
+$nh_shop_url = trailingslashit((string) get_permalink(wc_get_page_id('shop'))) . '#catalog';
 $nh_tools_url = get_term_link('tools', 'product_cat');
 if (is_wp_error($nh_tools_url)) {
     $nh_tools_url = '';

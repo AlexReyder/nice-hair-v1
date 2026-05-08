@@ -166,7 +166,11 @@ $nh_available_color_keys = array_values(array_filter(array_map(
     $nh_color_options
 )));
 
-if (($nh_selected_color_key === '' || ! in_array($nh_selected_color_key, $nh_available_color_keys, true)) && $nh_available_color_keys !== []) {
+if ($nh_available_color_keys === []) {
+    $nh_selected_color_key = '';
+    $nh_selected_color = null;
+    $nh_selected_color_image = null;
+} elseif ($nh_selected_color_key === '' || ! in_array($nh_selected_color_key, $nh_available_color_keys, true)) {
     $nh_selected_color_key = (string) $nh_available_color_keys[0];
 }
 $nh_selected_length = (string) ($nh_selected_values['length'] ?? '');
@@ -184,7 +188,7 @@ $nh_product_form_surcharge = isset($nh_product_form['surcharge_per_gram']) && is
     ? (float) $nh_product_form['surcharge_per_gram']
     : null;
 
-$nh_shop_url = get_permalink(wc_get_page_id('shop'));
+$nh_shop_url = trailingslashit((string) get_permalink(wc_get_page_id('shop'))) . '#catalog';
 $nh_contact_phone = nice_hair_get_contact_phone_display('shop');
 $nh_contact_phone_link = nice_hair_get_contact_phone_link('shop');
 $nh_contact_address = nice_hair_get_contact_address_plain('shop');
