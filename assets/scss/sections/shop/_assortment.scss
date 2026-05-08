@@ -1,0 +1,282 @@
+@use "../../abstracts/mixins" as *;
+
+.nh-shop-assortment {
+  position: relative;
+  isolation: isolate;
+  margin: 0 !important;
+  padding-top: var(--section-spacing);
+  background: var(--bg-color);
+  color: #fff;
+  overflow: hidden;
+
+  .is-layout-constrained
+    > :where(:not(.alignleft):not(.alignright):not(.alignfull)) {
+    max-width: none !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+  }
+
+  &__shell {
+    @include shell;
+  }
+
+  &__header {
+    display: block;
+  }
+
+  &__top {
+    display: flex;
+    justify-content: space-between;
+    gap: 40px;
+    align-items: start;
+  }
+
+  &__intro {
+    min-width: 0;
+    max-width: 560px;
+  }
+
+  &__eyebrow {
+    @include eyebrow;
+  }
+
+  &__divider {
+    @include divider;
+    margin-bottom: 28px;
+  }
+
+  &__title {
+    margin: 0;
+    // max-width: ch;
+    @include block_heading;
+  }
+
+  &__description {
+    margin: 34px 0 0;
+    max-width: 370px;
+    font-size: var(--text-size);
+    font-weight: 400;
+    line-height: 1.08;
+    color: var(--text-color-grey);
+  }
+
+  &__tools {
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    padding-top: var(--heading-offset);
+  }
+
+  &__nav {
+    display: flex;
+    gap: 14px;
+    margin-top: 120px;
+  }
+
+  &__nav-btn {
+    width: 54px;
+    height: 54px;
+    border-radius: 50%;
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    background: transparent;
+    color: #fff;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    cursor: pointer;
+    transition:
+      background-color 0.2s ease,
+      border-color 0.2s ease,
+      opacity 0.2s ease;
+
+    &:hover,
+    &:focus-visible {
+      background: rgba(255, 255, 255, 0.08);
+      border-color: #fff;
+      outline: none;
+    }
+
+    &.swiper-button-disabled {
+      opacity: 0.38;
+      pointer-events: none;
+    }
+  }
+
+  &__nav-icon {
+    display: block;
+    width: 14px;
+    height: 14px;
+    background-image: url("data:image/svg+xml,%3Csvg width='14' height='14' viewBox='0 0 14 14' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M5 2L11 7L5 12' stroke='%23ffffff' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round' fill='none'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 14px 14px;
+  }
+
+  &__nav-btn--prev &__nav-icon {
+    transform: scaleX(-1);
+  }
+
+  &__slider {
+    margin-top: 72px;
+    overflow: visible;
+  }
+
+  &__track {
+    align-items: flex-start;
+  }
+
+  &__slide {
+    height: auto;
+    display: flex;
+  }
+
+  &__card {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    text-decoration: none;
+    color: #fff;
+  }
+
+  &__media {
+    position: relative;
+    display: block;
+    overflow: hidden;
+    border-radius: 26px;
+    aspect-ratio: 252 / 220;
+    background: rgba(255, 255, 255, 0.06);
+  }
+
+  &__image {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.45s ease;
+  }
+
+  &__label {
+    display: block;
+    padding: 0 6px;
+    text-align: center;
+    font-size: clamp(18px, 1.5vw, 24px);
+    font-weight: 400;
+    line-height: 0.98;
+    letter-spacing: -0.04em;
+    color: #fff;
+    transition: color 0.2s ease;
+    text-wrap: balance;
+  }
+
+  &__card:hover &__image,
+  &__card:focus-visible &__image {
+    transform: scale(1.04);
+  }
+
+  &__card:hover &__label,
+  &__card:focus-visible &__label {
+    color: #c7ad9d;
+  }
+
+  &__empty {
+    margin-top: 48px;
+    max-width: 420px;
+    font-size: 15px;
+    line-height: 1.35;
+    color: rgba(255, 255, 255, 0.68);
+  }
+}
+
+@media (max-width: 1279px) {
+  .nh-shop-assortment {
+    &__top {
+      flex-direction: column;
+      gap: 34px;
+    }
+
+    &__tools {
+      padding-top: 0;
+      flex-direction: row;
+      align-items: center;
+      justify-content: flex-end;
+    }
+
+    &__nav {
+      margin-top: 0;
+    }
+
+    &__title {
+      max-width: 11ch;
+      font-size: clamp(46px, 7vw, 66px);
+    }
+
+    &__intro {
+      max-width: none;
+    }
+
+    &__description {
+      max-width: 430px;
+      margin-top: 24px;
+      font-size: 16px;
+    }
+
+    &__slider {
+      margin-top: 52px;
+    }
+
+    &__media {
+      border-radius: 22px;
+    }
+
+    &__label {
+      font-size: clamp(20px, 3vw, 28px);
+    }
+  }
+}
+
+@media (max-width: 767px) {
+  .nh-shop-assortment {
+    padding-top: 72px;
+    padding-bottom: 72px;
+
+    &__divider {
+      margin-bottom: 22px;
+    }
+
+    &__title {
+      max-width: 9ch;
+      font-size: clamp(40px, 12vw, 56px);
+    }
+
+    &__description {
+      max-width: 100%;
+      margin-top: 20px;
+      font-size: 15px;
+      line-height: 1.18;
+    }
+
+    &__nav {
+      gap: 10px;
+    }
+
+    &__nav-btn {
+      width: 46px;
+      height: 46px;
+    }
+
+    &__slider {
+      margin-top: 40px;
+    }
+
+    &__media {
+      border-radius: 20px;
+    }
+
+    &__label {
+      font-size: 22px;
+    }
+  }
+}

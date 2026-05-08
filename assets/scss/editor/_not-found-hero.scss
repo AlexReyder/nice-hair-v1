@@ -1,0 +1,287 @@
+.editor-styles-wrapper {
+  .nh-404-hero,
+  .nh-thank-you-hero {
+    position: relative;
+    min-height: auto !important;
+    margin: 0 !important;
+    overflow: hidden;
+
+    .wp-block-cover__inner-container {
+      min-height: auto !important;
+      padding: 0 !important;
+    }
+
+    .wp-block-cover__background {
+      opacity: 0.72 !important;
+    }
+
+    .wp-block-cover__image-background {
+      opacity: 1 !important;
+      visibility: visible !important;
+    }
+
+    .wp-block-group,
+    .wp-block-buttons,
+    .wp-block-button,
+    p,
+    h1,
+    figure {
+      margin-top: 0;
+      margin-bottom: 0;
+    }
+
+    .is-layout-constrained
+      > :where(:not(.alignleft):not(.alignright):not(.alignfull)) {
+      max-width: none !important;
+      margin-left: 0 !important;
+      margin-right: 0 !important;
+    }
+
+    &__shell {
+      position: relative;
+      width: min(calc(100% - 48px), 1528px);
+      min-height: auto;
+      margin: 0 auto;
+      padding: 28px 0 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+
+      &::before {
+        content: "NICE HAIR";
+        position: absolute;
+        top: 8px;
+        left: 0;
+        font-family: "Inter Tight", sans-serif;
+        font-size: clamp(88px, 14vw, 180px);
+        font-weight: 400;
+        line-height: 0.86;
+        letter-spacing: -0.055em;
+        color: rgba(255, 255, 255, 0.03);
+        white-space: nowrap;
+        pointer-events: none;
+        user-select: none;
+      }
+    }
+
+    &__top,
+    &__content,
+    &__bottom {
+      position: relative;
+      z-index: 1;
+    }
+
+    &__top {
+      display: flex;
+      justify-content: flex-end;
+      align-items: flex-start;
+      gap: 20px;
+    }
+
+    &__contact {
+      margin-left: 0;
+      text-align: right;
+    }
+
+    &__phone,
+    &__address,
+    &__title,
+    &__text,
+    &__feature-text,
+    &__hours-text,
+    &__social {
+      font-family: "Inter Tight", sans-serif;
+    }
+
+    &__phone {
+      font-size: 24px;
+      font-weight: 400;
+      line-height: 1;
+      letter-spacing: -0.04em;
+
+      a {
+        color: #fff !important;
+        text-decoration: none !important;
+      }
+    }
+
+    &__address {
+      margin-top: 8px;
+      font-size: 14px;
+      font-weight: 400;
+      line-height: 1.12;
+      letter-spacing: -0.03em;
+      color: rgba(255, 255, 255, 0.78) !important;
+    }
+
+    &__content {
+      display: grid;
+      grid-template-columns: minmax(240px, 1fr) minmax(360px, 520px);
+      gap: 32px;
+      align-items: start;
+      padding-bottom: 0;
+    }
+
+    &__main {
+      grid-column: 2;
+      justify-self: stretch;
+      width: 100%;
+      max-width: 520px;
+      padding-top: 80px;
+    }
+
+    &__title {
+      max-width: 420px;
+      font-size: clamp(40px, 5vw, 56px);
+      font-weight: 400;
+      line-height: 0.95;
+      letter-spacing: -0.055em;
+      color: #fff !important;
+      margin-bottom: 40px !important;
+    }
+
+    &__text {
+      max-width: 420px;
+      margin-top: 16px;
+      font-size: 18px;
+      font-weight: 400;
+      line-height: 1.08;
+      letter-spacing: -0.03em;
+      color: rgba(255, 255, 255, 0.78) !important;
+      margin-bottom: 40px !important;
+    }
+
+    &__actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      margin-top: 24px;
+
+      .wp-block-button {
+        margin: 0;
+      }
+    }
+
+    &__bottom {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: end;
+      gap: 24px 32px;
+
+      &::before {
+        content: "";
+        position: absolute;
+        top: 2px;
+        left: 0;
+        right: 0;
+        height: 1px;
+        background: rgba(255, 255, 255, 0.1);
+        pointer-events: none;
+      }
+    }
+
+    &__features {
+      display: grid;
+      grid-template-columns: repeat(3, auto);
+      gap: 26px;
+    }
+
+    &__feature,
+    &__hours {
+      position: relative;
+      padding-top: 22px;
+
+      &::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 56px;
+        height: 6px;
+        background: #fff;
+      }
+    }
+
+    &__feature-text,
+    &__hours-text {
+      font-size: 14px;
+      font-weight: 400;
+      line-height: 1.08;
+      letter-spacing: -0.03em;
+      color: rgba(255, 255, 255, 0.72) !important;
+    }
+
+    &__socials {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px 20px;
+      padding-bottom: 0;
+    }
+
+    &__social {
+      font-size: 14px;
+      font-weight: 400;
+      line-height: 1;
+      letter-spacing: -0.03em;
+      color: rgba(255, 255, 255, 0.72) !important;
+
+      a {
+        color: #fff !important;
+        text-decoration: none !important;
+      }
+    }
+  }
+}
+
+@media (max-width: 781px) {
+  .editor-styles-wrapper {
+    .nh-404-hero {
+      &__shell {
+        width: min(calc(100% - 32px), 100%);
+        padding: 24px 0 20px;
+
+        &::before {
+          font-size: 88px;
+        }
+      }
+
+      &__top {
+        gap: 14px;
+      }
+
+      &__content {
+        grid-template-columns: 1fr;
+        gap: 20px;
+      }
+
+      &__main {
+        grid-column: auto;
+        padding-top: 0;
+      }
+
+      &__bottom {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 18px;
+
+        &::before {
+          display: none;
+        }
+      }
+
+      &__features,
+      &__hours {
+        display: none;
+      }
+
+      &__title {
+        font-size: clamp(34px, 9vw, 52px);
+      }
+
+      &__text {
+        font-size: 16px;
+      }
+    }
+  }
+}

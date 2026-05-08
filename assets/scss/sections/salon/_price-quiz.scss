@@ -1,0 +1,793 @@
+@use "../../abstracts/mixins" as *;
+
+.nh-salon-price-quiz {
+  position: relative;
+  isolation: isolate;
+  margin: 0 !important;
+  padding-top: 0;
+  padding-bottom: var(--section-spacing);
+  background: var(--bg-color);
+  color: #fff;
+  overflow: hidden;
+
+  .is-layout-constrained
+    > :where(:not(.alignleft):not(.alignright):not(.alignfull)) {
+    max-width: none !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+  }
+
+  &__shell {
+    @include shell;
+  }
+
+  // Row 1 — eyebrow + divider (full shell width)
+  &__top {
+    position: relative;
+  }
+
+  &__eyebrow {
+    @include eyebrow;
+  }
+
+  &__divider {
+    @include divider;
+  }
+
+  // Row 2 — heading left, quiz card right
+  &__main {
+    margin-top: 60px;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 750px);
+    column-gap: 30px;
+    align-items: stretch;
+  }
+
+  &__intro-col {
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__title {
+    margin: 0;
+    font-size: var(--heading-size);
+    font-weight: 500;
+    line-height: 0.98;
+    letter-spacing: -0.03em;
+    color: var(--heading-color);
+  }
+
+  &__text {
+    margin: 44px 0 0;
+    margin-top: var(--heading-offset);
+    max-width: 440px;
+    font-size: var(--text-size);
+    font-weight: 400;
+    line-height: 1.2;
+    color: var(--text-color-grey);
+
+    p {
+      margin: 0 !important;
+
+      + p {
+        margin-top: 10px !important;
+      }
+    }
+  }
+
+  // RIGHT column: quiz card
+  &__card {
+    position: relative;
+    min-width: 0;
+    min-height: 680px;
+    border-radius: 32px;
+    overflow: hidden;
+    background-color: rgba(255, 255, 255, 0.04);
+    background-size: cover;
+    background-position: center;
+  }
+
+  &__card-tint {
+    position: absolute;
+    inset: 0;
+    // background: rgba(10, 10, 10, 0.62);
+    border-radius: inherit;
+    pointer-events: none;
+  }
+
+  &__card-body {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    height: 100%;
+    padding: 56px 56px 48px;
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__card-header {
+    position: relative;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    column-gap: 40px;
+    align-items: start;
+  }
+
+  &__back {
+    position: absolute;
+    left: 0;
+    top: -6px;
+    background: transparent;
+    border: none;
+    color: rgba(255, 255, 255, 0.55);
+    font: inherit;
+    font-size: 15px;
+    cursor: pointer;
+    padding: 4px 0;
+    letter-spacing: 0.02em;
+    transition: color 0.2s ease;
+
+    &:hover,
+    &:focus-visible {
+      color: #fff;
+      outline: none;
+    }
+  }
+
+  &__stepper {
+    margin: 0;
+    font-size: 16px;
+    color: rgba(255, 255, 255, 0.6);
+    padding-left: 52px; // leave room for absolute back button
+  }
+
+  &__intro {
+    margin: 0;
+    font-size: clamp(22px, 1.9vw, 30px);
+    line-height: 1.15;
+    color: #fff;
+    text-align: right;
+    letter-spacing: -0.01em;
+  }
+
+  &__card-divider {
+    margin: 32px 0 56px;
+    height: 1px;
+    background: rgba(255, 255, 255, 0.18);
+  }
+
+  &__steps {
+    flex: 1 1 auto;
+    min-height: 0;
+  }
+
+  &__step {
+    display: none;
+    border: 0;
+    padding: 0;
+    margin: 0;
+  }
+
+  // Show only the active step via attribute matching on the root.
+  // Active step uses a 2-column grid: question on the left, options/controls on the right.
+  &[data-nh-price-quiz-step="1"] &__step[data-step="1"],
+  &[data-nh-price-quiz-step="2"] &__step[data-step="2"],
+  &[data-nh-price-quiz-step="3"] &__step[data-step="3"],
+  &[data-nh-price-quiz-step="4"] &__step[data-step="4"],
+  &[data-nh-price-quiz-step="contact"] &__step[data-step="contact"] {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    column-gap: 48px;
+    align-items: start;
+  }
+
+  // Submitted state — hide all steps and the footer, show success panel.
+  &--submitted &__step,
+  &--submitted &__card-header,
+  &--submitted &__card-divider,
+  &--submitted &__card-footer,
+  &--submitted &__hint {
+    display: none !important;
+  }
+
+  &--submitted &__success {
+    display: flex !important;
+  }
+
+  &__question {
+    display: block;
+    float: none;
+    padding: 0;
+    margin: 0;
+    font-size: clamp(26px, 2.2vw, 36px);
+    font-weight: 400;
+    line-height: 1.05;
+    color: #fff;
+    letter-spacing: -0.02em;
+  }
+
+  &__options {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 18px;
+  }
+
+  &__option {
+    display: inline-flex;
+    align-items: center;
+    gap: 14px;
+    cursor: pointer;
+    color: rgba(255, 255, 255, 0.85);
+    font-size: 16px;
+    line-height: 1.2;
+    user-select: none;
+
+    input[type="checkbox"],
+    input[type="radio"] {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      margin: -1px;
+      padding: 0;
+      overflow: hidden;
+      clip: rect(0 0 0 0);
+      border: 0;
+    }
+  }
+
+  &__option-box {
+    flex: 0 0 22px;
+    width: 22px;
+    height: 22px;
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    border-radius: 4px;
+    background: transparent;
+    position: relative;
+    transition:
+      border-color 0.2s ease,
+      background 0.2s ease;
+  }
+
+  &__option input[type="radio"] + &__option-box {
+    border-radius: 50%;
+  }
+
+  // Checked state — gold fill + inner marker.
+  &__option input:checked + &__option-box {
+    background: var(--heading-color, #caa67a);
+    border-color: var(--heading-color, #caa67a);
+  }
+
+  &__option input[type="checkbox"]:checked + &__option-box::after {
+    content: "";
+    position: absolute;
+    inset: 4px 5px 5px 4px;
+    background: url("data:image/svg+xml,%3Csvg width='14' height='12' viewBox='0 0 14 12' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 6.5L5 10L13 1.5' stroke='%23121212' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E")
+      no-repeat center/contain;
+  }
+
+  &__option input[type="radio"]:checked + &__option-box::after {
+    content: "";
+    position: absolute;
+    inset: 5px;
+    border-radius: 50%;
+    background: #121212;
+  }
+
+  &__option input:focus-visible + &__option-box {
+    outline: 2px solid rgba(202, 166, 122, 0.6);
+    outline-offset: 2px;
+  }
+
+  // Step 4 — photo upload
+  &__upload {
+    display: flex;
+    flex-direction: column;
+    gap: 26px;
+  }
+
+  &__upload-hint {
+    margin: 0;
+    max-width: 360px;
+    font-size: 13px;
+    line-height: 1.3;
+    color: rgba(255, 255, 255, 0.6);
+    margin-left: auto;
+    text-align: right;
+  }
+
+  &__upload-row {
+    display: flex;
+    gap: 18px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+
+  &__upload-btn {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 14px 28px;
+    min-width: 180px;
+    font: inherit;
+    font-size: 14px;
+    letter-spacing: 0.06em;
+    line-height: 1;
+    border-radius: 999px;
+    border: 1px solid rgba(255, 255, 255, 0.6);
+    background: transparent;
+    color: #fff;
+    cursor: pointer;
+    transition:
+      background 0.2s ease,
+      border-color 0.2s ease,
+      color 0.2s ease;
+
+    &:hover,
+    &:focus-visible {
+      border-color: #fff;
+      outline: none;
+    }
+  }
+
+  // Initial state — UPLOAD is primary (gold), NO PHOTOS is secondary.
+  &__upload-btn--primary {
+    background: var(--heading-color, #caa67a);
+    border-color: var(--heading-color, #caa67a);
+    color: #1a1a1a;
+
+    &:hover,
+    &:focus-visible {
+      background: #d4b284;
+      border-color: #d4b284;
+    }
+  }
+
+  &__upload-btn--secondary {
+    background: transparent;
+    border-color: rgba(202, 166, 122, 0.6);
+    color: rgba(202, 166, 122, 0.9);
+  }
+
+  // After photos uploaded — primary drops back to outline + badge shown.
+  &[data-nh-pq-photos="uploaded"] &__upload-btn--primary {
+    background: transparent;
+    border-color: rgba(255, 255, 255, 0.6);
+    color: #fff;
+  }
+
+  &[data-nh-pq-photos="uploaded"] &__upload-btn--secondary {
+    color: #fff;
+    border-color: rgba(255, 255, 255, 0.6);
+  }
+
+  // NO PHOTOS chosen — swap primary/secondary colouring.
+  &[data-nh-pq-photos="skipped"] &__upload-btn--primary {
+    background: transparent;
+    border-color: rgba(202, 166, 122, 0.6);
+    color: rgba(202, 166, 122, 0.9);
+  }
+
+  &[data-nh-pq-photos="skipped"] &__upload-btn--secondary {
+    background: var(--heading-color, #caa67a);
+    border-color: var(--heading-color, #caa67a);
+    color: #1a1a1a;
+  }
+
+  &__upload-badge {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    min-width: 22px;
+    height: 22px;
+    padding: 0 6px;
+    border-radius: 999px;
+    background: var(--heading-color, #caa67a);
+    color: #1a1a1a;
+    font-size: 12px;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+
+    &[hidden] {
+      display: none;
+    }
+  }
+
+  &__upload-or {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+  }
+
+  &__upload-note {
+    margin: 0;
+    font-size: 13px;
+    color: rgba(255, 255, 255, 0.55);
+    line-height: 1.2;
+  }
+
+  &__file-input {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    border: 0;
+  }
+
+  // Contact
+  &__contact-fields {
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+    max-width: 420px;
+    margin-left: auto;
+  }
+
+  &__field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  &__field-label {
+    font-size: 12px;
+    letter-spacing: 0.12em;
+    color: rgba(255, 255, 255, 0.55);
+    text-transform: uppercase;
+  }
+
+  &__input {
+    background: transparent;
+    border: 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+    color: #fff;
+    font: inherit;
+    font-size: 18px;
+    padding: 8px 0 10px;
+    outline: none;
+    border-radius: 0;
+
+    &:focus {
+      border-bottom-color: #fff;
+    }
+
+    &::placeholder {
+      color: rgba(255, 255, 255, 0.35);
+    }
+  }
+
+  // Hint row (inline errors)
+  &__hint {
+    margin: 22px 0 0;
+    font-size: 13px;
+    line-height: 1.3;
+    color: #f4b8b8;
+    white-space: pre-line;
+
+    &[hidden] {
+      display: none;
+    }
+  }
+
+  // Footer (Next + disclaimer)
+  &__card-footer {
+    margin-top: auto;
+    padding-top: 40px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  &__next {
+    align-self: flex-start;
+    padding: 16px 44px;
+    min-width: 180px;
+    font: inherit;
+    font-size: 14px;
+    letter-spacing: 0.1em;
+    line-height: 1;
+    border-radius: 999px;
+    border: 1px solid var(--heading-color, #caa67a);
+    background: var(--heading-color, #caa67a);
+    color: #1a1a1a;
+    cursor: pointer;
+    transition:
+      background 0.2s ease,
+      border-color 0.2s ease;
+
+    &:hover,
+    &:focus-visible {
+      background: #d4b284;
+      border-color: #d4b284;
+      outline: none;
+    }
+
+    &[disabled] {
+      opacity: 0.6;
+      cursor: wait;
+    }
+  }
+
+  &[data-nh-price-quiz-step="contact"] &__next {
+    background: transparent;
+    color: #fff;
+    border-color: rgba(255, 255, 255, 0.55);
+    padding-right: 60px;
+    position: relative;
+
+    &::after {
+      content: "";
+      position: absolute;
+      top: 50%;
+      right: 24px;
+      width: 16px;
+      height: 16px;
+      transform: translateY(-50%);
+      background: url("data:image/svg+xml,%3Csvg width='16' height='16' viewBox='0 0 16 16' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M6 3L11 8L6 13' stroke='%23ffffff' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E")
+        no-repeat center/contain;
+    }
+  }
+
+  &__disclaimer {
+    margin: 0;
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.5);
+    line-height: 1.3;
+    max-width: 320px;
+
+    a {
+      color: rgba(255, 255, 255, 0.75);
+      text-decoration: underline;
+    }
+
+    &[hidden] {
+      display: none;
+    }
+  }
+
+  // Success state
+  &__success {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 40px 20px;
+    gap: 20px;
+    min-height: 340px;
+  }
+
+  &__success-icon {
+    width: 64px;
+    height: 64px;
+    color: var(--heading-color, #caa67a);
+  }
+
+  &__success-text {
+    margin: 0;
+    font-size: clamp(20px, 1.8vw, 26px);
+    line-height: 1.3;
+    color: #fff;
+    max-width: 460px;
+  }
+
+  &__success-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 14px 32px;
+    background: var(--heading-color, #caa67a);
+    color: #1a1a1a;
+    border-radius: 999px;
+    text-decoration: none;
+    font-size: 14px;
+    letter-spacing: 0.08em;
+    transition: background 0.2s ease;
+
+    &:hover,
+    &:focus-visible {
+      background: #d4b284;
+      outline: none;
+    }
+
+    &[hidden] {
+      display: none;
+    }
+  }
+
+  // Honeypot — hidden from real users.
+  &__hp {
+    position: absolute !important;
+    left: -9999px !important;
+    top: -9999px !important;
+    width: 1px !important;
+    height: 1px !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+  }
+
+  // Back button hidden on step 1
+  &[data-nh-price-quiz-step="1"] &__back {
+    visibility: hidden;
+  }
+}
+
+// Tablet
+@media (max-width: 1279px) {
+  .nh-salon-price-quiz {
+    &__shell {
+      @include shell;
+      padding-top: 60px;
+    }
+
+    &__main {
+      grid-template-columns: 1fr;
+      margin-top: 40px;
+      row-gap: 40px;
+    }
+
+    &__text {
+      margin-top: 28px;
+      max-width: none;
+    }
+
+    &__title {
+      font-size: clamp(44px, 7vw, 64px);
+    }
+
+    // Step grid collapses to single column on tablet.
+    &[data-nh-price-quiz-step="1"] &__step[data-step="1"],
+    &[data-nh-price-quiz-step="2"] &__step[data-step="2"],
+    &[data-nh-price-quiz-step="3"] &__step[data-step="3"],
+    &[data-nh-price-quiz-step="4"] &__step[data-step="4"],
+    &[data-nh-price-quiz-step="contact"] &__step[data-step="contact"] {
+      grid-template-columns: 1fr;
+      row-gap: 24px;
+    }
+
+    &__card {
+      min-height: 640px;
+    }
+
+    &__card-body {
+      padding: 44px 40px 40px;
+    }
+
+    &__card-header {
+      grid-template-columns: 1fr;
+      row-gap: 14px;
+    }
+
+    &__intro {
+      text-align: left;
+      font-size: clamp(20px, 3vw, 26px);
+    }
+
+    &__card-divider {
+      margin: 28px 0 44px;
+    }
+
+    &__question {
+      margin-bottom: 24px;
+      font-size: clamp(24px, 4vw, 32px);
+    }
+
+    &__upload-hint {
+      text-align: left;
+      margin-left: 0;
+    }
+
+    &__contact-fields {
+      margin-left: 0;
+      max-width: none;
+    }
+  }
+}
+
+// Mobile
+@media (max-width: 767px) {
+  .nh-salon-price-quiz {
+    padding-bottom: calc(var(--section-spacing) * 0.6);
+
+    &__shell {
+      @include shell;
+      padding-top: 40px;
+    }
+
+    &__main {
+      margin-top: 32px;
+      row-gap: 28px;
+    }
+
+    &__title {
+      font-size: clamp(36px, 10vw, 48px);
+    }
+
+    &__text {
+      margin-top: 28px;
+      font-size: 15px;
+    }
+
+    &__card {
+      min-height: 620px;
+      border-radius: 24px;
+    }
+
+    &__card-body {
+      padding: 32px 24px 32px;
+    }
+
+    &__card-header {
+      grid-template-columns: 1fr;
+      row-gap: 18px;
+    }
+
+    &__stepper {
+      padding-left: 0;
+      font-size: 14px;
+    }
+
+    &__back {
+      display: none;
+      position: static;
+      margin-bottom: 8px;
+      padding: 0;
+      font-size: 14px;
+    }
+
+    &__intro {
+      font-size: 18px;
+    }
+
+    &__card-divider {
+      margin: 24px 0 32px;
+    }
+
+    &__question {
+      margin-bottom: 22px;
+      font-size: 26px;
+    }
+
+    &__option {
+      font-size: 15px;
+    }
+
+    &__upload-row {
+      flex-direction: column;
+      align-items: stretch;
+      gap: 16px;
+    }
+
+    &__upload-btn {
+      width: 100%;
+      min-width: 0;
+    }
+
+    &__upload-or {
+      align-items: stretch;
+    }
+
+    &__next {
+      width: 100%;
+      align-self: stretch;
+    }
+
+    &[data-nh-price-quiz-step="contact"] &__next {
+      padding-right: 60px;
+    }
+
+    &__contact-fields {
+      gap: 22px;
+    }
+  }
+}

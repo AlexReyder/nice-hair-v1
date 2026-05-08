@@ -1,0 +1,188 @@
+.nh-salon-bundle {
+  margin: 0 !important;
+  padding-top: var(--section-spacing);
+  background: var(--bg-color);
+  color: #fff;
+  overflow: hidden;
+
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+
+  .wp-block-group,
+  .wp-block-cover,
+  p,
+  h2 {
+    margin-top: 0;
+    margin-bottom: 0;
+  }
+
+  .is-layout-constrained
+    > :where(:not(.alignleft):not(.alignright):not(.alignfull)) {
+    max-width: none !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+  }
+
+  &__shell {
+    position: relative;
+    width: var(--layout-width);
+    margin: 0 auto;
+  }
+
+  &__card {
+    position: relative;
+    // Override Gutenberg's default `.wp-block-cover { display: flex }`.
+    // A flex container whose only child is absolutely-positioned collapses
+    // to 0 height on the frontend, which makes `aspect-ratio` unusable.
+    // Block display lets aspect-ratio compute height = width × 680 / 1528
+    // regardless of in-flow content (the editor gets implicit height
+    // constraints from Gutenberg canvas, so it survives either way).
+    display: block !important;
+    width: 100%;
+    overflow: hidden;
+    border-radius: 32px;
+    // !important to beat any inline style Gutenberg may inject for
+    // wp:cover (historically adds `aspect-ratio: unset` when minHeight
+    // is set — we removed minHeight from the pattern attributes, but
+    // keep this as a hard guarantee in case a legacy post still has it
+    // serialised in its content).
+    aspect-ratio: 1528 / 680 !important;
+    min-height: auto !important;
+    margin: 0 !important;
+    padding: 0 !important; // override Gutenberg's default `padding: 1em`
+
+    // wp:cover dim layer — kept at 0 for Salon Bundle (image used as-is)
+    .wp-block-cover__background {
+      display: none;
+    }
+
+    // Pin the background image explicitly so any client-replaced image
+    // fills the card via object-fit regardless of Gutenberg core defaults.
+    .wp-block-cover__image-background {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: 1 !important;
+      visibility: visible !important;
+    }
+
+    // Stretch the inner-container across the full card so __content's
+    // absolute positioning has a stable reference frame. Using
+    // `position: absolute; inset: 0` avoids percent-height resolution
+    // issues under an aspect-ratio parent.
+    > .wp-block-cover__inner-container {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      max-width: none !important;
+      padding: 0 !important;
+      display: block;
+    }
+  }
+
+  &__content {
+    position: absolute;
+    right: 80px;
+    bottom: 60px;
+    // `min(Npx, calc(100% - gap))` so content shrinks when the card is
+    // narrower than the natural max-width + right padding. Prevents
+    // left-edge clipping (card has overflow: hidden).
+    max-width: min(560px, calc(100% - 160px));
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    z-index: 1;
+  }
+
+  &__description,
+  &__title {
+    font-family: "Inter Tight", sans-serif;
+    margin: 0 !important;
+  }
+
+  &__description {
+    max-width: 420px;
+    font-size: var(--text-size);
+    font-weight: 400;
+    line-height: 1.08;
+    letter-spacing: -0.02em;
+    color: rgba(255, 255, 255, 0.78);
+  }
+
+  &__title {
+    max-width: 560px;
+    font-size: clamp(34px, 3.4vw, 52px);
+    font-weight: 400;
+    line-height: 0.98;
+    letter-spacing: -0.035em;
+    color: #fff;
+  }
+}
+
+@media (max-width: 1279px) {
+  .nh-salon-bundle {
+    &__shell {
+      width: calc(100% - 40px);
+      height: 50vh;
+    }
+
+    &__card {
+      width: 100%;
+      height: 100%;
+      // aspect-ratio: 728 / 700 !important;
+      border-radius: 28px;
+    }
+
+    &__content {
+      right: 40px;
+      bottom: 40px;
+      max-width: min(420px, calc(100% - 80px));
+      gap: 20px;
+    }
+
+    &__description {
+      font-size: 14px;
+      max-width: 360px;
+    }
+
+    &__title {
+      font-size: clamp(30px, 4.5vw, 40px);
+    }
+  }
+}
+
+@media (max-width: 767px) {
+  .nh-salon-bundle {
+    &__shell {
+      width: calc(100% - 8px);
+    }
+
+    &__card {
+      aspect-ratio: 320 / 580 !important;
+      border-radius: 24px;
+    }
+
+    &__content {
+      right: auto;
+      left: 24px;
+      bottom: 32px;
+      max-width: calc(100% - 48px);
+      gap: 20px;
+    }
+
+    &__description {
+      font-size: 13px;
+      max-width: 260px;
+    }
+
+    &__title {
+      font-size: clamp(22px, 7.5vw, 30px);
+    }
+  }
+}

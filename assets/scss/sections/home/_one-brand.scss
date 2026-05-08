@@ -1,0 +1,264 @@
+.nh-home-one-brand {
+  margin: 0 !important;
+  padding-top: var(--section-spacing);
+  background: var(--bg-color);
+  color: #fff;
+  overflow: hidden;
+
+  .is-layout-constrained
+    > :where(:not(.alignleft):not(.alignright):not(.alignfull)) {
+    max-width: none !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+  }
+
+  &__shell {
+    position: relative;
+    width: var(--layout-width);
+    margin: 0 auto;
+  }
+
+  &__intro {
+    position: relative;
+  }
+
+  &__eyebrow {
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 1;
+    color: #fff;
+  }
+
+  &__divider {
+    position: relative;
+    height: 6px !important;
+    margin-top: 20px;
+    margin-bottom: 35px;
+
+    &::before {
+      content: "";
+      position: absolute;
+      inset: 0 auto 0 0;
+      width: 74px;
+      height: 6px;
+      background: #fff;
+    }
+
+    &::after {
+      content: "";
+      position: absolute;
+      top: 2px;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: rgba(255, 255, 255, 0.1);
+    }
+  }
+
+  &__title {
+    max-width: 640px;
+    font-size: var(--heading-size);
+    font-weight: 500;
+    line-height: 0.98;
+    letter-spacing: -0.03em;
+    color: var(--heading-color);
+  }
+
+  &__text {
+    max-width: 520px;
+    margin-top: 60px;
+    font-size: var(--text-size);
+    font-weight: 400;
+    line-height: 1.02;
+    color: var(--text-color-grey);
+  }
+
+  &__cards {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 60px 82px;
+    margin-top: var(--subheading-offset);
+  }
+
+  &__card {
+    min-width: 0;
+    margin-block-start: 0px;
+  }
+
+  &__image {
+    margin: 0;
+    aspect-ratio: 629 / 442;
+    overflow: hidden;
+    border-radius: 32px;
+
+    img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  }
+
+  &__card-body {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-areas:
+      "title actions"
+      "text text";
+    align-items: center;
+    column-gap: 32px;
+    row-gap: 30px;
+    margin-block-start: 0px;
+    margin-top: 35px;
+  }
+
+  &__card-title {
+    grid-area: title;
+    font-size: clamp(28px, 2.3vw, 42px);
+    font-weight: 400;
+    line-height: 0.95;
+    color: #fff;
+  }
+
+  &__card-text {
+    grid-area: text;
+    max-width: 360px;
+    font-size: clamp(17px, 1.2vw, 21px);
+    font-weight: 400;
+    line-height: 1.04;
+    color: rgba(255, 255, 255, 0.72);
+    margin-block-start: 0px;
+  }
+
+  &__card-actions {
+    grid-area: actions;
+    justify-content: flex-end;
+    align-self: center;
+    margin-block-start: 0px;
+
+    .wp-block-button {
+      margin: 0;
+    }
+  }
+}
+
+@media (max-width: 1279px) {
+  .nh-home-one-brand {
+    &__intro {
+      &::after {
+        top: 44px;
+      }
+    }
+
+    &__divider {
+      margin-bottom: 30px;
+    }
+
+    &__title {
+      max-width: 680px;
+      font-size: clamp(52px, 8vw, 64px);
+    }
+
+    &__text {
+      max-width: 560px;
+      margin-top: 60px;
+      font-size: clamp(18px, 2.7vw, 24px);
+    }
+
+    &__card {
+      max-width: 70vw;
+    }
+
+    &__cards {
+      grid-template-columns: 1fr;
+      gap: 60px;
+      margin-top: 60px;
+    }
+
+    &__card-body {
+      margin-top: 28px;
+    }
+
+    &__card-title {
+      font-size: clamp(28px, 4.5vw, 40px);
+    }
+
+    &__card-text {
+      max-width: 360px;
+      font-size: 18px;
+    }
+  }
+}
+
+@media (max-width: 767px) {
+  .nh-home-one-brand {
+    &__intro {
+      &::after {
+        display: none;
+      }
+    }
+
+    &__eyebrow {
+      font-size: 16px;
+    }
+
+    &__divider {
+      margin-top: 16px;
+      margin-bottom: 24px;
+
+      &::before {
+        width: 84px;
+      }
+    }
+
+    &__title {
+      max-width: 310px;
+      font-size: clamp(28px, 11.5vw, 48px);
+      line-height: 0.96;
+    }
+
+    &__text {
+      max-width: 100%;
+      margin-top: 30px;
+      font-size: 16px;
+      line-height: 1.04;
+    }
+
+    &__cards {
+      gap: 54px;
+      margin-top: 60px;
+    }
+
+    &__card {
+      max-width: 100%;
+    }
+
+    &__image {
+      border-radius: 30px;
+    }
+
+    &__card-body {
+      grid-template-columns: 1fr;
+      grid-template-areas:
+        "title"
+        "text"
+        "actions";
+      row-gap: 20px;
+      margin-top: 20px;
+    }
+
+    &__card-title {
+      font-size: clamp(24px, 10.5vw, 40px);
+    }
+
+    &__card-text {
+      max-width: 100%;
+      font-size: 16px;
+      line-height: 1.04;
+    }
+
+    &__card-actions {
+      justify-content: flex-start;
+    }
+  }
+}

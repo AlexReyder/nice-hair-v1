@@ -1,0 +1,305 @@
+// Gutenberg editor scope for the Salon PRICE QUIZ block.
+//
+// Full mirror approach (same as editor/_stylists.scss / _salon-results.scss):
+// this file does NOT @use sections/salon/price-quiz. Everything the editor
+// needs is re-declared here, scoped under .editor-styles-wrapper. Avoids
+// cascade fights with frontend media queries that otherwise trigger
+// tablet/mobile rules inside the editor iframe (760-1100 px wide) and
+// break the preview.
+//
+// JS does NOT run in editor. Only Step 1 is visible because the template
+// hardcodes data-nh-price-quiz-step="1" and the attribute-selector CSS
+// below hides every other step by default.
+
+.editor-styles-wrapper {
+  .wp-block-acf-nh-price-quiz {
+    max-width: none !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    margin-top: 0 !important;
+  }
+
+  .nh-salon-price-quiz {
+    position: relative;
+    margin: 0 !important;
+
+    --section-spacing: 60px;
+    padding-top: 24px;
+    padding-bottom: var(--section-spacing);
+    background: var(--bg-color);
+    color: #fff;
+    overflow: hidden;
+
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+    }
+
+    :where(
+      p,
+      h2,
+      h3,
+      figure,
+      .wp-block,
+      .wp-block-group,
+      .wp-block-paragraph,
+      .wp-block-heading
+    ) {
+      margin-top: 0 !important;
+      margin-bottom: 0 !important;
+      margin-block-start: 0 !important;
+      margin-block-end: 0 !important;
+    }
+
+    .is-layout-constrained
+      > :where(:not(.alignleft):not(.alignright):not(.alignfull)) {
+      max-width: none !important;
+      margin-left: 0 !important;
+      margin-right: 0 !important;
+    }
+
+    &__shell {
+      position: relative;
+      width: var(--layout-width);
+      margin: 0 auto;
+      padding-top: 40px;
+    }
+
+    &__top {
+      position: relative;
+    }
+
+    &__eyebrow {
+      margin: 0 !important;
+      font-size: 14px;
+      font-weight: 400;
+      line-height: 1;
+      color: #fff !important;
+    }
+
+    &__divider {
+      position: relative;
+      height: 6px !important;
+      margin-top: 16px !important;
+      margin-bottom: 0 !important;
+
+      &::before {
+        content: "";
+        position: absolute;
+        inset: 0 auto 0 0;
+        width: 74px;
+        height: 6px;
+        background: #fff;
+      }
+
+      &::after {
+        content: "";
+        position: absolute;
+        top: 2px;
+        left: 0;
+        right: 0;
+        height: 1px;
+        background: rgba(255, 255, 255, 0.1);
+      }
+    }
+
+    &__main {
+      margin-top: 40px;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 640px);
+      column-gap: 40px;
+      align-items: stretch;
+    }
+
+    &__intro-col {
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+    }
+
+    &__title {
+      margin: 0 !important;
+      font-size: clamp(34px, 3.6vw, 56px);
+      font-weight: 400;
+      line-height: 0.95;
+      letter-spacing: -0.03em;
+      color: var(--heading-color) !important;
+    }
+
+    &__text {
+      margin: 28px 0 0 !important;
+      max-width: 420px;
+      font-size: 14px;
+      line-height: 1.2;
+      color: rgba(255, 255, 255, 0.6) !important;
+
+      p {
+        margin: 0 !important;
+
+        + p {
+          margin-top: 8px !important;
+        }
+      }
+    }
+
+    &__card {
+      position: relative;
+      min-width: 0;
+      min-height: 520px;
+      border-radius: 24px;
+      overflow: hidden;
+      background-color: rgba(255, 255, 255, 0.04);
+      background-size: cover;
+      background-position: center;
+    }
+
+    &__card-tint {
+      position: absolute;
+      inset: 0;
+      background: rgba(10, 10, 10, 0.62);
+      border-radius: inherit;
+      pointer-events: none;
+    }
+
+    &__card-body {
+      position: relative;
+      z-index: 1;
+      padding: 36px 32px 32px;
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+
+    &__card-header {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      row-gap: 10px;
+    }
+
+    &__back {
+      display: none;
+    }
+
+    &__stepper {
+      margin: 0 !important;
+      font-size: 13px;
+      color: rgba(255, 255, 255, 0.6) !important;
+    }
+
+    &__intro {
+      margin: 0 !important;
+      font-size: 18px;
+      line-height: 1.2;
+      color: #fff !important;
+      text-align: left;
+    }
+
+    &__card-divider {
+      margin: 20px 0 28px;
+      height: 1px;
+      background: rgba(255, 255, 255, 0.18);
+    }
+
+    &__steps {
+      flex: 1 1 auto;
+    }
+
+    &__step {
+      display: none;
+      border: 0;
+      padding: 0;
+      margin: 0;
+    }
+
+    // Editor always shows step 1 (JS doesn't run; data attribute stays
+    // on "1" from the PHP template, so the attribute selector below matches).
+    &[data-nh-price-quiz-step="1"] &__step[data-step="1"] {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      column-gap: 32px;
+      align-items: start;
+    }
+
+    &__question {
+      display: block;
+      padding: 0;
+      margin: 0 !important;
+      font-size: 22px;
+      font-weight: 400;
+      line-height: 1.05;
+      color: #fff !important;
+    }
+
+    &__options {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      gap: 12px;
+    }
+
+    &__option {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      color: rgba(255, 255, 255, 0.85) !important;
+      font-size: 14px;
+    }
+
+    &__option-box {
+      flex: 0 0 20px;
+      width: 20px;
+      height: 20px;
+      border: 1px solid rgba(255, 255, 255, 0.4);
+      border-radius: 4px;
+    }
+
+    &__card-footer {
+      margin-top: 28px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    &__next {
+      align-self: flex-start;
+      padding: 12px 32px;
+      min-width: 140px;
+      font-size: 13px;
+      letter-spacing: 0.1em;
+      border-radius: 999px;
+      border: 1px solid var(--heading-color, #caa67a);
+      background: var(--heading-color, #caa67a);
+      color: #1a1a1a;
+    }
+
+    &__hint,
+    &__disclaimer,
+    &__success,
+    &__hp {
+      display: none;
+    }
+  }
+
+  // Narrow editor canvas (tablet preview ≈ 781 px)
+  @media (max-width: 1100px) {
+    .nh-salon-price-quiz {
+      &__main {
+        grid-template-columns: 1fr;
+        row-gap: 28px;
+      }
+
+      &__card {
+        min-height: 480px;
+      }
+
+      &__card-body {
+        padding: 32px 24px 28px;
+      }
+
+      &[data-nh-price-quiz-step="1"] &__step[data-step="1"] {
+        grid-template-columns: 1fr;
+        row-gap: 20px;
+      }
+    }
+  }
+}

@@ -1,0 +1,181 @@
+@use "../../abstracts/variables" as *;
+
+$_summary-text: #fff;
+$_summary-muted: rgba(255, 255, 255, 0.6);
+$_summary-surface: rgba(255, 255, 255, 0.06);
+
+.nh-order-summary__items {
+  list-style: none;
+  display: grid;
+  gap: 26px;
+  margin: 0;
+  padding: 0;
+}
+
+.nh-order-summary__item {
+  display: grid;
+  grid-template-columns: 80px minmax(0, 1fr) max-content;
+  gap: 14px;
+  align-items: start;
+
+  &.is-loading {
+    opacity: 0.55;
+    pointer-events: none;
+  }
+}
+
+.nh-order-summary__item-image {
+  width: 80px;
+  height: 80px;
+  border-radius: 10px;
+  overflow: hidden;
+  background: $_summary-surface;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}
+
+.nh-order-summary__item-info {
+  min-width: 0;
+}
+
+.nh-order-summary__item-name {
+  margin: 0 0 6px;
+  font-size: 1rem;
+  line-height: 1.08;
+  font-weight: 400;
+  color: $_summary-text;
+}
+
+.nh-order-summary__item-meta {
+  display: grid;
+  gap: 1px;
+  max-width: 260px;
+}
+
+.nh-order-summary__item-sku,
+.nh-order-summary__item-attr {
+  font-size: 0.58rem;
+  line-height: 1.25;
+  color: $_summary-muted;
+}
+
+.nh-order-summary__item-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 14px;
+  min-width: max-content;
+  padding-top: 6px;
+}
+
+.nh-order-summary__qty {
+  display: inline-flex;
+  align-items: center;
+  border: none;
+  border-radius: 999px;
+  overflow: hidden;
+  min-height: 24px;
+  background: rgba(255, 255, 255, 0.94);
+
+  &.is-loading {
+    opacity: 0.5;
+    pointer-events: none;
+  }
+}
+
+.nh-order-summary__qty-btn {
+  width: 22px;
+  height: 24px;
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: #1f1f1f;
+  cursor: pointer;
+  font-size: 0.8rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.nh-order-summary__qty-value {
+  min-width: 20px;
+  padding: 0 4px;
+  text-align: center;
+  font-size: 0.72rem;
+  color: #1f1f1f;
+}
+
+.nh-order-summary__item-price {
+  font-size: 0.98rem;
+  line-height: 1;
+  color: $_summary-text;
+  white-space: nowrap;
+}
+
+.nh-order-summary__item-price-old {
+  margin-left: 6px;
+  font-size: 0.82rem;
+  color: $_summary-muted;
+  text-decoration: line-through;
+}
+
+.nh-order-summary__item-remove {
+  color: $_summary-muted;
+  font-size: 1rem;
+  line-height: 1;
+  text-decoration: none;
+  transition: color 0.2s ease;
+
+  &:hover {
+    color: $_summary-text;
+  }
+}
+
+.nh-order-summary__total {
+  display: inline-flex;
+  align-items: baseline;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.nh-order-summary__total-label {
+  font-size: 1rem;
+  color: $_summary-text;
+}
+
+.nh-order-summary__total-amount {
+  font-size: 1.18rem;
+  font-weight: 500;
+  color: $_summary-text;
+}
+
+@media (max-width: 767px) {
+  .nh-order-summary__item {
+    grid-template-columns: 56px minmax(0, 1fr);
+    gap: 12px;
+  }
+
+  .nh-order-summary__item-image {
+    width: 56px;
+    height: 56px;
+  }
+
+  .nh-order-summary__item-name {
+    font-size: 0.95rem;
+  }
+
+  .nh-order-summary__item-meta {
+    max-width: none;
+  }
+
+  .nh-order-summary__item-actions {
+    grid-column: 2;
+    justify-content: flex-start;
+    gap: 10px;
+    padding-top: 6px;
+  }
+}

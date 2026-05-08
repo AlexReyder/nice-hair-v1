@@ -1,0 +1,11 @@
+@use '../abstracts/variables' as *;
+
+.nh-button {
+  &--primary .wp-element-button,
+  &--primary .wp-block-button__link {
+    background: $nh-color-accent;
+    color: #fff;
+    border-radius: 999px;
+    padding: 14px 24px;
+  }
+}

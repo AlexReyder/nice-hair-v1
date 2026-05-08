@@ -1,0 +1,433 @@
+.nh-shop-hero {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  min-height: 100vh;
+  min-height: 100svh;
+  min-height: 100dvh;
+  margin: 0 !important;
+  color: #fff;
+  background-color: #0f0f10;
+
+  .wp-block-cover__image-background {
+    opacity: 1 !important;
+    visibility: visible !important;
+    z-index: 1;
+  }
+
+  > .wp-block-cover__inner-container {
+    width: 100%;
+    max-width: none !important;
+    min-height: inherit;
+    padding: 0 !important;
+  }
+
+  .wp-block-group,
+  .wp-block-buttons,
+  .wp-block-button,
+  .wp-block-cover__inner-container,
+  p,
+  h1,
+  h2 {
+    margin-top: 0;
+    margin-bottom: 0;
+  }
+
+  .is-layout-constrained
+    > :where(:not(.alignleft):not(.alignright):not(.alignfull)) {
+    max-width: none !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+  }
+
+  &__shell {
+    position: relative;
+    z-index: 1;
+    width: min(calc(100% - 64px), 1528px);
+    min-height: inherit;
+    margin: 0 auto;
+    padding: 110px 0 22px;
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+    gap: 24px;
+
+    &::before {
+      content: "NICE HAIR";
+      position: absolute;
+      top: 0;
+      left: -6px;
+      z-index: 0;
+      font-family: "Inter Tight", sans-serif;
+      font-size: clamp(160px, 17vw, 298px);
+      font-weight: 400;
+      line-height: 0.84;
+      letter-spacing: -0.055em;
+      color: rgba(255, 255, 255, 0.02);
+      white-space: nowrap;
+      pointer-events: none;
+      user-select: none;
+    }
+  }
+
+  &__top,
+  &__content,
+  &__bottom {
+    position: relative;
+    z-index: 1;
+  }
+
+  &__top {
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  &__contact {
+    margin-left: auto;
+    text-align: right;
+  }
+
+  &__phone,
+  &__address,
+  &__secondary-title,
+  &__title,
+  &__text,
+  &__feature-text,
+  &__hours-text,
+  &__social {
+    font-family: "Inter Tight", sans-serif;
+  }
+
+  &__phone {
+    font-size: 25px;
+    font-weight: 400;
+    line-height: 1;
+    letter-spacing: -0.04em;
+
+    a {
+      color: #fff;
+      text-decoration: none;
+    }
+  }
+
+  &__address {
+    margin-top: 8px;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1.08;
+    letter-spacing: -0.03em;
+    color: rgba(255, 255, 255, 0.7);
+  }
+
+  &__content {
+    align-self: end;
+    display: grid;
+    grid-template-columns: minmax(280px, 1fr) minmax(500px, 700px);
+    align-items: end;
+    gap: 40px;
+    padding-bottom: 10px;
+  }
+
+  &__aside {
+    align-self: end;
+    padding-bottom: 34px;
+  }
+
+  &__secondary-title {
+    max-width: 700px;
+    font-size: clamp(56px, 4.6vw, 72px);
+    font-weight: 400;
+    line-height: 0.94;
+    letter-spacing: -0.055em;
+    color: #fff;
+  }
+
+  &__main {
+    justify-self: end;
+    width: 100%;
+    max-width: 700px;
+  }
+
+  &__title {
+    max-width: 680px;
+    font-size: clamp(58px, 4.95vw, 80px);
+    font-weight: 400;
+    line-height: 0.93;
+    letter-spacing: -0.055em;
+    color: #fff;
+  }
+
+  &__text {
+    max-width: 470px;
+    padding-top: 40px;
+    font-size: clamp(18px, 1.45vw, 24px);
+    font-weight: 400;
+    line-height: 1.03;
+    letter-spacing: -0.035em;
+    color: rgba(255, 255, 255, 0.7);
+  }
+
+  &__actions {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0 34px;
+    padding-top: 34px;
+
+    .wp-block-button {
+      margin: 0;
+    }
+  }
+
+  &__bottom {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: end;
+    gap: 24px 32px;
+
+    &::before {
+      content: "";
+      position: absolute;
+      top: 2px;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: rgba(255, 255, 255, 0.1);
+      pointer-events: none;
+    }
+  }
+
+  &__features {
+    display: grid;
+    grid-template-columns: repeat(3, auto);
+    gap: 26px;
+  }
+
+  &__feature {
+    position: relative;
+    min-width: 0;
+    padding-top: 22px;
+
+    &::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 56px;
+      height: 6px;
+      background: #fff;
+    }
+  }
+
+  &__feature-text {
+    font-size: 13px;
+    font-weight: 400;
+    line-height: 1.04;
+    letter-spacing: -0.03em;
+    color: rgba(255, 255, 255, 0.6);
+  }
+
+  &__hours {
+    position: relative;
+    padding-top: 22px;
+
+    &::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 56px;
+      height: 6px;
+      background: #fff;
+    }
+  }
+
+  &__hours-text {
+    font-size: 13px;
+    font-weight: 400;
+    line-height: 1.04;
+    letter-spacing: -0.03em;
+    color: rgba(255, 255, 255, 0.6);
+  }
+
+  &__socials {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px 40px;
+    padding-bottom: 3px;
+  }
+
+  &__social {
+    font-size: 13px;
+    font-weight: 400;
+    line-height: 1;
+    letter-spacing: -0.03em;
+    color: rgba(255, 255, 255, 0.6);
+
+    a {
+      color: inherit;
+      text-decoration: none;
+      transition:
+        color 0.25s ease,
+        opacity 0.25s ease;
+    }
+
+    a:hover,
+    a:focus-visible {
+      color: #fff;
+      opacity: 1;
+    }
+  }
+}
+
+@media (max-width: 1279px) {
+  .nh-shop-hero {
+    &__shell {
+      width: min(calc(100% - 48px), 1232px);
+      padding: 100px 0 20px;
+
+      &::before {
+        top: 2px;
+        left: 0;
+        font-size: clamp(126px, 16vw, 220px);
+      }
+    }
+
+    &__phone {
+      font-size: 22px;
+    }
+
+    &__address {
+      font-size: 13px;
+    }
+
+    &__content {
+      grid-template-columns: 1fr;
+      gap: 0;
+      padding-bottom: 0;
+    }
+
+    &__aside {
+      display: none;
+    }
+
+    &__main {
+      justify-self: start;
+      max-width: 640px;
+      padding-top: 210px;
+    }
+
+    &__title {
+      max-width: 620px;
+      font-size: clamp(56px, 7vw, 74px);
+      line-height: 0.94;
+    }
+
+    &__text {
+      max-width: 465px;
+      padding-top: 32px;
+      font-size: clamp(18px, 2vw, 23px);
+    }
+
+    &__actions {
+      padding-top: 28px;
+      gap: 0 30px;
+    }
+
+    &__bottom {
+      gap: 20px 24px;
+    }
+
+    &__features {
+      gap: 18px;
+    }
+
+    &__feature-text,
+    &__hours-text,
+    &__social {
+      font-size: 12px;
+    }
+  }
+}
+
+@media (max-width: 767px) {
+  .nh-shop-hero {
+    &__shell {
+      width: min(calc(100% - 32px), 100%);
+      padding: 90px 0 18px;
+      gap: 18px;
+
+      &::before {
+        top: 0;
+        left: 0;
+        font-size: 96px;
+        line-height: 0.9;
+      }
+    }
+
+    &__phone {
+      font-size: 18px;
+    }
+
+    &__address {
+      margin-top: 6px;
+      font-size: 13px;
+      line-height: 1.1;
+    }
+
+    &__content {
+      align-self: center;
+    }
+
+    &__main {
+      max-width: 100%;
+      padding-top: 0;
+    }
+
+    &__title {
+      max-width: none;
+      font-size: clamp(34px, 10.5vw, 52px);
+      line-height: 0.95;
+    }
+
+    &__text {
+      max-width: 100%;
+      padding-top: 24px;
+      font-size: 16px;
+      line-height: 1.05;
+    }
+
+    &__actions {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 18px;
+      padding-top: 30px;
+    }
+
+    &__bottom {
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+
+      &::before {
+        display: none;
+      }
+    }
+
+    &__features,
+    &__hours {
+      display: none;
+    }
+
+    &__socials {
+      justify-content: flex-start;
+      gap: 12px 24px;
+      padding-bottom: 0;
+    }
+
+    &__social {
+      font-size: 14px;
+    }
+  }
+}

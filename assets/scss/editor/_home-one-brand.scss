@@ -1,0 +1,83 @@
+@use "../abstracts/variables" as *;
+// Gutenberg editor scope for the Home ONE BRAND pattern.
+//
+// editor.scss @use's sections/home/one-brand BEFORE this file, so the
+// frontend partial is already applied when these rules run. We only keep
+// editor-specific fixes here; everything else (layout, colors, typography,
+// media queries) is inherited from the frontend source of truth.
+
+.editor-styles-wrapper {
+  font-family: "Inter Tight" !important;
+  .nh-home-one-brand {
+    // Shrink the vertical rhythm so the editor preview doesn't waste
+    // hundreds of pixels of empty padding on top of every section.
+    // Same approach as editor/_home-about-us.scss.
+    --section-spacing: 60px;
+    --subheading-offset: 40px;
+    padding-bottom: 40px;
+
+    // Visual hint that this pattern is locked in the editor.
+
+    // Neutralize Gutenberg default block margins so they don't fight
+    // the grid / layout defined by the frontend partial.
+    .wp-block-group,
+    .wp-block-image,
+    .wp-block-buttons,
+    .wp-block-button,
+    .wp-block-spacer,
+    p,
+    h2,
+    h3,
+    figure {
+      margin-top: 0;
+      margin-bottom: 0;
+    }
+
+    // Release children from theme.json contentSize constraint so they
+    // can use the layout width defined by __shell.
+    .is-layout-constrained
+      > :where(:not(.alignleft):not(.alignright):not(.alignfull)) {
+      max-width: none !important;
+      margin-left: 0 !important;
+      margin-right: 0 !important;
+    }
+
+    &__divider {
+      position: relative;
+      height: 6px !important;
+      margin-top: 20px !important;
+      margin-bottom: 35px !important;
+
+      &::before {
+        content: "";
+        position: absolute;
+        inset: 0 auto 0 0;
+        width: 74px;
+        height: 6px;
+        background: #fff;
+      }
+
+      &::after {
+        content: "";
+        position: absolute;
+        top: 2px;
+        left: 0;
+        right: 0;
+        height: 1px;
+        background: rgba(255, 255, 255, 0.1);
+      }
+    }
+
+    &__title {
+      margin-bottom: 40px !important;
+    }
+
+    &__text {
+      margin-bottom: 60px !important;
+    }
+
+    &__card-body {
+      margin-top: 35px !important;
+    }
+  }
+}

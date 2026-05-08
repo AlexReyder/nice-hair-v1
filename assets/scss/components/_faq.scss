@@ -1,0 +1,275 @@
+@use "../abstracts/variables" as *;
+@use "../abstracts/mixins" as *;
+
+.nh-faq {
+  margin: 0 !important;
+  // padding: 120px 0 140px;
+  padding-top: var(--section-spacing);
+  background: #1d1d1d;
+  color: #fff;
+  overflow: hidden;
+
+  .is-layout-constrained
+    > :where(:not(.alignleft):not(.alignright):not(.alignfull)) {
+    max-width: none !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+  }
+
+  &__shell {
+    width: var(--layout-width);
+    margin: 0 auto;
+  }
+
+  // --- Header ---
+
+  &__eyebrow {
+    font-family: "Inter Tight", sans-serif;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 1;
+    letter-spacing: -0.03em;
+    color: #fff;
+  }
+
+  &__divider {
+    position: relative;
+    height: 6px !important;
+    margin-top: 20px;
+    margin-bottom: 35px;
+
+    &::before {
+      content: "";
+      position: absolute;
+      inset: 0 auto 0 0;
+      width: 74px;
+      height: 6px;
+      background: #fff;
+    }
+
+    &::after {
+      content: "";
+      position: absolute;
+      top: 2px;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: rgba(255, 255, 255, 0.1);
+    }
+  }
+
+  &__title {
+    max-width: 680px;
+    font-family: "Inter Tight", sans-serif;
+    font-size: var(--heading-size);
+    font-weight: 500;
+    line-height: 0.98;
+    letter-spacing: -0.03em;
+    color: var(--heading-color);
+    margin-bottom: var(--heading-offset);
+  }
+
+  &__subtitle {
+    max-width: 420px;
+    margin-top: 60px;
+    font-family: "Inter Tight", sans-serif;
+    font-size: var(--text-size);
+    font-weight: 500;
+    line-height: 1.45;
+    color: rgba(255, 255, 255, 0.55);
+  }
+
+  // --- Grid ---
+
+  &__grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    align-items: start;
+    gap: 16px 24px;
+    margin-top: 100px;
+  }
+
+  &__column {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  // --- Item ---
+
+  &__item {
+    background-color: #1f1f1f;
+    // border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: none;
+    overflow: hidden;
+  }
+
+  &__question {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    width: 100%;
+    padding: 24px 28px;
+    border: 0;
+    background: transparent;
+    color: #fff;
+    font-family: "Inter Tight", sans-serif;
+    font-size: clamp(17px, 1.25vw, 20px);
+    font-weight: 400;
+    letter-spacing: -0.03em;
+    line-height: 1.25;
+    text-align: left;
+    cursor: pointer;
+    appearance: none;
+  }
+
+  // --- Icon (+ / x) ---
+
+  &__icon {
+    position: relative;
+    flex-shrink: 0;
+    width: 20px;
+    height: 20px;
+
+    &::before,
+    &::after {
+      content: "";
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 16px;
+      height: 1.5px;
+      background: #fff;
+      transition: transform 0.3s ease;
+    }
+
+    &::before {
+      transform: translate(-50%, -50%);
+    }
+
+    &::after {
+      transform: translate(-50%, -50%) rotate(90deg);
+    }
+  }
+
+  &__item--open &__icon {
+    &::before {
+      transform: translate(-50%, -50%) rotate(45deg);
+    }
+
+    &::after {
+      transform: translate(-50%, -50%) rotate(-45deg);
+    }
+  }
+
+  // --- Answer (animated with grid-template-rows) ---
+
+  &__answer {
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows 0.35s ease;
+    overflow: hidden;
+  }
+
+  &__answer-text {
+    min-height: 0;
+    overflow: hidden;
+    padding: 0 28px;
+    font-family: "Inter Tight", sans-serif;
+    font-size: clamp(14px, 1vw, 16px);
+    font-weight: 400;
+    line-height: 1.45;
+    letter-spacing: -0.02em;
+    color: rgba(255, 255, 255, 0.55);
+    transition: padding 0.35s ease;
+  }
+
+  &__item--open &__answer {
+    grid-template-rows: 1fr;
+  }
+
+  &__item--open &__answer-text {
+    padding-bottom: 24px;
+  }
+}
+
+// --- Tablet (<=1279px) ---
+
+@media (max-width: 1279px) {
+  .nh-faq {
+    &__divider {
+      margin-bottom: 32px;
+    }
+
+    &__title {
+      max-width: 520px;
+      font-size: clamp(40px, 8vw, 56px);
+    }
+
+    &__subtitle {
+      margin-top: 60px;
+    }
+
+    &__grid {
+      gap: 12px 20px;
+      margin-top: 60px;
+    }
+
+    &__column {
+      gap: 12px;
+    }
+
+    &__question {
+      padding: 22px 24px;
+      font-size: clamp(16px, 2.2vw, 19px);
+    }
+
+    &__answer-text {
+      padding-left: 24px;
+      padding-right: 24px;
+    }
+  }
+}
+
+// --- Mobile (<=767px) ---
+
+@media (max-width: 767px) {
+  .nh-faq {
+    &__divider {
+      margin-bottom: 28px;
+    }
+
+    &__title {
+      max-width: 100%;
+      font-size: clamp(32px, 11.5vw, 48px);
+    }
+
+    &__subtitle {
+      max-width: 100%;
+      margin-top: 30px;
+      font-size: 16px;
+    }
+
+    &__grid {
+      grid-template-columns: 1fr;
+      gap: 12px;
+      margin-top: 60px;
+    }
+
+    &__question {
+      padding: 20px;
+      font-size: 16px;
+    }
+
+    &__answer-text {
+      padding-left: 20px;
+      padding-right: 20px;
+      font-size: 14px;
+    }
+
+    &__item--open &__answer-text {
+      padding-bottom: 20px;
+    }
+  }
+}

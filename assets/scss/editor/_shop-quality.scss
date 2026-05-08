@@ -1,0 +1,94 @@
+.editor-styles-wrapper {
+  .nh-shop-quality {
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
+    max-width: none !important;
+
+    --section-spacing: 60px;
+    --subheading-offset: 40px;
+    --heading-size: clamp(28px, 3.5vw, 42px);
+    --text-size: 14px;
+
+    &__main {
+      gap: 40px 60px;
+    }
+
+    &__content {
+      margin-top: 28px;
+    }
+
+    &__body {
+      margin-top: 16px;
+    }
+
+    &__cards {
+      gap: 28px;
+    }
+
+    &__card {
+      gap: 20px;
+    }
+
+    &__card-image {
+      width: 140px;
+      margin: 0 !important;
+    }
+
+    &__card-title {
+      font-size: clamp(18px, 2vw, 24px);
+    }
+
+    &__divider {
+      position: relative;
+      height: 6px !important;
+      margin-top: 20px;
+      margin-bottom: 35px;
+
+      &::before {
+        content: "";
+        position: absolute;
+        inset: 0 auto 0 0;
+        width: 74px;
+        height: 6px;
+        background: #fff;
+      }
+
+      &::after {
+        content: "";
+        position: absolute;
+        top: 2px;
+        left: 0;
+        right: 0;
+        height: 1px;
+        background: rgba(255, 255, 255, 0.1);
+      }
+    }
+
+    .is-layout-constrained
+      > :where(:not(.alignleft):not(.alignright):not(.alignfull)) {
+      max-width: none !important;
+      margin-left: 0 !important;
+      margin-right: 0 !important;
+    }
+
+    .wp-block-image img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .rich-text {
+      max-width: 100%;
+    }
+
+    [data-rich-text-placeholder] {
+      min-width: 1ch;
+    }
+  }
+
+  .wp-block[data-align="full"] > .nh-shop-quality,
+  .nh-shop-quality.alignfull {
+    max-width: none !important;
+  }
+}

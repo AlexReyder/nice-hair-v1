@@ -1,0 +1,227 @@
+@use "../../abstracts/variables" as *;
+
+$_tools-bg: #1d1d1d;
+$_tools-text: #fff;
+$_tools-text-muted: rgba(255, 255, 255, 0.45);
+$_tools-accent: $nh-color-accent;
+$_tools-border: rgba(255, 255, 255, 0.08);
+
+/* ── Page wrapper ──────────────────────────────────── */
+
+.nh-main--tools {
+  background: $_tools-bg;
+  color: $_tools-text;
+}
+
+/* ══════════════════════════════════════════════════════
+   HERO
+   ══════════════════════════════════════════════════════ */
+
+.nh-tools-hero {
+  position: relative;
+  overflow: hidden;
+  padding: 0 !important;
+  margin: 0 !important;
+  background: $_tools-bg;
+  color: $_tools-text;
+
+  :where(p, h1, h2) {
+    margin: 0;
+  }
+
+  .is-layout-constrained
+    > :where(:not(.alignleft):not(.alignright):not(.alignfull)) {
+    max-width: none !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+  }
+}
+
+.nh-tools-hero__shell {
+  position: relative;
+  z-index: 1;
+  width: min(calc(100% - 64px), 1528px);
+  margin: 0 auto;
+  padding: 42px 0 60px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+
+  &::before {
+    content: "NICE HAIR";
+    position: absolute;
+    top: 40px;
+    left: -6px;
+    z-index: 0;
+    font-family: "Inter Tight", sans-serif;
+    font-size: clamp(120px, 14vw, 240px);
+    font-weight: 400;
+    line-height: 0.84;
+    letter-spacing: -0.055em;
+    color: rgba(255, 255, 255, 0.02);
+    white-space: nowrap;
+    pointer-events: none;
+    user-select: none;
+  }
+}
+
+/* ── Top row (breadcrumb + contact) ─────────────────── */
+
+.nh-tools-hero__top {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 24px;
+}
+
+/* ── Breadcrumb ────────────────────────────────────── */
+
+.nh-tools-hero__breadcrumb {
+  font-family: "Inter Tight", sans-serif;
+  font-size: 0.8125rem;
+  color: $_tools-text-muted;
+  letter-spacing: 0.02em;
+
+  a {
+    color: $_tools-text-muted;
+    text-decoration: none;
+    transition: color 0.15s ease;
+
+    &:hover {
+      color: $_tools-text;
+    }
+  }
+}
+
+/* ── Contact (top-right) ───────────────────────────── */
+
+.nh-tools-hero__contact {
+  text-align: right;
+  flex-shrink: 0;
+}
+
+.nh-tools-hero__phone {
+  font-family: "Inter Tight", sans-serif;
+  font-size: clamp(20px, 2vw, 28px);
+  font-weight: 400;
+  line-height: 1;
+  letter-spacing: -0.04em;
+
+  a {
+    color: $_tools-text;
+    text-decoration: none;
+  }
+}
+
+.nh-tools-hero__address {
+  margin-top: 8px;
+  font-family: "Inter Tight", sans-serif;
+  font-size: 0.875rem;
+  font-weight: 400;
+  line-height: 1.15;
+  letter-spacing: -0.03em;
+  color: $_tools-text-muted;
+}
+
+/* ── Title ─────────────────────────────────────────── */
+
+.nh-tools-hero__title {
+  position: relative;
+  z-index: 1;
+  font-family: "Inter Tight", sans-serif;
+  font-size: clamp(36px, 3.6vw, 58px);
+  font-weight: 400;
+  line-height: 1.15;
+  color: $_tools-text;
+  max-width: 600px;
+}
+
+/* ── Subtitle ──────────────────────────────────────── */
+
+.nh-tools-hero__subtitle {
+  position: relative;
+  z-index: 1;
+  font-family: "Inter Tight", sans-serif;
+  font-size: clamp(14px, 1.1vw, 18px);
+  line-height: 1.55;
+  color: $_tools-text-muted;
+  max-width: 400px;
+}
+
+/* ══════════════════════════════════════════════════════
+   PRODUCT GRID
+   ══════════════════════════════════════════════════════ */
+
+.nh-tools-grid-section {
+  padding: var(--section-spacing) 0 100px;
+}
+
+.nh-tools-grid {
+  width: min(calc(100% - 64px), 1528px);
+  margin: 0 auto;
+}
+
+.nh-main--tools {
+  :where(.woocommerce-pagination) {
+    width: min(calc(100% - 64px), 1528px);
+    margin: 40px auto 0;
+  }
+}
+
+/* ══════════════════════════════════════════════════════
+   PRODUCT CARD
+   ══════════════════════════════════════════════════════ */
+
+.nh-tools-grid--empty {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.nh-tools-empty {
+  padding: 32px 0 12px;
+}
+
+.nh-tools-empty__title {
+  margin: 0 0 12px;
+  font-family: "Inter Tight", sans-serif;
+  font-size: clamp(24px, 2vw, 32px);
+  font-weight: 400;
+  line-height: 1.1;
+  color: $_tools-text;
+}
+
+.nh-tools-empty__text {
+  margin: 0;
+  max-width: 420px;
+  font-family: "Inter Tight", sans-serif;
+  font-size: clamp(14px, 1.1vw, 18px);
+  line-height: 1.55;
+  color: $_tools-text-muted;
+}
+
+/* ══════════════════════════════════════════════════════
+   RESPONSIVE
+   ══════════════════════════════════════════════════════ */
+
+@media (max-width: 767px) {
+  .nh-tools-hero__shell {
+    width: calc(100% - 40px);
+    padding: 100px 0 40px;
+  }
+
+  .nh-tools-grid {
+    width: calc(100% - 40px);
+  }
+
+  .nh-tools-grid-section {
+    padding: var(--section-spacing) 0 60px;
+  }
+
+  .nh-main--tools {
+    :where(.woocommerce-pagination) {
+      width: calc(100% - 40px);
+    }
+  }
+}

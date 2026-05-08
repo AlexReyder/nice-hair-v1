@@ -1,0 +1,264 @@
+.editor-styles-wrapper {
+  .wp-block-acf-nh-shop-categories {
+    max-width: none !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    margin-top: 0 !important;
+  }
+
+  .nh-shop-categories {
+    position: relative;
+    margin: 0 !important;
+    padding-top: 0;
+    padding-bottom: 60px;
+    background: var(--bg-color);
+    color: #fff;
+    overflow: hidden;
+
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+    }
+
+    :where(
+      p,
+      h2,
+      h3,
+      figure,
+      .wp-block,
+      .wp-block-group,
+      .wp-block-paragraph,
+      .wp-block-heading
+    ) {
+      margin-top: 0 !important;
+      margin-bottom: 0 !important;
+      margin-block-start: 0 !important;
+      margin-block-end: 0 !important;
+    }
+
+    &__shell {
+      width: min(calc(100% - 48px), 1372px);
+      margin: 0 auto;
+      padding-top: 48px;
+    }
+
+    &__header {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+    }
+
+    &__eyebrow {
+      font-size: 14px;
+      font-weight: 400;
+      line-height: 1;
+      color: #fff !important;
+    }
+
+    &__divider {
+      position: relative;
+      height: 6px;
+      margin-top: 16px;
+
+      &::before {
+        content: "";
+        position: absolute;
+        inset: 0 auto 0 0;
+        width: 74px;
+        height: 6px;
+        background: #fff;
+      }
+
+      &::after {
+        content: "";
+        position: absolute;
+        top: 2px;
+        left: 0;
+        right: 0;
+        height: 1px;
+        background: rgba(255, 255, 255, 0.1);
+      }
+    }
+
+    &__title {
+      margin-top: 24px !important;
+      font-size: clamp(36px, 3.6vw, 54px);
+      font-weight: 500;
+      line-height: 0.92;
+      letter-spacing: -0.03em;
+      color: var(--heading-color) !important;
+    }
+
+    &__text {
+      margin-top: 14px !important;
+      max-width: 480px;
+      font-size: 14px;
+      font-weight: 400;
+      line-height: 1.25;
+      color: rgba(255, 255, 255, 0.72) !important;
+    }
+
+    &__grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      grid-template-rows: 13fr 5fr 17fr;
+      height: clamp(360px, 40vw, 500px);
+      gap: 14px;
+      margin-top: 36px;
+    }
+
+    &__card {
+      position: relative;
+      display: flex;
+      border-radius: 18px;
+      overflow: hidden;
+      text-decoration: none !important;
+      color: #fff !important;
+      background: rgba(255, 255, 255, 0.04);
+
+      &:nth-child(1) {
+        grid-column: 1 / 3;
+        grid-row: 1 / 3;
+      }
+      &:nth-child(2) {
+        grid-column: 3;
+        grid-row: 1;
+      }
+      &:nth-child(3) {
+        grid-column: 4;
+        grid-row: 1;
+      }
+      &:nth-child(4) {
+        grid-column: 1 / 3;
+        grid-row: 3;
+      }
+      &:nth-child(5) {
+        grid-column: 3 / 5;
+        grid-row: 2 / 4;
+      }
+
+      &::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        z-index: 1;
+        background: linear-gradient(
+          to top,
+          rgba(0, 0, 0, 0.55) 0%,
+          rgba(0, 0, 0, 0.15) 55%,
+          transparent 100%
+        );
+        pointer-events: none;
+      }
+    }
+
+    &__card-bg {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    &__card-body {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      padding: 28px;
+      width: 100%;
+    }
+
+    &__card-title {
+      font-size: clamp(18px, 2vw, 24px);
+      font-weight: 400;
+      line-height: 1.1;
+      color: #fff !important;
+      letter-spacing: -0.01em;
+    }
+
+    &__card-text {
+      margin-top: 10px !important;
+      max-width: 280px;
+      font-size: 13px;
+      line-height: 1.3;
+      color: rgba(255, 255, 255, 0.75) !important;
+    }
+
+    &__card-cta {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      align-self: flex-start;
+      margin-top: auto;
+      min-height: 0;
+      padding: 0;
+      border: 0;
+      border-radius: 0;
+      background: transparent;
+
+      // No animation in editor — static pill only
+      .wp-block-button__link {
+        min-height: 48px;
+        padding: 0 20px !important;
+        border: 0 !important;
+        border-radius: 999px !important;
+        background: #ad9482 !important;
+        color: #fff !important;
+        font-family: "Inter Tight", sans-serif;
+        font-size: 14px;
+        font-weight: 400;
+        line-height: 1;
+        text-transform: uppercase;
+        white-space: nowrap;
+        text-decoration: none !important;
+
+        &::before,
+        &::after {
+          display: none !important;
+        }
+      }
+
+      &::before,
+      &::after {
+        display: none;
+      }
+    }
+  }
+}
+
+@media (max-width: 781px) {
+  .editor-styles-wrapper {
+    .nh-shop-categories {
+      &__shell {
+        width: min(calc(100% - 32px), 100%);
+        padding-top: 32px;
+      }
+
+      &__header::after {
+        display: none;
+      }
+
+      &__grid {
+        grid-template-columns: 1fr;
+        grid-template-rows: none;
+        height: auto;
+        gap: 12px;
+      }
+
+      &__card {
+        grid-column: span 1 !important;
+        grid-row: auto !important;
+        min-height: 180px;
+        border-radius: 14px;
+      }
+
+      &__title {
+        font-size: clamp(28px, 7vw, 38px);
+      }
+    }
+  }
+}

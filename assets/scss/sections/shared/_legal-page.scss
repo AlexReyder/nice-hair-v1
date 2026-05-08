@@ -1,0 +1,189 @@
+@use "../../abstracts/mixins" as *;
+
+.nh-main--privacy-policy-page {
+  background: #1d1d1d;
+}
+
+.nh-legal-page {
+  margin: 0 !important;
+  padding: 150px 0 var(--section-spacing);
+  padding-bottom: 0;
+  background: #1d1d1d;
+  color: #fff;
+  overflow: hidden;
+
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+
+  :where(.wp-block-group, p, h1, h2, h3, hr) {
+    margin-top: 0;
+    margin-bottom: 0;
+    margin-block-start: 0;
+    margin-block-end: 0;
+  }
+
+  .is-layout-constrained
+    > :where(:not(.alignleft):not(.alignright):not(.alignfull)) {
+    max-width: none !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+  }
+
+  &__shell {
+    @include shell;
+  }
+
+  &__hero {
+    position: relative;
+  }
+
+  &__eyebrow {
+    @include eyebrow;
+  }
+
+  &__divider {
+    @include divider;
+  }
+
+  &__title {
+    max-width: 760px;
+    @include block_heading;
+    color: #fff;
+  }
+
+  &__intro-text {
+    max-width: 760px;
+    margin-top: var(--subheading-offset);
+    font-family: "Inter Tight", sans-serif;
+    font-size: clamp(20px, 1.8vw, 34px);
+    font-weight: 400;
+    line-height: 1.04;
+    letter-spacing: -0.04em;
+    color: #fff;
+  }
+
+  &__body {
+    width: min(100%, 920px);
+    margin-top: 90px;
+  }
+
+  &__section {
+    padding: 34px 0 38px;
+    border-top: 1px solid rgba(255, 255, 255, 0.12);
+  }
+
+  &__section-title {
+    max-width: 780px;
+    font-family: "Inter Tight", sans-serif;
+    font-size: clamp(26px, 2vw, 40px);
+    font-weight: 400;
+    line-height: 1;
+    letter-spacing: -0.045em;
+    color: #c1a692;
+  }
+
+  &__text {
+    max-width: 840px;
+    margin-top: 22px;
+    font-family: "Inter Tight", sans-serif;
+    font-size: clamp(16px, 1.05vw, 19px);
+    font-weight: 400;
+    line-height: 1.34;
+    letter-spacing: -0.02em;
+    color: rgba(255, 255, 255, 0.72);
+  }
+
+  &__items {
+    margin-top: 28px;
+    display: grid;
+    gap: 26px;
+  }
+
+  &__item {
+    padding: 26px 28px 28px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 22px;
+    background: rgba(255, 255, 255, 0.035);
+
+    .nh-legal-page__text {
+      margin-top: 14px;
+    }
+  }
+
+  &__item-title {
+    max-width: 760px;
+    font-family: "Inter Tight", sans-serif;
+    font-size: clamp(19px, 1.25vw, 24px);
+    font-weight: 400;
+    line-height: 1.08;
+    letter-spacing: -0.035em;
+    color: #fff;
+  }
+}
+
+@media (max-width: 1279px) {
+  .nh-legal-page {
+    padding-top: 140px;
+
+    &__body {
+      margin-top: 72px;
+    }
+  }
+}
+
+@media (max-width: 767px) {
+  .nh-legal-page {
+    padding-top: 120px;
+    padding-bottom: calc(var(--section-spacing) * 0.65);
+
+    &__shell {
+      width: calc(100% - 32px);
+    }
+
+    &__divider {
+      margin-top: 16px;
+      margin-bottom: 28px;
+
+      &::before {
+        width: 84px;
+      }
+    }
+
+    &__title {
+      font-size: clamp(42px, 13vw, 58px);
+      line-height: 0.95;
+    }
+
+    &__intro-text {
+      margin-top: 42px;
+      font-size: 22px;
+      line-height: 1.08;
+    }
+
+    &__body {
+      margin-top: 58px;
+    }
+
+    &__section {
+      padding: 28px 0 32px;
+    }
+
+    &__text {
+      font-size: 16px;
+      line-height: 1.4;
+    }
+
+    &__item {
+      padding: 22px 20px 24px;
+      border-radius: 18px;
+    }
+  }
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}

@@ -1,0 +1,6 @@
+@use "../../abstracts/mixins" as *;
+
+.nh-home-cta {
+  @include nh-container;
+  padding: 64px 0 96px;
+}

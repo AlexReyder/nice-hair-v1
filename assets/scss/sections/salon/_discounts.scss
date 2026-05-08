@@ -1,0 +1,276 @@
+@use "../../abstracts/mixins" as *;
+
+.nh-salon-discounts {
+  position: relative;
+  isolation: isolate;
+  margin: 0 !important;
+  padding-top: 0;
+  background: var(--bg-color);
+  color: #fff;
+  overflow: hidden;
+
+  // Release from theme.json contentSize
+  .is-layout-constrained
+    > :where(:not(.alignleft):not(.alignright):not(.alignfull)) {
+    max-width: none !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+  }
+
+  &__shell {
+    @include shell;
+  }
+
+  &__header {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+
+    @include block_decor_plus;
+  }
+
+  &__eyebrow {
+    margin: 0;
+    @include eyebrow;
+  }
+
+  &__divider {
+    @include divider;
+  }
+
+  &__title {
+    @include block_heading;
+    max-width: 320px;
+  }
+
+  &__text {
+    margin: 20px 0 0;
+    max-width: 560px;
+    font-size: var(--text-size);
+    font-weight: 400;
+    line-height: 1.2;
+    color: var(--text-color-grey);
+  }
+
+  // Card grid
+  &__grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 20px;
+    margin-top: 60px;
+  }
+
+  &__card {
+    display: grid;
+    grid-template-columns: minmax(0, 0.55fr) minmax(0, 0.45fr);
+    border-radius: 24px;
+    overflow: hidden;
+    background: rgba(255, 255, 255, 0.04);
+    margin: 0 !important;
+  }
+
+  &__card-body {
+    padding: 44px 40px 40px 44px;
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__card-title {
+    margin: 0;
+    font-size: clamp(22px, 2vw, 30px);
+    font-weight: 400;
+    line-height: 1.1;
+    color: #fff;
+    letter-spacing: -0.01em;
+  }
+
+  &__card-text {
+    margin: 14px 0 0;
+    font-size: 14px;
+    line-height: 1.35;
+    color: rgba(255, 255, 255, 0.75);
+  }
+
+  // CTA — simple bordered pill, no animation
+  &__cta {
+    margin-top: auto;
+    padding-top: 32px;
+  }
+
+  &__cta-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 56px;
+    padding: 0 32px;
+    border-radius: 999px;
+    background: #fff;
+    color: #000;
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 1;
+    text-decoration: none;
+    text-transform: uppercase;
+    white-space: nowrap;
+    transition:
+      background-color 0.2s ease,
+      color 0.2s ease,
+      border-color 0.2s ease;
+
+    &:hover,
+    &:focus-visible {
+      border-color: #fff;
+      outline: none;
+    }
+  }
+
+  &__socials {
+    margin: 24px 0 0;
+    padding: 0;
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px 24px;
+
+    li {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    a {
+      color: rgba(255, 255, 255, 0.6);
+      text-decoration: none;
+      font-size: 14px;
+      transition: color 0.2s ease;
+
+      &:hover,
+      &:focus-visible {
+        color: #fff;
+        outline: none;
+      }
+    }
+  }
+
+  // Card image
+  &__card-media {
+    position: relative;
+
+    img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+  }
+}
+
+// Tablet
+@media (max-width: 1279px) {
+  .nh-salon-discounts {
+    &__shell {
+      @include shell;
+      padding-top: 60px;
+    }
+
+    &__title {
+      font-size: clamp(44px, 7vw, 64px);
+    }
+
+    &__grid {
+      grid-template-columns: 1fr;
+      gap: 16px;
+      margin-top: 48px;
+    }
+
+    &__card {
+      border-radius: 20px;
+    }
+
+    &__card-body {
+      padding: 36px 32px 32px;
+    }
+
+    &__card-title {
+      font-size: clamp(20px, 2.6vw, 26px);
+    }
+
+    &__cta-link {
+      min-height: 54px;
+      padding: 0 28px;
+      font-size: 15px;
+    }
+  }
+}
+
+// Mobile
+@media (max-width: 767px) {
+  .nh-salon-discounts {
+    padding-bottom: calc(var(--section-spacing) * 0.6);
+
+    &__shell {
+      @include shell;
+      width: calc(100% - 32px);
+      padding-top: 40px;
+    }
+
+    &__header::after {
+      display: none;
+    }
+
+    &__title {
+      font-size: clamp(34px, 9vw, 46px);
+    }
+
+    &__text {
+      max-width: none;
+    }
+
+    &__grid {
+      gap: 16px;
+      margin-top: 36px;
+    }
+
+    &__card {
+      grid-template-columns: 1fr;
+      border-radius: 18px;
+    }
+
+    &__card-body {
+      padding: 32px 26px 28px;
+      order: 2;
+    }
+
+    &__card-media {
+      order: 1;
+      aspect-ratio: 3 / 2;
+
+      img {
+        position: static;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+    }
+
+    &__card-title {
+      font-size: 22px;
+    }
+
+    &__card-text {
+      font-size: 13px;
+    }
+
+    &__cta-link {
+      min-height: 54px;
+      padding: 0 28px;
+      font-size: 15px;
+    }
+
+    &__socials {
+      gap: 24px;
+    }
+  }
+}

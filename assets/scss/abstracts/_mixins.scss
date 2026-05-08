@@ -1,0 +1,70 @@
+@mixin nh-container {
+  width: min(100% - 64px, 1372px);
+  margin-inline: auto;
+}
+
+@mixin shell {
+  position: relative;
+  z-index: 2;
+  width: var(--layout-width);
+  margin: 0 auto;
+}
+
+@mixin eyebrow {
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 1;
+  color: #fff;
+}
+
+@mixin divider {
+  position: relative;
+  height: 6px !important;
+  margin-top: 20px;
+  margin-bottom: 35px;
+
+  &::before {
+    content: "";
+    position: absolute;
+    inset: 0 auto 0 0;
+    width: 74px;
+    height: 6px;
+    background: #fff;
+  }
+
+  &::after {
+    content: "";
+    position: absolute;
+    top: 2px;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: rgba(255, 255, 255, 0.1);
+  }
+}
+
+@mixin block_heading {
+  font-size: var(--heading-size);
+  font-weight: 500;
+  line-height: 0.98;
+  letter-spacing: -0.03em;
+  text-wrap: balance;
+  color: var(--heading-color);
+}
+
+@mixin block_decor_plus {
+  // &::after {
+  //   content: "[ + ]";
+  //   position: absolute;
+  //   top: 50px;
+  //   right: 0;
+  //   font-family: "Inter Tight", sans-serif;
+  //   font-size: 16px;
+  //   font-weight: 400;
+  //   line-height: 1;
+  //   letter-spacing: -0.03em;
+  //   color: #fff;
+  //   pointer-events: none;
+  //   user-select: none;
+  // }
+}

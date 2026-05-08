@@ -1,0 +1,67 @@
+@use "../abstracts/variables" as *;
+
+:root {
+  --bg-color: #1d1d1d;
+  --heading-color: #ad9482;
+  --heading-color-white: #fff;
+  --text-color: #fff;
+  --text-color-grey: rgba(255, 255, 255, 0.6);
+
+  --heading-size: clamp(42px, 4.5vw, 64px);
+  --subheading-size: clamp(18px, 1vw, 20px);
+  --text-size: clamp(14px, 1.2vw, 16px);
+  --nicehair-size: clamp(160px, 17vw, 298px);
+
+  --section-spacing: 200px;
+  --heading-offset: 60px;
+  --subheading-offset: 100px;
+
+  --accent-color: #ff6633;
+
+  --layout-width: min(calc(100% - 64px), 1372px);
+
+  @media (max-width: 900px) {
+    --section-spacing: 100px;
+  }
+
+  @media (min-width: 1920px) {
+    --layout-width: min(calc(100% - 64px), 1760px);
+  }
+
+  @media (max-width: 1279px) {
+    --layout-width: calc(100% - 64px);
+  }
+
+  @media (max-width: 767px) {
+    --section-spacing: 60px;
+    --layout-width: calc(100% - 32px);
+  }
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  background: $nh-color-bg;
+  color: $nh-color-text;
+  font-family: "Inter Tight", sans-serif;
+}
+
+// WordPress 6.9.x may reintroduce inner Gutenberg wrappers on the frontend.
+// Mirror the parent layout props so our custom nh-* grid/flex blocks keep
+// working even when .wp-block-group__inner-container is injected.
+.wp-block-cover[class*="nh-"] > .wp-block-cover__inner-container {
+  width: 100%;
+  max-width: inherit;
+  min-width: 0;
+}
+
+.wp-block-group[class*="nh-"] > .wp-block-group__inner-container {
+  display: contents;
+}
+
+a {
+  text-decoration: none;
+}

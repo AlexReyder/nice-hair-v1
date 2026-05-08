@@ -1,0 +1,47 @@
+@use "../../../abstracts/variables" as *;
+
+/* ---------- Product grid ---------- */
+
+:where(.products) {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 24px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.nh-shop-archive__product-grid--custom-hair {
+  :where(.products) {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 28px 18px;
+  }
+}
+
+.nh-shop-archive__product-grid--exclusive {
+  :where(.products) {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 30px 22px;
+  }
+}
+
+.nh-shop-archive__product-grid--ready {
+  :where(.products) {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 28px 22px;
+  }
+}
+
+.nh-shop-archive__product-grid--tools {
+  :where(.products) {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 24px;
+  }
+}
+
+.nh-shop-archive__keratin-products {
+  :where(.products) {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 28px 18px;
+  }
+}

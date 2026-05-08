@@ -1,0 +1,119 @@
+.editor-styles-wrapper {
+  .nh-tools-hero {
+    position: relative;
+    overflow: hidden;
+    margin: 0 !important;
+    padding: 0 !important;
+    background: #1d1d1d;
+    color: #fff;
+
+    .wp-block-group,
+    p,
+    h1 {
+      margin-top: 0;
+      margin-bottom: 0;
+    }
+
+    .is-layout-constrained
+      > :where(:not(.alignleft):not(.alignright):not(.alignfull)) {
+      max-width: none !important;
+      margin-left: 0 !important;
+      margin-right: 0 !important;
+    }
+
+    &__shell {
+      position: relative;
+      width: min(calc(100% - 48px), 1528px);
+      margin: 0 auto;
+      padding: 32px 0 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+
+      &::before {
+        content: "NICE HAIR";
+        position: absolute;
+        top: 8px;
+        left: -4px;
+        font-family: "Inter Tight", sans-serif;
+        font-size: clamp(80px, 12vw, 160px);
+        font-weight: 400;
+        line-height: 0.84;
+        letter-spacing: -0.055em;
+        color: rgba(255, 255, 255, 0.03);
+        white-space: nowrap;
+        pointer-events: none;
+        user-select: none;
+      }
+    }
+
+    &__top {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 20px;
+    }
+
+    &__breadcrumb {
+      font-family: "Inter Tight", sans-serif;
+      font-size: 0.75rem;
+      color: rgba(255, 255, 255, 0.45) !important;
+      letter-spacing: 0.02em;
+
+      a {
+        color: rgba(255, 255, 255, 0.45) !important;
+        text-decoration: none !important;
+      }
+    }
+
+    &__contact {
+      text-align: right;
+      flex-shrink: 0;
+    }
+
+    &__phone {
+      font-family: "Inter Tight", sans-serif;
+      font-size: 20px;
+      font-weight: 400;
+      line-height: 1;
+      letter-spacing: -0.04em;
+
+      a {
+        color: #fff !important;
+        text-decoration: none !important;
+      }
+    }
+
+    &__address {
+      margin-top: 6px;
+      font-family: "Inter Tight", sans-serif;
+      font-size: 12px;
+      font-weight: 400;
+      line-height: 1.15;
+      color: rgba(255, 255, 255, 0.45) !important;
+    }
+
+    &__title {
+      position: relative;
+      z-index: 1;
+      font-family: "Inter Tight", sans-serif;
+      font-size: clamp(32px, 4vw, 48px);
+      font-weight: 400;
+      line-height: 1.12;
+      color: #fff !important;
+      max-width: 600px;
+    }
+
+    &__subtitle {
+      position: relative;
+      z-index: 1;
+      font-family: "Inter Tight", sans-serif;
+      font-size: 14px;
+      line-height: 1.5;
+      color: rgba(255, 255, 255, 0.45) !important;
+      max-width: 400px;
+    }
+  }
+}

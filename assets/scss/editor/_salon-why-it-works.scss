@@ -1,0 +1,237 @@
+.editor-styles-wrapper {
+  .wp-block[data-align="full"] > .nh-salon-why-it-works,
+  .nh-salon-why-it-works.alignfull {
+    max-width: none !important;
+  }
+
+  .nh-salon-why-it-works {
+    position: relative;
+    isolation: isolate;
+    margin: 0 !important;
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
+    // Compact vertical rhythm for editor preview
+    --section-spacing: 60px;
+    padding-top: var(--section-spacing);
+    padding-bottom: var(--section-spacing);
+    background: var(--bg-color);
+    color: #fff;
+    overflow: hidden;
+
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+    }
+
+    // Aggressive margin reset: beats Gutenberg's per-block-group inline
+    // <style> at .wp-container-{hash} > * + * { margin-block-start: ... }
+    // Same pattern as editor/_salon-bundle.scss:38-53.
+    :where(
+      p,
+      h2,
+      h3,
+      figure,
+      .wp-block,
+      .wp-block-group,
+      .wp-block-paragraph,
+      .wp-block-heading,
+      .wp-block-image
+    ) {
+      margin-top: 0 !important;
+      margin-bottom: 0 !important;
+      margin-block-start: 0 !important;
+      margin-block-end: 0 !important;
+    }
+
+    // Release children from theme.json contentSize constraint.
+    .is-layout-constrained
+      > :where(:not(.alignleft):not(.alignright):not(.alignfull)) {
+      max-width: none !important;
+      margin-left: 0 !important;
+      margin-right: 0 !important;
+    }
+
+    // Wave background — clones About Us pattern (same as frontend)
+    &::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: 1;
+      width: 100%;
+      aspect-ratio: 1582 / 1270;
+      pointer-events: none;
+      user-select: none;
+      background-image: url("../../images/bg-about-pattern.svg");
+      background-repeat: no-repeat;
+      background-position: top center;
+      background-size: 100% 100%;
+    }
+
+    // Decor S-curve overlay on the right side
+    &::after {
+      content: "";
+      position: absolute;
+      top: 26%;
+      right: 4%;
+      z-index: 1;
+      width: 32%;
+      max-width: 360px;
+      aspect-ratio: 1 / 1;
+      pointer-events: none;
+      user-select: none;
+      background-image: url("../../images/nice-hair-decor.png");
+      background-repeat: no-repeat;
+      background-position: right center;
+      background-size: contain;
+    }
+
+    &__shell {
+      position: relative;
+      z-index: 2;
+      width: var(--layout-width);
+      margin: 0 auto;
+    }
+
+    &__intro {
+      position: relative;
+    }
+
+    &__eyebrow {
+      font-size: 14px;
+      font-weight: 400;
+      line-height: 1;
+      color: #fff !important;
+    }
+
+    // Mirror frontend decorative bar for the spacer block. Gutenberg's
+    // editor wraps wp:spacer in .components-resizable-box__container with
+    // chrome that otherwise dominates the 6px target.
+    &__divider {
+      position: relative;
+      height: 6px !important;
+      margin-top: 16px !important;
+      margin-bottom: 28px !important;
+
+      &::before {
+        content: "";
+        position: absolute;
+        inset: 0 auto 0 0;
+        width: 74px;
+        height: 6px;
+        background: #fff;
+      }
+
+      &::after {
+        content: "";
+        position: absolute;
+        top: 2px;
+        left: 0;
+        right: 0;
+        height: 1px;
+        background: rgba(255, 255, 255, 0.1);
+      }
+    }
+
+    &__title {
+      max-width: 640px;
+      font-size: clamp(28px, 3.5vw, 42px);
+      font-weight: 500;
+      line-height: 0.98;
+      letter-spacing: -0.03em;
+      color: var(--heading-color) !important;
+      text-wrap: balance;
+      margin-bottom: 60px !important;
+    }
+
+    // Force the desktop two-column layout regardless of editor iframe
+    // width — full-mirror's whole point is to avoid the tablet collapse.
+    // The image min-width is kept low (180px) so the features grid still
+    // has room when the editor canvas is in narrow sidebar mode (~780 px).
+    &__main {
+      display: grid;
+      grid-template-columns: minmax(180px, 360px) minmax(0, 1fr);
+      column-gap: 40px;
+      row-gap: 30px;
+      margin-top: 40px;
+      align-items: start;
+    }
+
+    &__image {
+      margin: 0 !important;
+      aspect-ratio: 540 / 720;
+      overflow: hidden;
+      border-radius: 24px;
+    }
+
+    .wp-block-image img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    // Staircase 1+2+3 grid (mirrors the frontend desktop layout).
+    &__features {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      grid-template-areas:
+        "f1 .  . "
+        "f2 f3 . "
+        "f4 f5 f6";
+      column-gap: 28px;
+      row-gap: 36px;
+      align-items: start;
+    }
+
+    &__feature {
+      min-width: 0;
+      max-width: 100%;
+
+      &:nth-child(1) {
+        grid-area: f1;
+      }
+      &:nth-child(2) {
+        grid-area: f2;
+      }
+      &:nth-child(3) {
+        grid-area: f3;
+      }
+      &:nth-child(4) {
+        grid-area: f4;
+      }
+      &:nth-child(5) {
+        grid-area: f5;
+      }
+      &:nth-child(6) {
+        grid-area: f6;
+      }
+    }
+
+    &__feature-title {
+      font-size: clamp(16px, 1.5vw, 22px);
+      font-weight: 400;
+      line-height: 0.98;
+      letter-spacing: -0.02em;
+      color: #fff !important;
+    }
+
+    &__feature-text {
+      margin-top: 14px !important;
+      max-width: 100%;
+      font-size: 13px;
+      font-weight: 400;
+      line-height: 1.06;
+      color: rgba(255, 255, 255, 0.6) !important;
+    }
+
+    .rich-text {
+      max-width: 100%;
+    }
+
+    [data-rich-text-placeholder] {
+      min-width: 1ch;
+    }
+  }
+}

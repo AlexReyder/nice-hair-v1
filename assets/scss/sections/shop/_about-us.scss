@@ -1,0 +1,392 @@
+@use "../../abstracts/mixins" as *;
+
+.nh-shop-about-us {
+  position: relative;
+  isolation: isolate;
+  margin: 0 !important;
+  padding-top: var(--section-spacing);
+  background: var(--bg-color);
+  color: #fff;
+  overflow: hidden;
+
+  .is-layout-constrained
+    > :where(:not(.alignleft):not(.alignright):not(.alignfull)) {
+    max-width: none !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+  }
+
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 1;
+    width: 100%;
+    aspect-ratio: 1582 / 1270;
+    pointer-events: none;
+    user-select: none;
+    background-image: url("../../../images/bg-about-pattern.svg");
+    background-repeat: no-repeat;
+    background-position: top center;
+    background-size: 100% 100%;
+  }
+
+  &__shell {
+    @include shell;
+  }
+
+  &__eyebrow,
+  &__aside-eyebrow {
+    @include eyebrow;
+  }
+
+  &__divider,
+  &__aside-divider {
+    @include divider;
+  }
+
+  &__title {
+    max-width: 760px;
+    @include block_heading;
+  }
+
+  &__main {
+    display: grid;
+    grid-template-columns: minmax(320px, 540px) minmax(0, 1fr);
+    gap: 80px 110px;
+    margin-top: var(--subheading-offset);
+    align-items: flex-start;
+  }
+
+  &__content {
+    max-width: 500px;
+  }
+
+  &__lead {
+    max-width: 620px;
+    font-size: clamp(26px, 2.2vw, 42px);
+    font-weight: 400;
+    line-height: 0.96;
+    letter-spacing: -0.055em;
+    color: #fff;
+  }
+
+  &__body {
+    max-width: 500px;
+    margin-top: 30px;
+  }
+
+  &__body-text {
+    font-size: var(--text-size);
+    font-weight: 400;
+    line-height: 1.04;
+    color: var(--text-color-grey);
+
+    & + & {
+      margin-top: 34px;
+    }
+
+    &--primary {
+      color: var(--text-color-grey);
+    }
+  }
+
+  &__stats {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 54px 84px;
+    align-items: flex-start;
+    margin-block-start: 0;
+  }
+
+  &__stat {
+    min-width: 0;
+    max-width: 320px;
+    margin-block-start: 0;
+  }
+
+  &__stat-title {
+    font-size: clamp(28px, 2vw, 42px);
+    font-weight: 400;
+    line-height: 0.95;
+    color: #fff;
+  }
+
+  &__stat-text {
+    margin-top: 24px;
+    max-width: 280px;
+    font-size: var(--text-size);
+    font-weight: 400;
+    line-height: 1.06;
+    color: var(--text-color-grey);
+  }
+
+  &__bottom {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr)) minmax(240px, 320px);
+    align-items: end;
+    gap: 18px;
+    margin-top: 150px;
+  }
+
+  &__gallery {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 18px;
+    grid-column: 1 / 4;
+  }
+
+  &__gallery-image {
+    margin: 0;
+    aspect-ratio: 375 / 500;
+    overflow: hidden;
+    border-radius: 32px;
+
+    img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  }
+
+  &__aside {
+    min-width: 0;
+    padding-left: 42px;
+    padding-bottom: 18px;
+  }
+
+  &__aside-title {
+    max-width: 12ch;
+    font-size: clamp(32px, 2.2vw, 48px);
+    font-weight: 400;
+    line-height: 0.96;
+    letter-spacing: -0.055em;
+    color: #fff;
+  }
+
+  &__aside-text {
+    margin-top: 36px;
+    max-width: 280px;
+    font-size: var(--text-size);
+    font-weight: 400;
+    line-height: 1.06;
+    color: rgba(255, 255, 255, 0.72);
+  }
+
+  &__aside-link {
+    margin-top: 46px;
+  }
+}
+
+@media (max-width: 1279px) {
+  .nh-shop-about-us {
+    &::before {
+      top: 20px;
+      left: 50%;
+      width: 128%;
+      transform: translateX(-49%);
+      background-position: top center;
+      background-size: 100% 100%;
+    }
+
+    &__divider,
+    &__aside-divider {
+      margin-bottom: 30px;
+    }
+
+    &__title {
+      max-width: 720px;
+      font-size: clamp(48px, 8vw, 72px);
+    }
+
+    &__main {
+      grid-template-columns: minmax(0, 1fr) minmax(220px, 280px);
+      gap: 48px 40px;
+      margin-top: 60px;
+    }
+
+    &__content {
+      max-width: 420px;
+    }
+
+    &__lead {
+      max-width: 410px;
+      font-size: clamp(20px, 4.1vw, 32px);
+    }
+
+    &__body {
+      max-width: 420px;
+      margin-top: 60px;
+    }
+
+    &__body-text {
+      font-size: 16px;
+
+      & + & {
+        margin-top: 28px;
+      }
+    }
+
+    &__stats {
+      grid-template-columns: 1fr;
+      gap: 44px;
+      padding-top: 2px;
+    }
+
+    &__stat {
+      max-width: 100%;
+    }
+
+    &__stat-title {
+      font-size: clamp(22px, 4vw, 34px);
+    }
+
+    &__stat-text {
+      margin-top: 18px;
+      max-width: 220px;
+      font-size: 14px;
+    }
+
+    &__bottom {
+      grid-template-columns: 1fr;
+      gap: 60px;
+      margin-top: 110px;
+    }
+
+    &__aside {
+      order: -1;
+      padding-left: 0;
+      padding-bottom: 0;
+    }
+
+    &__aside-title {
+      max-width: 14ch;
+      font-size: 30px;
+    }
+
+    &__aside-text {
+      margin-top: 28px;
+      max-width: 320px;
+      font-size: 16px;
+    }
+
+    &__aside-link {
+      margin-top: 36px;
+    }
+
+    &__gallery {
+      grid-column: auto;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    &__gallery-image {
+      border-radius: 24px;
+    }
+  }
+}
+
+@media (max-width: 767px) {
+  .nh-shop-about-us {
+    &::before {
+      top: 360px;
+      left: 50%;
+      width: 190%;
+      transform: translateX(-57%);
+      background-position: top center;
+      background-size: 100% 100%;
+    }
+
+    &__divider,
+    &__aside-divider {
+      margin-top: 16px;
+      margin-bottom: 24px;
+
+      &::before {
+        width: 84px;
+      }
+    }
+
+    &__title {
+      max-width: 100%;
+      font-size: clamp(34px, 11.5vw, 52px);
+      line-height: 0.96;
+    }
+
+    &__main {
+      grid-template-columns: 1fr;
+      gap: 48px;
+      margin-top: 30px;
+    }
+
+    &__content {
+      max-width: 100%;
+    }
+
+    &__lead {
+      max-width: 100%;
+      font-size: clamp(24px, 9vw, 40px);
+      line-height: 0.96;
+    }
+
+    &__body {
+      max-width: 100%;
+      margin-top: 60px;
+    }
+
+    &__body-text {
+      font-size: 16px;
+      line-height: 1.08;
+    }
+
+    &__stats {
+      gap: 36px;
+      padding-top: 0;
+    }
+
+    &__stat-title {
+      font-size: clamp(26px, 8.5vw, 34px);
+    }
+
+    &__stat-text {
+      max-width: 100%;
+      font-size: 15px;
+      line-height: 1.08;
+    }
+
+    &__bottom {
+      gap: 60px;
+      margin-top: 80px;
+    }
+
+    &__aside-title {
+      font-size: 28px;
+    }
+
+    &__aside-text {
+      max-width: 100%;
+      font-size: 16px;
+      line-height: 1.08;
+    }
+
+    &__gallery {
+      grid-template-columns: 1fr;
+      gap: 16px;
+    }
+
+    &__gallery-image {
+      border-radius: 24px;
+      max-width: 50vw;
+    }
+  }
+}
+
+@media (max-width: 490px) {
+  .nh-shop-about-us {
+    &__gallery-image {
+      max-width: 100%;
+    }
+  }
+}

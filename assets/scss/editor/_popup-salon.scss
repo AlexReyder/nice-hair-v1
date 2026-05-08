@@ -1,0 +1,198 @@
+.editor-styles-wrapper {
+  .nh-popup-salon__canvas {
+    position: relative;
+    width: min(100%, 694px);
+    min-height: 376px;
+    margin: 28px auto !important;
+    border-radius: 22px;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: rgba(20, 20, 20, 0.94);
+    box-shadow: 0 18px 42px rgba(0, 0, 0, 0.24);
+    padding: 0 !important;
+    isolation: isolate;
+
+    * {
+      box-sizing: border-box;
+    }
+  }
+
+  .nh-popup-salon__image,
+  .nh-popup-salon__image figure,
+  .nh-popup-salon__image img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    margin: 0 !important;
+  }
+
+  .nh-popup-salon__image {
+    z-index: 0;
+  }
+
+  .nh-popup-salon__image img {
+    object-fit: cover;
+  }
+
+  .nh-popup-salon__canvas .wp-block-image {
+    margin-bottom: 0 !important;
+  }
+
+  .nh-popup-salon__canvas .is-layout-constrained
+    > :where(:not(.alignleft):not(.alignright):not(.alignfull)) {
+    max-width: none !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+  }
+
+  .nh-popup-salon__copy {
+    position: relative;
+    z-index: 2;
+    max-width: 276px;
+    padding: 28px 26px 0;
+    display: grid;
+    align-content: start;
+    justify-items: start;
+    gap: 16px;
+  }
+
+  .nh-popup-salon__copy
+    > :where(
+      p,
+      h1,
+      h2,
+      h3,
+      h4,
+      h5,
+      h6,
+      figure,
+      .wp-block,
+      .wp-block-group,
+      .wp-block-image,
+      .wp-block-paragraph,
+      .wp-block-heading
+    ) {
+    margin: 0 !important;
+    margin-block-start: 0 !important;
+    margin-block-end: 0 !important;
+  }
+
+  .nh-popup-salon__title {
+    margin: 0 !important;
+    max-width: 236px;
+    font-size: clamp(22px, 2vw, 28px);
+    font-weight: 400;
+    line-height: 0.98;
+    letter-spacing: -0.035em;
+    color: #fff !important;
+  }
+
+  .nh-popup-salon__description {
+    margin: 0 !important;
+    max-width: 214px;
+    font-size: 12px;
+    line-height: 1.28;
+    color: rgba(255, 255, 255, 0.68) !important;
+
+    a {
+      color: #fff !important;
+      text-decoration: underline;
+    }
+  }
+
+  .nh-popup-salon__form-title-content,
+  .nh-popup-salon__disclaimer-content {
+    position: absolute;
+    z-index: 2;
+    margin: 0 !important;
+  }
+
+  .nh-popup-salon__form-title-content {
+    left: 26px;
+    bottom: 74px;
+    max-width: 170px;
+    font-size: 20px;
+    line-height: 1;
+    color: #fff !important;
+  }
+
+  .nh-popup-salon__disclaimer-content {
+    right: 26px;
+    bottom: 26px;
+    max-width: 144px;
+    font-size: 11px;
+    line-height: 1.16;
+    color: rgba(255, 255, 255, 0.56) !important;
+
+    a {
+      color: rgba(255, 255, 255, 0.78) !important;
+      text-decoration: underline;
+    }
+  }
+
+  @media (max-width: 1100px) {
+    .nh-popup-salon__canvas {
+      width: min(100%, 640px);
+      min-height: 436px;
+      margin: 24px auto !important;
+    }
+
+    .nh-popup-salon__copy {
+      max-width: 250px;
+      padding: 26px 24px 0;
+    }
+
+    .nh-popup-salon__form-title-content {
+      left: 24px;
+      bottom: 74px;
+      max-width: 156px;
+      font-size: 18px;
+    }
+
+    .nh-popup-salon__disclaimer-content {
+      right: 24px;
+      bottom: 24px;
+      max-width: 136px;
+    }
+  }
+
+  @media (max-width: 782px) {
+    .nh-popup-salon__canvas {
+      width: 100%;
+      min-height: 560px;
+      margin: 16px auto !important;
+    }
+
+    .nh-popup-salon__copy {
+      max-width: none;
+      padding: 58px 20px 0;
+      gap: 14px;
+    }
+
+    .nh-popup-salon__title {
+      max-width: 236px;
+      font-size: clamp(20px, 6.5vw, 26px);
+    }
+
+    .nh-popup-salon__description {
+      max-width: 208px;
+      font-size: 12px;
+    }
+
+    .nh-popup-salon__form-title-content {
+      left: 20px;
+      right: 20px;
+      bottom: 94px;
+      max-width: 220px;
+      font-size: 24px;
+    }
+
+    .nh-popup-salon__disclaimer-content {
+      left: 20px;
+      right: auto;
+      bottom: 20px;
+      max-width: 176px;
+    }
+  }
+}

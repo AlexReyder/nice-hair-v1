@@ -1,0 +1,262 @@
+@use "../../abstracts/mixins" as *;
+
+.nh-shop-categories {
+  position: relative;
+  isolation: isolate;
+  margin: 0 !important;
+  padding-top: var(--section-spacing);
+  // padding-bottom: var(--section-spacing);
+  background: var(--bg-color);
+  color: #fff;
+  overflow: hidden;
+
+  .is-layout-constrained
+    > :where(:not(.alignleft):not(.alignright):not(.alignfull)) {
+    max-width: none !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+  }
+
+  &__shell {
+    @include shell;
+    padding-top: 0 !important;
+  }
+
+  // Header — eyebrow + divider + title + text + [ + ] decor
+  &__header {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+
+    @include block_decor_plus;
+  }
+
+  &__eyebrow {
+    margin: 0;
+    @include eyebrow;
+  }
+
+  &__divider {
+    @include divider;
+  }
+
+  &__title {
+    @include block_heading;
+  }
+
+  &__text {
+    margin: 20px 0 0;
+    max-width: 560px;
+    font-size: var(--text-size);
+    font-weight: 400;
+    line-height: 1.2;
+    color: var(--text-color-grey);
+  }
+
+  // Bento grid — 4 columns, 3 staggered rows
+  &__grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: 13fr 5fr 17fr;
+    height: clamp(560px, 50vw, 740px);
+    gap: 20px;
+    margin-top: 60px;
+  }
+
+  // Card — clickable <a> with background image
+  &__card {
+    position: relative;
+    display: flex;
+    border-radius: 24px;
+    overflow: hidden;
+    text-decoration: none;
+    color: #fff;
+    background: rgba(255, 255, 255, 0.04);
+
+    // Bento positions
+    &:nth-child(1) {
+      grid-column: 1 / 3;
+      grid-row: 1 / 3;
+    }
+    &:nth-child(2) {
+      grid-column: 3;
+      grid-row: 1;
+    }
+    &:nth-child(3) {
+      grid-column: 4;
+      grid-row: 1;
+    }
+    &:nth-child(4) {
+      grid-column: 1 / 3;
+      grid-row: 3;
+    }
+    &:nth-child(5) {
+      grid-column: 3 / 5;
+      grid-row: 2 / 4;
+    }
+
+    // Gradient overlay for text readability
+    &::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      background: linear-gradient(
+        to top,
+        rgba(0, 0, 0, 0.55) 0%,
+        rgba(0, 0, 0, 0.15) 55%,
+        transparent 100%
+      );
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+
+    &:hover::after,
+    &:focus-visible::after {
+      opacity: 0.85;
+    }
+  }
+
+  // Background image
+  &__card-bg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.4s ease;
+
+    .nh-shop-categories__card:hover &,
+    .nh-shop-categories__card:focus-visible & {
+      transform: scale(1.03);
+    }
+  }
+
+  // Card body — text content over image
+  &__card-body {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    padding: 40px;
+    width: 100%;
+  }
+
+  &__card-title {
+    margin: 0;
+    font-size: clamp(22px, 2vw, 30px);
+    font-weight: 400;
+    line-height: 1.1;
+    color: #fff;
+    letter-spacing: -0.01em;
+  }
+
+  &__card-text {
+    margin: 14px 0 0;
+    max-width: 320px;
+    font-size: 14px;
+    line-height: 1.35;
+    color: rgba(255, 255, 255, 0.75);
+  }
+
+  // CTA pill — mirrors .nh-cta-link UI & animation (ring slides in on hover)
+  // Rendered as <span> inside <a> card, hover triggered by card
+  &__card-cta {
+    align-self: flex-start;
+    margin-top: auto;
+  }
+
+  &__card:hover &__card-cta .wp-block-button__link::before,
+  &__card:focus-visible &__card-cta .wp-block-button__link::before {
+    right: 0;
+  }
+
+  &__card:hover &__card-cta .wp-block-button__link::after,
+  &__card:focus-visible &__card-cta .wp-block-button__link::after {
+    border-color: transparent;
+    background-color: transparent;
+    transform: translateY(-50%) rotate(0deg);
+  }
+}
+
+// Tablet
+@media (max-width: 1279px) {
+  .nh-shop-categories {
+    &__title {
+      font-size: clamp(44px, 7vw, 64px);
+    }
+
+    &__grid {
+      grid-template-columns: repeat(2, 1fr);
+      grid-template-rows: none;
+      height: auto;
+      gap: 16px;
+      margin-top: 48px;
+    }
+
+    &__card {
+      grid-column: span 1 !important;
+      grid-row: auto !important;
+      min-height: 280px;
+      border-radius: 20px;
+    }
+
+    &__card-body {
+      padding: 32px;
+    }
+
+    &__card-title {
+      font-size: clamp(20px, 2.6vw, 26px);
+    }
+
+  }
+}
+
+// Mobile
+@media (max-width: 767px) {
+  .nh-shop-categories {
+    padding-bottom: calc(var(--section-spacing) * 0.6);
+
+    &__header::after {
+      display: none;
+    }
+
+    &__title {
+      font-size: clamp(34px, 9vw, 46px);
+    }
+
+    &__text {
+      max-width: none;
+    }
+
+    &__grid {
+      grid-template-columns: 1fr;
+      grid-template-rows: none;
+      height: auto;
+      gap: 16px;
+      margin-top: 36px;
+    }
+
+    &__card {
+      grid-column: span 1 !important;
+      grid-row: auto !important;
+      min-height: 280px;
+      border-radius: 18px;
+    }
+
+    &__card-body {
+      padding: 28px;
+    }
+
+    &__card-title {
+      font-size: 22px;
+    }
+
+    &__card-text {
+      font-size: 13px;
+    }
+
+  }
+}

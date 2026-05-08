@@ -1,0 +1,59 @@
+// Gutenberg editor-scope base. Imported by editor.scss as `@use "editor/base";`
+// BEFORE the frontend partials (sections/home/about-us, sections/home/one-brand)
+// so the CSS custom properties declared here are available when those partials run.
+//
+// We deliberately do NOT @use "base/base": the frontend base drags in body/margin/
+// background/font-family rules that fight Gutenberg's own block canvas layout.
+// We only need the CSS variables here.
+
+.editor-styles-wrapper {
+  background: #fffaf7;
+  color: #2a1f1a;
+
+  // Mirror of the :root block in assets/scss/base/_base.scss.
+  // Keep in lock-step by hand — if a variable is added/renamed there, mirror
+  // it here, otherwise the editor preview will silently fall back to the CSS
+  // initial value (empty) and section layouts will collapse.
+  --bg-color: #1d1d1d;
+  --heading-color: #ad9482;
+  --heading-color-white: #fff;
+  --text-color: #fff;
+  --text-color-grey: rgba(255, 255, 255, 0.6);
+
+  --heading-size: clamp(42px, 4.5vw, 64px);
+  --subheading-size: clamp(18px, 1vw, 20px);
+  --text-size: clamp(14px, 1.2vw, 16px);
+
+  --section-spacing: 200px;
+  --heading-offset: 60px;
+  --subheading-offset: 100px;
+
+  --layout-width: min(calc(100% - 64px), 1372px);
+
+  @media (min-width: 1920px) {
+    --layout-width: min(calc(100% - 64px), 1760px);
+  }
+}
+
+.editor-styles-wrapper
+  .wp-block-cover[class*="nh-"]
+  > .wp-block-cover__inner-container {
+  width: 100%;
+  max-width: inherit;
+  min-width: 0;
+}
+
+.editor-styles-wrapper
+  .wp-block-group[class*="nh-"]
+  > .wp-block-group__inner-container {
+  display: contents;
+}
+
+.editor-styles-wrapper .nh-home-hero,
+.editor-styles-wrapper .nh-home-cta {
+  padding: 24px;
+}
+
+.acf-block-preview {
+  // min-height: 0 !important;
+}

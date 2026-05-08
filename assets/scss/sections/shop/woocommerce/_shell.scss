@@ -1,0 +1,146 @@
+@use "../../../abstracts/variables" as *;
+
+/* ---------- WC reset - neutralise default WooCommerce styles ---------- */
+
+:where(.woocommerce) {
+  margin: 0;
+  padding: 0;
+}
+
+/* ---------- Shop archive shell ---------- */
+
+.nh-main--shop-archive {
+  min-height: 100vh;
+  padding-top: 120px;
+  background: linear-gradient(
+    180deg,
+    #1d1d1d 0,
+    #1d1d1d 340px,
+    #fffaf7 340px,
+    #fffaf7 100%
+  );
+}
+
+.nh-main--shop-archive--dark {
+  background: #1d1d1d;
+}
+
+.nh-main--shop-utility {
+  min-height: 100vh;
+  padding-top: 120px;
+  background: linear-gradient(
+    180deg,
+    #1d1d1d 0,
+    #1d1d1d 220px,
+    #fffaf7 220px,
+    #fffaf7 100%
+  );
+}
+
+/* ---------- WC notices ---------- */
+
+:where(.woocommerce-message, .woocommerce-error, .woocommerce-info) {
+  margin: 0 0 20px;
+  padding: 12px 20px;
+  border-radius: 12px;
+  font-size: 0.875rem;
+}
+
+/* ---------- Pagination ---------- */
+
+:where(.woocommerce-pagination) {
+  margin: 0;
+
+  ul,
+  .nav-links {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    margin: 60px 0 0;
+    padding: 0;
+    list-style: none;
+    font-family: "Inter Tight", sans-serif;
+    font-size: 16px;
+    font-weight: 400;
+    letter-spacing: -0.03em;
+  }
+
+  li {
+    margin: 0;
+    padding: 0;
+  }
+
+  a,
+  span {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    text-decoration: none;
+    color: $nh-color-text;
+    transition:
+      background-color 0.2s ease,
+      color 0.2s ease;
+  }
+
+  a:hover {
+    background: rgba(42, 31, 26, 0.06);
+  }
+
+  .page-numbers.current {
+    background: transparent;
+    color: #ff6633;
+  }
+
+  :where(.prev, .next) {
+    font-size: 14px;
+  }
+
+  .page-numbers.prev:not(a),
+  .page-numbers.next:not(a),
+  .page-numbers.first:not(a),
+  .page-numbers.last:not(a) {
+    opacity: 0.3;
+    cursor: default;
+  }
+}
+
+.nh-main--shop-archive--dark,
+.nh-main--tools {
+  :where(.woocommerce-pagination) {
+    a,
+    span {
+      color: #fff;
+    }
+
+    a:hover {
+      background: rgba(255, 255, 255, 0.08);
+    }
+
+    .page-numbers.current {
+      background: transparent;
+      color: #ff6633;
+    }
+  }
+}
+
+@media (max-width: 1279px) {
+  :where(.woocommerce-pagination) {
+    ul,
+    .nav-links {
+      margin-top: 48px;
+    }
+  }
+}
+
+@media (max-width: 767px) {
+  :where(.woocommerce-pagination) {
+    ul,
+    .nav-links {
+      margin-top: 40px;
+    }
+  }
+}

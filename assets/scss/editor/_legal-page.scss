@@ -1,0 +1,120 @@
+.editor-styles-wrapper {
+  &:has(.nh-legal-page) {
+    // background: #1d1d1d;
+  }
+
+  .block-editor-block-list__layout.is-root-container
+    > .wp-block-group.alignfull.nh-legal-page {
+    width: 100%;
+    max-width: none !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+  }
+
+  .nh-legal-page {
+    margin: 0 !important;
+
+    .wp-block-group,
+    .wp-block-heading,
+    .wp-block-paragraph,
+    .wp-block-separator,
+    p,
+    h1,
+    h2,
+    h3,
+    hr {
+      margin-block-start: 0;
+      margin-block-end: 0;
+    }
+
+    .wp-block-group__inner-container {
+      display: contents;
+    }
+
+    .rich-text {
+      max-width: 100%;
+    }
+
+    [data-rich-text-placeholder] {
+      min-width: 1ch;
+    }
+
+    &__divider {
+      height: 6px !important;
+      margin-top: 20px !important;
+      margin-bottom: 35px !important;
+
+      .components-resizable-box__container {
+        height: 6px !important;
+        min-height: 6px !important;
+      }
+    }
+
+    &__intro-text {
+      margin-top: var(--subheading-offset) !important;
+    }
+
+    &__body {
+      margin-top: 90px !important;
+    }
+
+    &__section {
+      padding-top: 34px !important;
+      padding-bottom: 38px !important;
+    }
+
+    &__text {
+      margin-top: 22px !important;
+    }
+
+    &__items {
+      margin-top: 28px !important;
+      gap: 26px;
+    }
+
+    &__item {
+      .nh-legal-page__text {
+        margin-top: 14px !important;
+      }
+    }
+  }
+}
+
+@media (max-width: 1279px) {
+  .editor-styles-wrapper {
+    .nh-legal-page {
+      &__body {
+        margin-top: 72px !important;
+      }
+    }
+  }
+}
+
+@media (max-width: 767px) {
+  .editor-styles-wrapper {
+    .nh-legal-page {
+      &__divider {
+        margin-top: 16px !important;
+        margin-bottom: 28px !important;
+      }
+
+      &__intro-text {
+        margin-top: 42px !important;
+      }
+
+      &__body {
+        margin-top: 58px !important;
+      }
+
+      &__section {
+        padding-top: 28px !important;
+        padding-bottom: 32px !important;
+      }
+    }
+  }
+}
+
+a {
+  text-decoration: none !important;
+  color: inherit;
+}

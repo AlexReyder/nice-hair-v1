@@ -1,0 +1,231 @@
+.nh-shipping-hero {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  margin: 0 !important;
+  color: red;
+  background-color: var(--bg-color);
+
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+
+  .wp-block-group,
+  p,
+  h1 {
+    margin-top: 0;
+    margin-bottom: 0;
+  }
+
+  .is-layout-constrained
+    > :where(:not(.alignleft):not(.alignright):not(.alignfull)) {
+    max-width: none !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+  }
+
+  &__shell {
+    position: relative;
+    z-index: 1;
+    width: min(calc(100% - 64px), 1528px);
+    margin: 0 auto;
+    padding: 110px 0 80px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+
+    &::before {
+      content: "NICE HAIR";
+      position: absolute;
+      top: 0;
+      left: -6px;
+      z-index: 0;
+      font-family: "Inter Tight", sans-serif;
+      font-size: clamp(160px, 17vw, 298px);
+      font-weight: 400;
+      line-height: 0.84;
+      letter-spacing: -0.055em;
+      color: rgba(255, 255, 255, 0.02);
+      white-space: nowrap;
+      pointer-events: none;
+      user-select: none;
+    }
+  }
+
+  &__top,
+  &__content {
+    position: relative;
+    z-index: 1;
+  }
+
+  &__top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 24px;
+  }
+
+  &__breadcrumbs {
+    font-family: "Inter Tight", sans-serif;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1;
+    letter-spacing: -0.03em;
+    color: rgba(255, 255, 255, 0.6);
+    white-space: nowrap;
+
+    a {
+      color: rgba(255, 255, 255, 0.6);
+      text-decoration: none;
+      transition: color 0.25s ease;
+    }
+
+    a:hover,
+    a:focus-visible {
+      color: #fff;
+    }
+  }
+
+  &__contact {
+    margin-left: auto;
+    text-align: right;
+  }
+
+  &__phone,
+  &__address,
+  &__breadcrumbs,
+  &__title,
+  &__text {
+    font-family: "Inter Tight", sans-serif;
+  }
+
+  &__phone {
+    font-size: 25px;
+    font-weight: 400;
+    line-height: 1;
+    letter-spacing: -0.04em;
+
+    a {
+      color: #fff;
+      text-decoration: none;
+    }
+  }
+
+  &__address {
+    margin-top: 8px;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1.08;
+    letter-spacing: -0.03em;
+    color: rgba(255, 255, 255, 0.7);
+  }
+
+  &__title {
+    max-width: 900px;
+    font-size: clamp(58px, 4.95vw, 80px);
+    font-weight: 400;
+    line-height: 0.93;
+    letter-spacing: -0.055em;
+    color: #fff;
+  }
+
+  &__text {
+    max-width: 560px;
+    padding-top: 40px;
+    font-size: clamp(18px, 1.45vw, 24px);
+    font-weight: 400;
+    line-height: 1.03;
+    letter-spacing: -0.035em;
+    color: rgba(255, 255, 255, 0.7);
+  }
+}
+
+@media (max-width: 1279px) {
+  .nh-shipping-hero {
+    &__shell {
+      width: min(calc(100% - 48px), 1232px);
+      padding: 100px 0 60px;
+
+      &::before {
+        top: 2px;
+        left: 0;
+        font-size: clamp(126px, 16vw, 220px);
+      }
+    }
+
+    &__phone {
+      font-size: 22px;
+    }
+
+    &__address {
+      font-size: 13px;
+    }
+
+    &__breadcrumbs {
+      font-size: 13px;
+    }
+
+    &__title {
+      max-width: 700px;
+      font-size: clamp(56px, 7vw, 74px);
+      line-height: 0.94;
+    }
+
+    &__text {
+      max-width: 500px;
+      padding-top: 32px;
+      font-size: clamp(18px, 2vw, 23px);
+    }
+  }
+}
+
+@media (max-width: 767px) {
+  .nh-shipping-hero {
+    &__shell {
+      width: min(calc(100% - 32px), 100%);
+      padding: 90px 0 40px;
+      gap: 20px;
+
+      &::before {
+        top: 0;
+        left: 0;
+        font-size: 96px;
+        line-height: 0.9;
+      }
+    }
+
+    &__top {
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    &__breadcrumbs {
+      font-size: 13px;
+    }
+
+    &__phone {
+      font-size: 18px;
+    }
+
+    &__address {
+      margin-top: 6px;
+      font-size: 13px;
+      line-height: 1.1;
+    }
+
+    &__title {
+      max-width: none;
+      font-size: clamp(34px, 10.5vw, 52px);
+      line-height: 0.95;
+    }
+
+    &__text {
+      max-width: 100%;
+      padding-top: 24px;
+      font-size: 16px;
+      line-height: 1.05;
+    }
+  }
+}

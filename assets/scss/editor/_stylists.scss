@@ -1,0 +1,294 @@
+// Gutenberg editor scope for the Salon STYLISTS ACF block.
+//
+// Full mirror approach (same as editor/_salon-bundle.scss): editor.scss
+// does NOT @use sections/salon/stylists, so this file re-declares
+// everything the editor needs. Avoids cascade fights with frontend
+// media queries that otherwise trigger tablet/mobile rules inside the
+// editor iframe (760-1100 px wide) and break the preview.
+//
+// Critical: Swiper JS does NOT run in the editor, and Swiper CSS is
+// intentionally NOT imported in the editor bundle. We re-declare the
+// .swiper-wrapper as a static 3-column CSS Grid so the editor preview
+// shows 3 stylist cards at once without Swiper's runtime layout.
+
+.editor-styles-wrapper {
+  // Release the ACF block wrapper from theme.json's contentSize (840px)
+  // constraint so the dark Stylists section spans the full editor canvas.
+  .wp-block-acf-nh-stylists {
+    max-width: none !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    margin-top: 0 !important;
+    margin-block-start: 0 !important;
+  }
+
+  .nh-salon-stylists {
+    position: relative;
+    margin: 0 !important;
+    margin-top: 0 !important;
+    // Compact vertical rhythm for editor preview
+    --section-spacing: 60px;
+    padding-top: 24px;
+    padding-bottom: var(--section-spacing);
+    background: var(--bg-color);
+    color: #fff;
+    overflow: hidden;
+
+    // Locked-pattern visual hint
+
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+    }
+
+    // Aggressive margin reset: beats Gutenberg's per-block-group inline
+    // <style> at .wp-container-{hash} > * + * { margin-block-start: ... }
+    // Same pattern as editor/_salon-bundle.scss:38-53.
+    :where(
+      p,
+      h2,
+      h3,
+      figure,
+      .wp-block,
+      .wp-block-group,
+      .wp-block-paragraph,
+      .wp-block-heading
+    ) {
+      margin-top: 0 !important;
+      margin-bottom: 0 !important;
+      margin-block-start: 0 !important;
+      margin-block-end: 0 !important;
+    }
+
+    // Release children from theme.json contentSize constraint.
+    .is-layout-constrained
+      > :where(:not(.alignleft):not(.alignright):not(.alignfull)) {
+      max-width: none !important;
+      margin-left: 0 !important;
+      margin-right: 0 !important;
+    }
+
+    &__shell {
+      position: relative;
+      width: var(--layout-width);
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(260px, 300px);
+      gap: 40px;
+      align-items: end;
+      padding-top: 40px;
+    }
+
+    &__slider {
+      grid-column: 1;
+      min-width: 0;
+      width: 100%;
+    }
+
+    // Critical: neutralize Swiper expectations.
+    // Swiper JS doesn't run in editor → no inline transform/widths.
+    // Swiper CSS is not imported in editor bundle → .swiper-wrapper
+    // is just a plain div. We coerce it into a static 3-up grid so
+    // the editor preview shows 3 cards at once.
+    .swiper-wrapper {
+      display: grid !important;
+      grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+      gap: 14px;
+      transform: none !important;
+      width: 100% !important;
+    }
+
+    .swiper-slide {
+      width: auto !important;
+      height: auto !important;
+      flex-shrink: 1 !important;
+      display: flex;
+    }
+
+    &__card {
+      position: relative;
+      width: 100%;
+      overflow: hidden;
+      border-radius: 24px;
+      aspect-ratio: 420 / 560 !important;
+      margin: 0 !important;
+      padding: 0 !important;
+      background: rgba(255, 255, 255, 0.04);
+    }
+
+    &__image {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    &__caption {
+      position: absolute;
+      left: 22px;
+      right: 22px;
+      bottom: 22px;
+      z-index: 1;
+    }
+
+    &__name {
+      margin: 0 !important;
+      font-size: clamp(20px, 1.8vw, 26px);
+      font-weight: 400;
+      line-height: 1;
+      color: #fff !important;
+      letter-spacing: -0.02em;
+    }
+
+    &__exp {
+      margin: 6px 0 0 !important;
+      font-size: 13px;
+      font-weight: 400;
+      line-height: 1.1;
+      color: rgba(255, 255, 255, 0.65) !important;
+    }
+
+    &__aside {
+      grid-column: 2;
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      padding-bottom: 8px;
+    }
+
+    &__nav {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 32px;
+    }
+
+    &__nav-btn {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      border: 1px solid rgba(255, 255, 255, 0.35);
+      background: transparent;
+      color: #fff;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      padding: 0;
+    }
+
+    &__nav-icon {
+      display: block;
+      width: 14px;
+      height: 14px;
+      background-image: url("data:image/svg+xml,%3Csvg width='14' height='14' viewBox='0 0 14 14' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M5 2L11 7L5 12' stroke='%23ffffff' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round' fill='none'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: center;
+      background-size: 14px 14px;
+    }
+
+    &__nav-btn--prev &__nav-icon {
+      transform: scaleX(-1);
+    }
+
+    &__eyebrow {
+      margin: 0 !important;
+      font-size: 14px;
+      font-weight: 400;
+      line-height: 1;
+      color: #fff !important;
+    }
+
+    &__divider {
+      position: relative;
+      height: 6px !important;
+      margin-top: 16px !important;
+      margin-bottom: 24px !important;
+
+      &::before {
+        content: "";
+        position: absolute;
+        inset: 0 auto 0 0;
+        width: 74px;
+        height: 6px;
+        background: #fff;
+      }
+
+      &::after {
+        content: "";
+        position: absolute;
+        top: 2px;
+        left: 0;
+        right: 0;
+        height: 1px;
+        background: rgba(255, 255, 255, 0.1);
+      }
+    }
+
+    &__value {
+      margin: 0 !important;
+      font-size: clamp(36px, 3vw, 52px);
+      font-weight: 400;
+      line-height: 0.92;
+      color: var(--heading-color) !important;
+      letter-spacing: -0.03em;
+    }
+
+    &__subtitle {
+      margin: 6px 0 0 !important;
+      font-size: clamp(20px, 2vw, 28px);
+      font-weight: 400;
+      line-height: 0.95;
+      color: #fff !important;
+      letter-spacing: -0.02em;
+    }
+
+    &__text {
+      margin: 24px 0 0 !important;
+      max-width: 280px;
+      font-size: 14px;
+      font-weight: 400;
+      line-height: 1.06;
+      color: rgba(255, 255, 255, 0.6) !important;
+    }
+
+    &__link {
+      margin-top: 30px !important;
+    }
+  }
+
+  // Narrow editor canvas (Gutenberg "tablet" preview ≈ 781px)
+  @media (max-width: 1100px) {
+    .nh-salon-stylists {
+      &__shell {
+        grid-template-columns: 1fr;
+        gap: 40px;
+        padding-top: 30px;
+      }
+
+      &__slider {
+        grid-column: 1;
+      }
+
+      .swiper-wrapper {
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+      }
+
+      &__aside {
+        grid-column: 1;
+        order: -1;
+        padding-bottom: 0;
+      }
+
+      &__nav {
+        margin-bottom: 24px;
+      }
+    }
+  }
+}
+
+.nh-salon-stylists__nav-btn--prev {
+  transform: scaleX(-1) !important;
+}

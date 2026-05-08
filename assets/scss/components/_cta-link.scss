@@ -1,0 +1,216 @@
+// CTA pill button with an integrated clickable arrow circle.
+// The link/button owns the full hit area: text pill + gap + arrow circle.
+
+.nh-cta-link {
+  display: inline-flex;
+  overflow: visible !important;
+
+  .wp-block-button__link {
+    position: relative;
+    isolation: isolate;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    min-width: 196px;
+    min-height: 56px;
+    padding: 0 130px 0 25px;
+    border: 0 !important;
+    border-radius: 999px !important;
+    background: transparent !important;
+    color: #fff !important;
+    font-family: "Inter Tight", sans-serif;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 1;
+    letter-spacing: -0.03em;
+    text-decoration: none;
+    text-transform: uppercase;
+    white-space: nowrap;
+    box-shadow: none !important;
+    cursor: pointer;
+
+    &::before {
+      content: "";
+      position: absolute;
+      inset: 0 60px 0 0;
+      z-index: -1;
+      border-radius: inherit;
+      background: #ad9482;
+      transition:
+        right 0.3s ease,
+        background-color 0.2s ease;
+    }
+
+    &::after {
+      content: "";
+      position: absolute;
+      top: 50%;
+      right: 0;
+      z-index: 1;
+      width: 56px;
+      height: 56px;
+      border: 1px solid rgba(255, 255, 255, 0.95);
+      border-radius: 50%;
+      background-color: transparent;
+      background-image: url("data:image/svg+xml,%3Csvg width='20' height='20' viewBox='0 0 20 20' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cline x1='0.00257927' y1='9.67188' x2='19.2119' y2='9.6209' stroke='white'/%3E%3Cline x1='19.5246' y1='9.73111' x2='10.9169' y2='2.88228' stroke='white'/%3E%3Cline x1='12.597' y1='17.6379' x2='19.4458' y2='9.03014' stroke='white'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: center;
+      background-size: 18px 18px;
+      pointer-events: none;
+      transform: translateY(-50%) rotate(-45deg);
+      transform-origin: center center;
+      transition:
+        background-color 0.2s ease,
+        border-color 0.2s ease,
+        transform 0.2s ease;
+    }
+
+    &:hover,
+    &:focus-visible {
+      outline: none;
+    }
+
+    &:hover::before,
+    &:focus-visible::before {
+      right: 0;
+    }
+
+    &:hover::after,
+    &:focus-visible::after {
+      border-color: transparent;
+      background-color: transparent;
+      transform: translateY(-50%) rotate(0deg);
+    }
+
+    &__white {
+      color: #000 !important;
+
+      &::before {
+        background: #fff;
+      }
+
+      &:hover::after,
+      &:focus-visible::after {
+        background-color: transparent;
+        background-image: url("data:image/svg+xml,%3Csvg width='20' height='20' viewBox='0 0 20 20' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cline x1='0.00257927' y1='9.67188' x2='19.2119' y2='9.6209' stroke='black'/%3E%3Cline x1='19.5246' y1='9.73111' x2='10.9169' y2='2.88228' stroke='black'/%3E%3Cline x1='12.597' y1='17.6379' x2='19.4458' y2='9.03014' stroke='black'/%3E%3C/svg%3E");
+      }
+    }
+  }
+
+  &:hover .wp-block-button__link::before {
+    right: 0;
+  }
+
+  &:hover .wp-block-button__link::after {
+    border-color: transparent;
+    background-color: transparent;
+    transform: translateY(-50%) rotate(0deg);
+  }
+
+  &:hover .wp-block-button__link__white::after {
+    background-color: transparent;
+    background-image: url("data:image/svg+xml,%3Csvg width='20' height='20' viewBox='0 0 20 20' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cline x1='0.00257927' y1='9.67188' x2='19.2119' y2='9.6209' stroke='black'/%3E%3Cline x1='19.5246' y1='9.73111' x2='10.9169' y2='2.88228' stroke='black'/%3E%3Cline x1='12.597' y1='17.6379' x2='19.4458' y2='9.03014' stroke='black'/%3E%3C/svg%3E");
+  }
+
+  &--dark {
+    .wp-block-button__link {
+      color: #fff !important;
+
+      &::before {
+        box-sizing: border-box;
+        border: 1px solid rgba(255, 255, 255, 0.68);
+        background: transparent;
+      }
+
+      &::after {
+        border-color: rgba(255, 255, 255, 0.68);
+        background-color: transparent;
+      }
+
+      &:hover::before,
+      &:focus-visible::before {
+        border-color: rgba(255, 255, 255, 0.85);
+        background: rgba(255, 255, 255, 0.08);
+      }
+
+      &:hover::after,
+      &:focus-visible::after {
+        border-color: transparent;
+        background-color: transparent;
+      }
+    }
+
+    &:hover .wp-block-button__link::before {
+      border-color: rgba(255, 255, 255, 0.85);
+      background: rgba(255, 255, 255, 0.08);
+    }
+
+    &:hover .wp-block-button__link::after {
+      border-color: transparent;
+      background-color: transparent;
+    }
+  }
+}
+
+@media (max-width: 1279px) {
+  .nh-cta-link {
+    .wp-block-button__link {
+      min-width: 190px;
+      min-height: 54px;
+      padding: 0 124px 0 25px;
+      font-size: 15px;
+
+      &::before {
+        right: 58px;
+      }
+
+      &::after {
+        width: 54px;
+        height: 54px;
+      }
+    }
+  }
+}
+
+@media (max-width: 767px) {
+  .nh-cta-link {
+    .wp-block-button__link {
+      min-width: 180px;
+      min-height: 54px;
+      padding: 0 124px 0 24px;
+      font-size: 15px;
+
+      &::before {
+        right: 58px;
+      }
+
+      &::after {
+        width: 54px;
+        height: 54px;
+        background-size: 18px 18px;
+      }
+    }
+  }
+}
+
+@media (max-width: 360px) {
+  .nh-cta-link {
+    .wp-block-button__link {
+      min-width: 0;
+      min-height: 48px;
+      padding: 0 86px 0 18px;
+      font-size: 14px;
+
+      &::before {
+        right: 52px;
+      }
+
+      &::after {
+        width: 48px;
+        height: 48px;
+        background-size: 16px 16px;
+      }
+    }
+  }
+}
