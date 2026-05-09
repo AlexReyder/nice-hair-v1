@@ -62,10 +62,17 @@ $nh_is_keratin_child = $nh_archive_term instanceof WP_Term && function_exists('n
 $nh_is_custom_archive = $nh_archive_family === 'custom_hair';
 $nh_is_ready_archive = $nh_archive_family === 'ready_to_install';
 $nh_is_exclusive_archive = $nh_archive_family === 'exclusive_hair';
+$nh_is_generic_archive = $nh_archive_term instanceof WP_Term
+    && $nh_archive_family === '';
 $nh_has_configured_archive_filters = $nh_archive_term instanceof WP_Term && function_exists('nice_hair_archive_filter_definitions_are_configured')
     ? nice_hair_archive_filter_definitions_are_configured($nh_archive_term)
     : false;
-$nh_is_collection_archive = $nh_is_ready_archive || $nh_is_exclusive_archive || ($nh_filter_definitions !== [] && $nh_has_configured_archive_filters);
+$nh_is_collection_archive = ! $nh_is_generic_archive
+    && (
+        $nh_is_ready_archive
+        || $nh_is_exclusive_archive
+        || ($nh_filter_definitions !== [] && $nh_has_configured_archive_filters)
+    );
 $nh_contact_phone = function_exists('nice_hair_get_contact_phone_display')
     ? nice_hair_get_contact_phone_display('shop')
     : '';
@@ -187,11 +194,23 @@ $nh_render_collection_filters_form = static function (
 $nh_shop_url = function_exists('wc_get_page_permalink')
     ? wc_get_page_permalink('shop')
     : home_url('/shop/');
+
+if (! is_string($nh_shop_url) || $nh_shop_url === '') {
+    $nh_shop_url = home_url('/shop/');
+}
+
+$nh_shop_url = trailingslashit($nh_shop_url) . '#catalog';
 $nh_main_classes = ['nh-main', 'nh-main--shop-archive'];
 $nh_dark_archive_families = ['keratin', 'ready_to_install', 'exclusive_hair', 'custom_hair'];
 
 if ($nh_archive_family !== '') {
     $nh_main_classes[] = 'nh-main--shop-archive--' . sanitize_html_class(str_replace('_', '-', $nh_archive_family));
+}
+
+if ($nh_is_generic_archive) {
+    $nh_main_classes[] = 'nh-main--shop-archive--generic';
+    $nh_main_classes[] = 'nh-main--shop-archive--dark';
+    $nh_main_classes[] = 'nh-main--tools';
 }
 
 if ($nh_is_collection_archive || in_array($nh_archive_family, $nh_dark_archive_families, true)) {
@@ -317,6 +336,8 @@ get_header('shop');
         <?php endif; ?>
     <?php elseif ($nh_archive_family === 'tools' && ! $nh_is_collection_archive) : ?>
         <?php get_template_part('template-parts/woocommerce/archive-tools'); ?>
+        <?php elseif ($nh_is_generic_archive) : ?>
+    <?php get_template_part('template-parts/woocommerce/archive-generic'); ?>
     <?php elseif ($nh_is_collection_archive) : ?>
         <div class="nh-shop-archive nh-shop-archive--wide nh-shop-archive--ready<?php echo $nh_is_exclusive_archive ? ' nh-shop-archive--exclusive' : ''; ?>">
             <div class="nh-shop-ready<?php echo $nh_has_filters ? '' : ' nh-shop-ready--no-sidebar'; ?><?php echo $nh_is_exclusive_archive ? ' nh-shop-ready--exclusive' : ''; ?>">

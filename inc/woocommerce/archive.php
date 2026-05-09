@@ -235,16 +235,20 @@ function nice_hair_get_product_category_breadcrumbs(WP_Term|int|null $term = nul
         return $crumbs;
     }
 
-    $shop_url = function_exists('wc_get_page_permalink')
-        ? wc_get_page_permalink('shop')
-        : nice_hair_get_page_url('shop', 'page-templates/page-shop.php');
+  $shop_url = function_exists('wc_get_page_permalink')
+    ? wc_get_page_permalink('shop')
+    : nice_hair_get_page_url('shop', 'page-templates/page-shop.php');
 
-    if (is_string($shop_url) && $shop_url !== '') {
-        $crumbs[] = [
-            'label' => 'Shop',
-            'url'   => $shop_url,
-        ];
-    }
+if (! is_string($shop_url) || $shop_url === '') {
+    $shop_url = home_url('/shop/');
+}
+
+$shop_url = trailingslashit($shop_url) . '#catalog';
+
+$crumbs[] = [
+    'label' => 'Shop',
+    'url'   => $shop_url,
+];
 
     $ancestor_ids = array_reverse(array_map('intval', get_ancestors($resolved->term_id, 'product_cat', 'taxonomy')));
 

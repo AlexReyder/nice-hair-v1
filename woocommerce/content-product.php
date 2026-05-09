@@ -2,8 +2,6 @@
 /**
  * WooCommerce — Product card in archive grid.
  *
- * Minimal shell — real design will be added with Figma mockups.
- *
  * @see https://woocommerce.com/document/template-structure/
  */
 
@@ -20,23 +18,37 @@ if (empty($product) || ! $product->is_visible()) {
 $nh_card_attributes = function_exists('nice_hair_get_product_card_attributes')
     ? nice_hair_get_product_card_attributes($product)
     : [];
+
 $nh_family = function_exists('nice_hair_get_product_family')
     ? nice_hair_get_product_family($product)
     : '';
+
 $nh_is_unique = function_exists('nice_hair_is_unique_item_product')
     ? nice_hair_is_unique_item_product($product)
     : false;
+
 $nh_is_out_of_stock = ! $product->is_in_stock();
+
 $nh_is_keratin = $nh_family === 'keratin';
 $nh_is_ready = $nh_family === 'ready_to_install';
 $nh_is_exclusive = $nh_family === 'exclusive_hair';
 $nh_is_custom = $nh_family === 'custom_hair';
 $nh_is_tools = $nh_family === 'tools';
+
+$nh_is_generic = ! $nh_is_keratin
+    && ! $nh_is_ready
+    && ! $nh_is_exclusive
+    && ! $nh_is_custom
+    && ! $nh_is_tools;
+
 $nh_permalink = get_the_permalink();
+
 $nh_sku = function_exists('nice_hair_get_product_archive_sku')
     ? nice_hair_get_product_archive_sku($product)
     : trim((string) $product->get_sku());
+
 $nh_status_label = '';
+
 $nh_card_class_names = [
     'nh-product-card',
     $nh_is_out_of_stock ? 'nh-product-card--sold' : '',
@@ -45,16 +57,21 @@ $nh_card_class_names = [
     $nh_is_exclusive ? 'nh-product-card--exclusive-hair' : '',
     $nh_is_custom ? 'nh-product-card--custom-hair' : '',
     $nh_is_tools ? 'nh-product-card--tools' : '',
+    $nh_is_generic ? 'nh-product-card--generic' : '',
 ];
+
 $nh_keratin_weight_labels = $nh_is_keratin && function_exists('nice_hair_get_product_variation_attribute_labels')
     ? nice_hair_get_product_variation_attribute_labels($product, 'pa_weight')
     : [];
+
 $nh_keratin_min_price = $nh_is_keratin && function_exists('nice_hair_get_product_min_price')
     ? nice_hair_get_product_min_price($product)
     : null;
+
 $nh_keratin_min_price_html = $nh_keratin_min_price !== null && function_exists('wc_price')
     ? wc_price($nh_keratin_min_price)
     : '';
+
 $nh_card_price = $product->get_price();
 $nh_card_price_html = '';
 
@@ -62,6 +79,7 @@ if ($nh_card_price !== '' && is_numeric($nh_card_price) && function_exists('wc_p
     $nh_card_display_price = wc_get_price_to_display($product, [
         'price' => (float) $nh_card_price,
     ]);
+
     $nh_card_price_html = wc_price($nh_card_display_price) . $product->get_price_suffix($nh_card_display_price);
 }
 
@@ -75,6 +93,7 @@ if ($nh_is_out_of_stock) {
 $nh_show_icon_badges = $nh_status_label === ''
     && ! $nh_is_keratin
     && ! $nh_is_tools
+    && ! $nh_is_generic
     && ($product->is_on_sale() || $product->is_featured());
 ?>
 
@@ -99,19 +118,10 @@ $nh_show_icon_badges = $nh_status_label === ''
                 </div>
             <?php endif; ?>
 
-            <?php if ($nh_is_ready || $nh_is_exclusive) : ?>
-                <?php if ($nh_status_label !== '') : ?>
-                    <span class="nh-product-card__badge nh-product-card__badge--sold">
-                        <?php echo esc_html($nh_status_label); ?>
-                    </span>
-                <?php endif; ?>
-            <?php else : ?>
-                <?php if ($nh_status_label !== '') : ?>
-                    <span class="nh-product-card__badge nh-product-card__badge--sold">
-                        <?php echo esc_html($nh_status_label); ?>
-                    </span>
-                <?php endif; ?>
-
+            <?php if ($nh_status_label !== '') : ?>
+                <span class="nh-product-card__badge nh-product-card__badge--sold">
+                    <?php echo esc_html($nh_status_label); ?>
+                </span>
             <?php endif; ?>
         </div>
 
@@ -145,11 +155,13 @@ $nh_show_icon_badges = $nh_status_label === ''
                         [ MORE ] <span class="nh-product-card__more-arrow">&rarr;</span>
                     </span>
                 </div>
+
             <?php elseif ($nh_is_custom) : ?>
                 <span class="nh-product-card__more">
                     [MORE] <span class="nh-product-card__more-arrow">&rarr;</span>
                 </span>
-            <?php elseif ($nh_is_ready || $nh_is_exclusive || $nh_is_tools) : ?>
+
+            <?php elseif ($nh_is_ready || $nh_is_exclusive || $nh_is_tools || $nh_is_generic) : ?>
                 <div class="nh-product-card__footer nh-product-card__ready-footer">
                     <div class="nh-product-card__meta-stack nh-product-card__ready-meta">
                         <?php if ($nh_sku !== '') : ?>
@@ -164,11 +176,13 @@ $nh_show_icon_badges = $nh_status_label === ''
                     </div>
 
                     <span class="nh-product-card__more">
-                        <?php echo esc_html($nh_is_tools ? '[ MORE ]' : '[MORE]'); ?> <span class="nh-product-card__more-arrow">&rarr;</span>
+                        <?php echo esc_html(($nh_is_tools || $nh_is_generic) ? '[ MORE ]' : '[MORE]'); ?>
+                        <span class="nh-product-card__more-arrow">&rarr;</span>
                     </span>
                 </div>
+
             <?php else : ?>
-                <?php if (! $nh_is_keratin && $nh_card_attributes !== []) : ?>
+                <?php if ($nh_card_attributes !== []) : ?>
                     <ul class="nh-product-card__meta" aria-label="<?php esc_attr_e('Product attributes', 'nice-hair'); ?>">
                         <?php foreach ($nh_card_attributes as $nh_card_attribute) : ?>
                             <li class="nh-product-card__meta-item"><?php echo esc_html($nh_card_attribute); ?></li>
@@ -176,20 +190,18 @@ $nh_show_icon_badges = $nh_status_label === ''
                     </ul>
                 <?php endif; ?>
 
-                <?php if (! $nh_is_keratin) : ?>
-                    <?php if ($nh_card_price_html !== '') : ?>
-                        <div class="nh-product-card__price">
-                            <?php echo $nh_card_price_html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
-                        </div>
-                    <?php endif; ?>
+                <?php if ($nh_card_price_html !== '') : ?>
+                    <div class="nh-product-card__price">
+                        <?php echo $nh_card_price_html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+                    </div>
                 <?php endif; ?>
             <?php endif; ?>
         </div>
     </a>
 
-    <?php if (! $nh_is_keratin && ! $nh_is_ready && ! $nh_is_exclusive && ! $nh_is_custom && ! $nh_is_tools && ! $product->is_type('variable') && $product->is_in_stock() && $product->is_purchasable()) : ?>
+    <?php if (! $nh_is_keratin && ! $nh_is_ready && ! $nh_is_exclusive && ! $nh_is_custom && ! $nh_is_tools && ! $nh_is_generic && ! $product->is_type('variable') && $product->is_in_stock() && $product->is_purchasable()) : ?>
         <?php woocommerce_template_loop_add_to_cart(); ?>
-    <?php elseif ($nh_status_label !== '' && ! $nh_is_ready && ! $nh_is_exclusive && ! $nh_is_custom && ! $nh_is_tools) : ?>
+    <?php elseif ($nh_status_label !== '' && ! $nh_is_ready && ! $nh_is_exclusive && ! $nh_is_custom && ! $nh_is_tools && ! $nh_is_generic) : ?>
         <span class="nh-product-card__stock-state"><?php echo esc_html($nh_status_label); ?></span>
     <?php endif; ?>
 </li>

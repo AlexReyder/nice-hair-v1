@@ -335,7 +335,8 @@ $_card-title-max-size: 30px;
 .nh-product-card--ready-to-install,
 .nh-product-card--exclusive-hair,
 .nh-product-card--tools,
-.nh-product-card--custom-hair {
+.nh-product-card--custom-hair,
+.nh-product-card--generic {
   @include flat-dark-card;
   @include image-hover-scale;
 
@@ -370,7 +371,8 @@ $_card-title-max-size: 30px;
 }
 
 .nh-product-card--keratin,
-.nh-product-card--tools {
+.nh-product-card--tools,
+.nh-product-card--generic {
   .nh-product-card__sku::before {
     content: "SKU: ";
   }
@@ -561,7 +563,8 @@ $_card-title-max-size: 30px;
   }
 }
 
-.nh-product-card--tools {
+.nh-product-card--tools,
+.nh-product-card--generic {
   .nh-product-card__link {
     gap: 0;
   }

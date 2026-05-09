@@ -39,6 +39,13 @@
   }
 }
 
+.nh-shop-archive__product-grid--generic {
+  :where(.products) {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 24px;
+  }
+}
+
 .nh-shop-archive__keratin-products {
   :where(.products) {
     grid-template-columns: repeat(4, minmax(0, 1fr));
