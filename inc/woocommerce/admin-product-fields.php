@@ -13,9 +13,21 @@ function nice_hair_admin_product_field_family_priority(): array
     ];
 }
 
-function nice_hair_admin_product_field_groups(): array
+
+function nice_hair_admin_custom_hair_field_group_keys(): array
 {
     return [
+        'group_nh_product_custom_hair',
+        'group_nh_product_custom_hair_params',
+        'group_nh_product_custom_hair_colors',
+        'group_nh_product_custom_hair_color_options',
+        'group_nh_custom_hair_colors',
+    ];
+}
+
+function nice_hair_admin_product_field_groups(): array
+{
+    $groups = [
         'group_nh_product_common' => [
             'default',
             'tools',
@@ -31,13 +43,15 @@ function nice_hair_admin_product_field_groups(): array
         'group_nh_product_exclusive_hair' => [
             'exclusive_hair',
         ],
-        'group_nh_product_custom_hair' => [
-            'custom_hair',
-        ],
-        'group_nh_product_custom_hair_colors' => [
-            'custom_hair',
-        ],
     ];
+
+    foreach (nice_hair_admin_custom_hair_field_group_keys() as $group_key) {
+        $groups[$group_key] = [
+            'custom_hair',
+        ];
+    }
+
+    return $groups;
 }
 
 function nice_hair_admin_is_product_edit_screen(): bool
@@ -164,34 +178,82 @@ function nice_hair_admin_product_field_body_class(string $classes): string
 }
 add_filter('admin_body_class', 'nice_hair_admin_product_field_body_class');
 
+function nice_hair_admin_build_acf_group_selectors(array $group_keys, string $body_selector = 'body.nh-product-admin-fields'): string
+{
+    $selectors = [];
+
+    foreach ($group_keys as $group_key) {
+        $group_key = sanitize_key((string) $group_key);
+
+        if ($group_key === '') {
+            continue;
+        }
+
+        $selectors[] = sprintf(
+            '%s .acf-postbox[data-key="%s"]',
+            $body_selector,
+            esc_attr($group_key)
+        );
+
+        $selectors[] = sprintf(
+            '%s #acf-%s',
+            $body_selector,
+            esc_attr($group_key)
+        );
+    }
+
+    return implode(",\n        ", $selectors);
+}
+
 function nice_hair_admin_product_field_visibility_css(): void
 {
     if (! nice_hair_admin_is_product_edit_screen()) {
         return;
     }
+
+    $unique_group_keys = [
+        'group_nh_product_unique',
+    ];
+
+    $exclusive_group_keys = [
+        'group_nh_product_unique',
+        'group_nh_product_exclusive_hair',
+    ];
+
+    $custom_hair_group_keys = nice_hair_admin_custom_hair_field_group_keys();
+
+    $hidden_group_keys = array_values(array_unique(array_merge(
+        $exclusive_group_keys,
+        $custom_hair_group_keys
+    )));
+
+    $hidden_selectors = nice_hair_admin_build_acf_group_selectors(
+        $hidden_group_keys
+    );
+
+    $ready_to_install_selectors = nice_hair_admin_build_acf_group_selectors(
+        $unique_group_keys,
+        'body.nh-product-admin-fields.nh-product-family--ready_to_install'
+    );
+
+    $exclusive_selectors = nice_hair_admin_build_acf_group_selectors(
+        $exclusive_group_keys,
+        'body.nh-product-admin-fields.nh-product-family--exclusive_hair'
+    );
+
+    $custom_hair_selectors = nice_hair_admin_build_acf_group_selectors(
+        $custom_hair_group_keys,
+        'body.nh-product-admin-fields.nh-product-family--custom_hair'
+    );
     ?>
     <style id="nice-hair-admin-product-fields-css">
-        body.nh-product-admin-fields .acf-postbox[data-key="group_nh_product_unique"],
-        body.nh-product-admin-fields #acf-group_nh_product_unique,
-        body.nh-product-admin-fields .acf-postbox[data-key="group_nh_product_exclusive_hair"],
-        body.nh-product-admin-fields #acf-group_nh_product_exclusive_hair,
-        body.nh-product-admin-fields .acf-postbox[data-key="group_nh_product_custom_hair"],
-        body.nh-product-admin-fields #acf-group_nh_product_custom_hair,
-        body.nh-product-admin-fields .acf-postbox[data-key="group_nh_product_custom_hair_colors"],
-        body.nh-product-admin-fields #acf-group_nh_product_custom_hair_colors {
+        <?php echo $hidden_selectors; ?> {
             display: none !important;
         }
 
-        body.nh-product-admin-fields.nh-product-family--ready_to_install .acf-postbox[data-key="group_nh_product_unique"],
-        body.nh-product-admin-fields.nh-product-family--ready_to_install #acf-group_nh_product_unique,
-        body.nh-product-admin-fields.nh-product-family--exclusive_hair .acf-postbox[data-key="group_nh_product_unique"],
-        body.nh-product-admin-fields.nh-product-family--exclusive_hair #acf-group_nh_product_unique,
-        body.nh-product-admin-fields.nh-product-family--exclusive_hair .acf-postbox[data-key="group_nh_product_exclusive_hair"],
-        body.nh-product-admin-fields.nh-product-family--exclusive_hair #acf-group_nh_product_exclusive_hair,
-        body.nh-product-admin-fields.nh-product-family--custom_hair .acf-postbox[data-key="group_nh_product_custom_hair"],
-        body.nh-product-admin-fields.nh-product-family--custom_hair #acf-group_nh_product_custom_hair,
-        body.nh-product-admin-fields.nh-product-family--custom_hair .acf-postbox[data-key="group_nh_product_custom_hair_colors"],
-        body.nh-product-admin-fields.nh-product-family--custom_hair #acf-group_nh_product_custom_hair_colors {
+        <?php echo $ready_to_install_selectors; ?>,
+        <?php echo $exclusive_selectors; ?>,
+        <?php echo $custom_hair_selectors; ?> {
             display: block !important;
         }
     </style>

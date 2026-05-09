@@ -161,8 +161,7 @@
   margin: auto -28px 0;
   padding: 18px 28px 28px;
   background:
-    linear-gradient(180deg, rgba(29, 29, 29, 0), #1d1d1d 18px),
-    #1d1d1d;
+    linear-gradient(180deg, rgba(29, 29, 29, 0), #1d1d1d 18px), #1d1d1d;
 }
 
 .nh-shop-ready__filters-submit {
@@ -170,6 +169,7 @@
   align-items: center;
   justify-content: center;
   min-height: 44px;
+  max-width: 320px;
   padding: 0 18px;
   border: 0;
   border-radius: 999px;
@@ -420,11 +420,11 @@
   }
 
   .nh-content-drawer__rule {
-    background: var(--accent-color);
+    background: #fff;
   }
 
   .nh-content-drawer__title {
-    color: var(--accent-color);
+    color: var(--heading-color);
   }
 
   .nh-shop-ready__filter-drawer-body {

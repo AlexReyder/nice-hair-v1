@@ -20,9 +20,7 @@ $nh_sku = $product->get_sku();
 $nh_price = $product->get_price();
 $nh_video_url = function_exists('get_field') ? get_field('nh_product_video_url') : '';
 
-$nh_shop_url = function_exists('wc_get_page_id')
-    ? get_permalink(wc_get_page_id('shop'))
-    : home_url('/shop/');
+$nh_shop_url = trailingslashit((string) get_permalink(wc_get_page_id('shop'))) . '#catalog';
 
 $nh_product_terms = get_the_terms($product->get_id(), 'product_cat');
 $nh_primary_term = null;

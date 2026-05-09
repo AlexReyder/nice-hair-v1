@@ -426,7 +426,6 @@ function nice_hair_register_acf_fields(): void
                 'name'         => 'nh_categories_items',
                 'type'         => 'repeater',
                 'min'          => 1,
-                'max'          => 5,
                 'layout'       => 'block',
                 'button_label' => 'Добавить карточку категории',
                 'sub_fields'   => [

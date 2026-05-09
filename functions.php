@@ -20,6 +20,7 @@ $nice_hair_files = [
     '/inc/acf/running-line-options.php',
     '/inc/acf/shop-options.php',
     '/inc/acf/custom-hair-colors.php',
+    '/inc/acf/product-custom-hair-params.php',
     '/inc/quiz/options.php',
     '/inc/quiz/cpt.php',
     '/inc/quiz/email.php',

@@ -175,9 +175,7 @@ $nh_render_collection_filters_form = static function (
     <?php
 };
 
-$nh_shop_url = function_exists('wc_get_page_permalink')
-    ? wc_get_page_permalink('shop')
-    : home_url('/shop/');
+$nh_shop_url = trailingslashit((string) get_permalink(wc_get_page_id('shop'))) . '#catalog';
 ?>
 
 <div class="nh-shop-archive nh-shop-archive--wide nh-shop-archive--ready nh-shop-archive--generic">
