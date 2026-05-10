@@ -18,27 +18,14 @@ function nice_hair_get_shop_pricing_default_field_values(): array
         ? nice_hair_get_default_product_form_labels()
         : [];
 
-    $keratin_table = static function (array $items): array {
-        $rows = [];
-
-        foreach ($items as $weight => $price) {
-            $rows[] = [
-                'item_weight' => (string) $weight,
-                'item_price'  => (float) $price,
-            ];
-        }
-
-        return $rows;
-    };
-
     $custom_base_rows = [];
 
     foreach ((array) ($defaults['custom_hair']['base_prices'] ?? []) as $quality => $lengths) {
         foreach ((array) $lengths as $length => $price) {
             $custom_base_rows[] = [
-                'item_quality'         => ucfirst((string) $quality),
-                'item_length'          => (float) $length,
-                'item_price_per_gram'  => (float) $price,
+                'item_quality'        => ucfirst((string) $quality),
+                'item_length'         => (float) $length,
+                'item_price_per_gram' => (float) $price,
             ];
         }
     }
@@ -49,18 +36,16 @@ function nice_hair_get_shop_pricing_default_field_values(): array
         $normalized_key = function_exists('nice_hair_normalize_shop_key')
             ? nice_hair_normalize_shop_key((string) $form_key)
             : sanitize_title((string) $form_key);
+
         $form_surcharge_rows[] = [
-            'item_extension_type'   => (string) ($form_labels[$normalized_key] ?? ucwords(str_replace('_', ' ', (string) $normalized_key))),
-            'item_price_per_gram'   => (float) $price,
+            'item_extension_type' => (string) ($form_labels[$normalized_key] ?? ucwords(str_replace('_', ' ', (string) $normalized_key))),
+            'item_price_per_gram' => (float) $price,
         ];
     }
 
     return [
-        'nh_shop_pricing_keratin_pigmented'        => $keratin_table((array) ($defaults['keratin']['pigmented'] ?? [])),
-        'nh_shop_pricing_keratin_italian_standard' => $keratin_table((array) ($defaults['keratin']['italian_standard'] ?? [])),
-        'nh_shop_pricing_keratin_transparent'      => $keratin_table((array) ($defaults['keratin']['transparent'] ?? [])),
-        'nh_shop_pricing_custom_base_prices'       => $custom_base_rows,
-        'nh_shop_pricing_form_surcharges'          => $form_surcharge_rows,
+        'nh_shop_pricing_custom_base_prices' => $custom_base_rows,
+        'nh_shop_pricing_form_surcharges'    => $form_surcharge_rows,
     ];
 }
 
@@ -77,13 +62,10 @@ function nice_hair_maybe_bootstrap_shop_pricing_config(): void
         ? nice_hair_header_footer_post_id('shop')
         : 'nh_header_footer_shop';
     $default_values = nice_hair_get_shop_pricing_default_field_values();
-    $field_names = [
-        'nh_shop_pricing_keratin_pigmented',
-        'nh_shop_pricing_keratin_italian_standard',
-        'nh_shop_pricing_keratin_transparent',
-        'nh_shop_pricing_custom_base_prices',
-        'nh_shop_pricing_form_surcharges',
-    ];
+   $field_names = [
+    'nh_shop_pricing_custom_base_prices',
+    'nh_shop_pricing_form_surcharges',
+];
 
     foreach ($field_names as $field_name) {
         $current_value = get_field($field_name, $pricing_post_id);
@@ -525,106 +507,7 @@ function nice_hair_register_shop_acf_options(): void
         'active' => true,
     ]);
 
-    acf_add_local_field_group([
-        'key'    => 'group_nh_shop_pricing_keratin',
-        'title'  => 'Shop Pricing: Keratin',
-        'fields' => [
-            [
-                'key'           => 'field_nh_shop_pricing_keratin_note',
-                'label'         => 'Комментарий',
-                'name'          => 'nh_shop_pricing_keratin_note',
-                'type'          => 'message',
-                'message'       => 'Если таблицы пустые, тема использует встроенные fallback-значения из текущего shop data-model слоя.',
-                'new_lines'     => 'wpautop',
-                'esc_html'      => 0,
-            ],
-            [
-                'key'          => 'field_nh_shop_pricing_keratin_pigmented',
-                'label'        => 'Pigmented keratin - цены по весу',
-                'name'         => 'nh_shop_pricing_keratin_pigmented',
-                'type'         => 'repeater',
-                'layout'       => 'table',
-                'button_label' => 'Добавить строку',
-                'sub_fields'   => [
-                    [
-                        'key'   => 'field_nh_shop_pricing_keratin_pigmented_weight',
-                        'label' => 'Вес',
-                        'name'  => 'item_weight',
-                        'type'  => 'text',
-                    ],
-                    [
-                        'key'   => 'field_nh_shop_pricing_keratin_pigmented_price',
-                        'label' => 'Цена',
-                        'name'  => 'item_price',
-                        'type'  => 'number',
-                        'min'   => 0,
-                        'step'  => 0.01,
-                        'prepend' => '$',
-                    ],
-                ],
-            ],
-            [
-                'key'          => 'field_nh_shop_pricing_keratin_italian_standard',
-                'label'        => 'Italian gel keratin - standard цены по весу',
-                'name'         => 'nh_shop_pricing_keratin_italian_standard',
-                'type'         => 'repeater',
-                'layout'       => 'table',
-                'button_label' => 'Добавить строку',
-                'sub_fields'   => [
-                    [
-                        'key'   => 'field_nh_shop_pricing_keratin_italian_standard_weight',
-                        'label' => 'Вес',
-                        'name'  => 'item_weight',
-                        'type'  => 'text',
-                    ],
-                    [
-                        'key'     => 'field_nh_shop_pricing_keratin_italian_standard_price',
-                        'label'   => 'Цена',
-                        'name'    => 'item_price',
-                        'type'    => 'number',
-                        'min'     => 0,
-                        'step'    => 0.01,
-                        'prepend' => '$',
-                    ],
-                ],
-            ],
-            [
-                'key'          => 'field_nh_shop_pricing_keratin_transparent',
-                'label'        => 'Transparent keratin - цены по весу',
-                'name'         => 'nh_shop_pricing_keratin_transparent',
-                'type'         => 'repeater',
-                'layout'       => 'table',
-                'button_label' => 'Добавить строку',
-                'sub_fields'   => [
-                    [
-                        'key'   => 'field_nh_shop_pricing_keratin_transparent_weight',
-                        'label' => 'Вес',
-                        'name'  => 'item_weight',
-                        'type'  => 'text',
-                    ],
-                    [
-                        'key'     => 'field_nh_shop_pricing_keratin_transparent_price',
-                        'label'   => 'Цена',
-                        'name'    => 'item_price',
-                        'type'    => 'number',
-                        'min'     => 0,
-                        'step'    => 0.01,
-                        'prepend' => '$',
-                    ],
-                ],
-            ],
-        ],
-        'location' => [
-            [
-                [
-                    'param'    => 'options_page',
-                    'operator' => '==',
-                    'value'    => nice_hair_shop_pricing_options_page_slug(),
-                ],
-            ],
-        ],
-        'active' => true,
-    ]);
+
 
     acf_add_local_field_group([
         'key'    => 'group_nh_shop_pricing_custom_hair',

@@ -2,6 +2,14 @@
 
 declare(strict_types=1);
 
+/**
+ * Admin visibility rules for product ACF field groups.
+ *
+ * Product family is resolved from selected WooCommerce product categories.
+ * JS receives the same fieldGroups map and updates visibility live when
+ * product categories are changed in the editor.
+ */
+
 function nice_hair_admin_product_field_family_priority(): array
 {
     return [
@@ -13,45 +21,55 @@ function nice_hair_admin_product_field_family_priority(): array
     ];
 }
 
-
-function nice_hair_admin_custom_hair_field_group_keys(): array
-{
-    return [
-        'group_nh_product_custom_hair',
-        'group_nh_product_custom_hair_params',
-        'group_nh_product_custom_hair_colors',
-        'group_nh_product_custom_hair_color_options',
-        'group_nh_custom_hair_colors',
-    ];
-}
-
 function nice_hair_admin_product_field_groups(): array
 {
-    $groups = [
+    return [
+        /**
+         * Common fields must be visible for every product category.
+         */
         'group_nh_product_common' => [
-            'default',
-            'tools',
-            'keratin',
-            'ready_to_install',
-            'exclusive_hair',
-            'custom_hair',
+            '*',
         ],
+
+        /**
+         * Unique product toggle is relevant only for unique-item product families.
+         */
         'group_nh_product_unique' => [
             'ready_to_install',
             'exclusive_hair',
         ],
+
+        /**
+         * Exclusive Hair fields.
+         */
         'group_nh_product_exclusive_hair' => [
             'exclusive_hair',
         ],
-    ];
 
-    foreach (nice_hair_admin_custom_hair_field_group_keys() as $group_key) {
-        $groups[$group_key] = [
+        /**
+         * Custom Hair fields.
+         *
+         * group_nh_product_custom_hair:
+         *   Main Custom Hair product fields from inc/acf/fields.php.
+         *
+         * group_nh_product_custom_hair_params:
+         *   Length / Hair Quality / Texture / Weight settings from
+         *   inc/acf/product-custom-hair-params.php.
+         *
+         * group_nh_product_custom_hair_colors:
+         *   Product-level Custom Hair color selector from
+         *   inc/acf/custom-hair-colors.php.
+         */
+        'group_nh_product_custom_hair' => [
             'custom_hair',
-        ];
-    }
-
-    return $groups;
+        ],
+        'group_nh_product_custom_hair_params' => [
+            'custom_hair',
+        ],
+        'group_nh_product_custom_hair_colors' => [
+            'custom_hair',
+        ],
+    ];
 }
 
 function nice_hair_admin_is_product_edit_screen(): bool
@@ -172,6 +190,7 @@ function nice_hair_admin_product_field_body_class(string $classes): string
     }
 
     $family = nice_hair_admin_get_current_product_field_family();
+
     $classes .= ' nh-product-admin-fields nh-product-family--' . sanitize_html_class($family);
 
     return $classes;
@@ -205,57 +224,79 @@ function nice_hair_admin_build_acf_group_selectors(array $group_keys, string $bo
     return implode(",\n        ", $selectors);
 }
 
+function nice_hair_admin_get_category_specific_group_keys(): array
+{
+    $group_keys = [];
+
+    foreach (nice_hair_admin_product_field_groups() as $group_key => $allowed_families) {
+        if (in_array('*', $allowed_families, true)) {
+            continue;
+        }
+
+        $group_keys[] = (string) $group_key;
+    }
+
+    return array_values(array_unique(array_filter($group_keys)));
+}
+
+function nice_hair_admin_build_visible_group_selectors(): string
+{
+    $selectors = [];
+
+    foreach (nice_hair_admin_product_field_groups() as $group_key => $allowed_families) {
+        if (in_array('*', $allowed_families, true)) {
+            continue;
+        }
+
+        foreach ($allowed_families as $family) {
+            $family = sanitize_key((string) $family);
+
+            if ($family === '') {
+                continue;
+            }
+
+            $selector = nice_hair_admin_build_acf_group_selectors(
+                [(string) $group_key],
+                'body.nh-product-admin-fields.nh-product-family--' . sanitize_html_class($family)
+            );
+
+            if ($selector !== '') {
+                $selectors[] = $selector;
+            }
+        }
+    }
+
+    return implode(",\n        ", array_values(array_unique($selectors)));
+}
+
 function nice_hair_admin_product_field_visibility_css(): void
 {
     if (! nice_hair_admin_is_product_edit_screen()) {
         return;
     }
 
-    $unique_group_keys = [
-        'group_nh_product_unique',
-    ];
-
-    $exclusive_group_keys = [
-        'group_nh_product_unique',
-        'group_nh_product_exclusive_hair',
-    ];
-
-    $custom_hair_group_keys = nice_hair_admin_custom_hair_field_group_keys();
-
-    $hidden_group_keys = array_values(array_unique(array_merge(
-        $exclusive_group_keys,
-        $custom_hair_group_keys
-    )));
-
     $hidden_selectors = nice_hair_admin_build_acf_group_selectors(
-        $hidden_group_keys
+        nice_hair_admin_get_category_specific_group_keys()
     );
 
-    $ready_to_install_selectors = nice_hair_admin_build_acf_group_selectors(
-        $unique_group_keys,
-        'body.nh-product-admin-fields.nh-product-family--ready_to_install'
-    );
+    $visible_selectors = nice_hair_admin_build_visible_group_selectors();
 
-    $exclusive_selectors = nice_hair_admin_build_acf_group_selectors(
-        $exclusive_group_keys,
-        'body.nh-product-admin-fields.nh-product-family--exclusive_hair'
-    );
-
-    $custom_hair_selectors = nice_hair_admin_build_acf_group_selectors(
-        $custom_hair_group_keys,
-        'body.nh-product-admin-fields.nh-product-family--custom_hair'
-    );
+    if ($hidden_selectors === '' && $visible_selectors === '') {
+        return;
+    }
     ?>
     <style id="nice-hair-admin-product-fields-css">
+        <?php if ($hidden_selectors !== '') : ?>
         <?php echo $hidden_selectors; ?> {
             display: none !important;
         }
+        <?php endif; ?>
 
-        <?php echo $ready_to_install_selectors; ?>,
-        <?php echo $exclusive_selectors; ?>,
-        <?php echo $custom_hair_selectors; ?> {
+        <?php if ($visible_selectors !== '') : ?>
+        <?php echo $visible_selectors; ?> {
             display: block !important;
         }
+        <?php endif; ?>
     </style>
     <?php
 }

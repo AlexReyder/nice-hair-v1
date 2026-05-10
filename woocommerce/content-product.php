@@ -73,6 +73,26 @@ $nh_keratin_min_price_html = $nh_keratin_min_price !== null && function_exists('
     : '';
 
 $nh_card_price = $product->get_price();
+
+/**
+ * Exclusive Hair fallback:
+ *
+ * If WooCommerce price is empty, show ACF "Base lot price" in catalog.
+ * This keeps catalog cards filled even when the product is priced only
+ * through the Exclusive Hair lot pricing fields.
+ */
+if (
+    ($nh_card_price === '' || ! is_numeric($nh_card_price))
+    && $nh_is_exclusive
+    && function_exists('nice_hair_get_product_base_lot_price')
+) {
+    $nh_base_lot_price = nice_hair_get_product_base_lot_price($product);
+
+    if ($nh_base_lot_price !== null) {
+        $nh_card_price = (string) $nh_base_lot_price;
+    }
+}
+
 $nh_card_price_html = '';
 
 if ($nh_card_price !== '' && is_numeric($nh_card_price) && function_exists('wc_price') && function_exists('wc_get_price_to_display')) {

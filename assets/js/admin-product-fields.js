@@ -7,6 +7,7 @@
     ? config.familyPriority
     : [];
   const fieldGroups = config.fieldGroups || {};
+
   const categorySelector = [
     '#product_catchecklist input[type="checkbox"][value]',
     '#product_catchecklist-pop input[type="checkbox"][value]',
@@ -15,16 +16,27 @@
 
   const knownFamilies = new Set([defaultFamily]);
 
-  familyPriority.forEach((family) => knownFamilies.add(family));
-  Object.values(fieldGroups).forEach((families) => {
-    if (Array.isArray(families)) {
-      families.forEach((family) => knownFamilies.add(family));
-    }
-  });
-
   function normalizeFamily(family) {
     return typeof family === "string" && family !== "" ? family : defaultFamily;
   }
+
+  function addKnownFamily(family) {
+    if (typeof family !== "string" || family === "" || family === "*") {
+      return;
+    }
+
+    knownFamilies.add(family);
+  }
+
+  familyPriority.forEach(addKnownFamily);
+
+  Object.values(fieldGroups).forEach((families) => {
+    if (!Array.isArray(families)) {
+      return;
+    }
+
+    families.forEach(addKnownFamily);
+  });
 
   function selectedFamilies() {
     const inputs = Array.from(document.querySelectorAll(categorySelector));
@@ -72,11 +84,17 @@
     body.classList.add("nh-product-admin-fields", nextClass);
   }
 
+  function escapeAttributeValue(value) {
+    return String(value).replace(/\\/g, "\\\\").replace(/"/g, '\\"');
+  }
+
   function fieldGroupElements(groupKey) {
+    const safeGroupKey = escapeAttributeValue(groupKey);
+
     return Array.from(
       document.querySelectorAll(
-        `.acf-postbox[data-key="${groupKey}"], #acf-${groupKey}`
-      )
+        `.acf-postbox[data-key="${safeGroupKey}"], #acf-${groupKey}`,
+      ),
     ).filter((group) => group instanceof HTMLElement);
   }
 
@@ -88,7 +106,11 @@
     }
 
     groups.forEach((group) => {
-      group.style.setProperty("display", visible ? "block" : "none", "important");
+      group.style.setProperty(
+        "display",
+        visible ? "block" : "none",
+        "important",
+      );
       group.setAttribute("aria-hidden", visible ? "false" : "true");
     });
   }

@@ -1401,65 +1401,183 @@ function nice_hair_calculate_exclusive_product_form_total(WC_Product|int|null $p
 function nice_hair_get_exclusive_product_form_pricing(WC_Product|int|null $product = null): array
 {
     $resolved = nice_hair_resolve_product($product);
-    $base_pricing = nice_hair_get_exclusive_base_pricing($resolved);
-    $base_lot_price = $base_pricing['base_lot_price'] ?? null;
-    $effective_base_lot_price = $base_pricing['effective_base_lot_price'] ?? null;
+
+    $empty_result = [
+        'fixed_weight'    => null,
+        'options'         => [],
+        'default_key'     => '',
+        'selected_option' => null,
+        'is_complete'     => false,
+    ];
+
+    if (! $resolved instanceof WC_Product) {
+        return $empty_result;
+    }
+
+    $acf_base_lot_price = nice_hair_get_product_base_lot_price($resolved);
     $fixed_weight = nice_hair_get_product_fixed_weight_grams($resolved);
+    $form_catalog = nice_hair_get_shop_product_form_catalog();
+
+    if ($fixed_weight === null || $fixed_weight <= 0 || $form_catalog === []) {
+        return array_replace($empty_result, [
+            'fixed_weight' => $fixed_weight,
+        ]);
+    }
+
+    /**
+     * Exclusive Hair price source rules:
+     *
+     * 1. ACF base lot price is the business fallback/base lot price.
+     * 2. If WooCommerce sale is active, WooCommerce regular/sale prices define
+     *    regular/current base prices for frontend display and cart price.
+     * 3. Do not subtract the WooCommerce discount from ACF base price.
+     *
+     * Bug example before this fix:
+     * ACF base = 130, WC regular = 175, WC sale = 130
+     * Previous result: 130 - (175 - 130) = 85
+     * Correct result: current base = 130, regular base = 175
+     */
+    $wc_regular_price = $resolved->get_regular_price();
+    $wc_sale_price = $resolved->get_sale_price();
+    $wc_current_price = $resolved->get_price();
+
+    $wc_regular_price = is_numeric($wc_regular_price) ? (float) $wc_regular_price : null;
+    $wc_sale_price = is_numeric($wc_sale_price) ? (float) $wc_sale_price : null;
+    $wc_current_price = is_numeric($wc_current_price) ? (float) $wc_current_price : null;
+
+    $has_wc_sale = $wc_regular_price !== null
+        && $wc_sale_price !== null
+        && $wc_regular_price > 0
+        && $wc_sale_price > 0
+        && $wc_sale_price < $wc_regular_price
+        && $resolved->is_on_sale();
+
+    if ($has_wc_sale) {
+        $regular_base_price = $wc_regular_price;
+        $current_base_price = $wc_sale_price;
+    } else {
+        $fallback_base_price = $acf_base_lot_price;
+
+        if ($fallback_base_price === null && $wc_current_price !== null && $wc_current_price > 0) {
+            $fallback_base_price = $wc_current_price;
+        }
+
+        if ($fallback_base_price === null || $fallback_base_price <= 0) {
+            return array_replace($empty_result, [
+                'fixed_weight' => $fixed_weight,
+            ]);
+        }
+
+        $regular_base_price = $fallback_base_price;
+        $current_base_price = $fallback_base_price;
+    }
+
     $options = [];
 
-    foreach (nice_hair_get_exclusive_product_form_options($resolved) as $option) {
-        $form_key = (string) ($option['key'] ?? '');
-        $totals = nice_hair_get_exclusive_product_form_totals($resolved, $form_key);
-        $total_price = isset($totals['current_total_price']) && is_numeric($totals['current_total_price'])
-            ? (float) $totals['current_total_price']
+    foreach ($form_catalog as $form_option) {
+        if (! is_array($form_option)) {
+            continue;
+        }
+
+        $form_key = isset($form_option['key'])
+            ? nice_hair_normalize_shop_key((string) $form_option['key'])
+            : '';
+
+        if ($form_key === '') {
+            continue;
+        }
+
+        $form_label = trim((string) ($form_option['label'] ?? ''));
+
+        if ($form_label === '') {
+            $form_label = nice_hair_humanize_shop_key($form_key);
+        }
+
+        $price_per_gram = isset($form_option['price_per_gram']) && is_numeric($form_option['price_per_gram'])
+            ? (float) $form_option['price_per_gram']
             : null;
 
-        $options[] = [
-            'key'            => $form_key,
-            'label'          => (string) ($option['label'] ?? ''),
-            'price_per_gram' => (float) ($option['price_per_gram'] ?? 0),
-            'sample_image'   => is_array($option['sample_image'] ?? null) ? $option['sample_image'] : nice_hair_get_product_form_sample_image($form_key, (string) ($option['label'] ?? '')),
-            'support_copy'   => (string) ($option['support_copy'] ?? nice_hair_get_product_form_support_copy($form_key, (string) ($option['label'] ?? ''))),
-            'regular_total_price' => isset($totals['regular_total_price']) && is_numeric($totals['regular_total_price'])
-                ? (float) $totals['regular_total_price']
-                : null,
-            'total_price'    => $total_price,
-            'price_html'     => (string) ($totals['price_html'] ?? ''),
-            'is_available'   => $total_price !== null,
+        if ($price_per_gram === null) {
+            continue;
+        }
+
+        if ($form_key === 'bulk') {
+            $price_per_gram = 0.0;
+        }
+
+        $form_surcharge_total = $fixed_weight * $price_per_gram;
+
+        $regular_price = $regular_base_price + $form_surcharge_total;
+        $current_price = $current_base_price + $form_surcharge_total;
+
+        $has_discount = $regular_price > $current_price;
+
+        $regular_display_price = function_exists('wc_get_price_to_display')
+            ? wc_get_price_to_display($resolved, ['price' => $regular_price])
+            : $regular_price;
+
+        $current_display_price = function_exists('wc_get_price_to_display')
+            ? wc_get_price_to_display($resolved, ['price' => $current_price])
+            : $current_price;
+
+        if ($has_discount && function_exists('wc_format_sale_price')) {
+            $price_html = wc_format_sale_price($regular_display_price, $current_display_price);
+        } elseif (function_exists('wc_price')) {
+            $price_html = wc_price($current_display_price);
+        } else {
+            $price_html = number_format($current_display_price, 2, '.', '');
+        }
+
+        $sample_image = is_array($form_option['sample_image'] ?? null)
+            ? $form_option['sample_image']
+            : nice_hair_get_product_form_sample_image($form_key, $form_label);
+
+        $support_copy = trim((string) ($form_option['support_copy'] ?? ''));
+
+        if ($support_copy === '') {
+            $support_copy = nice_hair_get_product_form_support_copy($form_key, $form_label);
+        }
+
+        $options[$form_key] = [
+            'key'                     => $form_key,
+            'label'                   => $form_label,
+            'price_per_gram'          => $price_per_gram,
+            'base_lot_price'          => $current_base_price,
+            'regular_base_lot_price'  => $regular_base_price,
+            'form_surcharge_total'    => $form_surcharge_total,
+
+            /**
+             * Keep several names for compatibility with cart/order code.
+             */
+            'price'                   => $current_price,
+            'regular_price'           => $regular_price,
+            'unit_price'              => $current_price,
+            'regular_unit_price'      => $regular_price,
+
+            'price_html'              => $price_html,
+            'has_discount'            => $has_discount,
+            'is_available'            => true,
+            'sample_image'            => $sample_image,
+            'support_copy'            => $support_copy,
         ];
     }
 
-    $default_key = nice_hair_get_exclusive_default_product_form_key($resolved);
-    $selected_option = null;
-
-    foreach ($options as $option) {
-        if (($option['key'] ?? '') === $default_key) {
-            $selected_option = $option;
-            break;
-        }
+    if ($options === []) {
+        return array_replace($empty_result, [
+            'fixed_weight' => $fixed_weight,
+        ]);
     }
 
-    if (! is_array($selected_option)) {
-        foreach ($options as $option) {
-            if (! empty($option['is_available'])) {
-                $selected_option = $option;
-                break;
-            }
-        }
-    }
-
-    if (! is_array($selected_option) && $options !== []) {
-        $selected_option = $options[0];
-    }
+    $default_key = isset($options['bulk'])
+        ? 'bulk'
+        : (string) array_key_first($options);
 
     return [
-        'base_lot_price'   => $base_lot_price,
-        'effective_base_lot_price' => $effective_base_lot_price,
-        'fixed_weight'     => $fixed_weight,
-        'options'          => $options,
-        'default_key'      => is_array($selected_option) ? (string) ($selected_option['key'] ?? '') : '',
-        'selected_option'  => $selected_option,
-        'is_complete'      => $base_lot_price !== null && $fixed_weight !== null,
+        'fixed_weight'    => $fixed_weight,
+        'options'         => array_values($options),
+        'default_key'     => $default_key,
+        'selected_option' => $options[$default_key] ?? null,
+        'is_complete'     => true,
     ];
 }
 
