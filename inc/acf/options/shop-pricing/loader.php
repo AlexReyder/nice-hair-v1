@@ -10,7 +10,6 @@ $nice_hair_shop_pricing_acf_files = [
     '/helpers.php',
     '/fields.php',
     '/bootstrap.php',
-    '/legacy.php',
 ];
 
 foreach ($nice_hair_shop_pricing_acf_files as $nice_hair_shop_pricing_acf_file) {

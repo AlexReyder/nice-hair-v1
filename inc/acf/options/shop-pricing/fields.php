@@ -51,7 +51,13 @@ function nice_hair_register_shop_pricing_acf_options(): void
                         'label'         => 'Quality',
                         'name'          => 'item_quality',
                         'type'          => 'select',
-                        'choices'       => nice_hair_get_shop_pricing_hair_quality_choices(),
+
+                        /**
+                         * Fallback for early local field registration.
+                         * Actual choices are refreshed via acf/load_field in helpers.php.
+                         */
+                        'choices'       => nice_hair_get_shop_pricing_hair_quality_fallback_choices(),
+
                         'default_value' => 'Lux',
                         'ui'            => 1,
                     ],
