@@ -11,7 +11,7 @@ declare(strict_types=1);
  */
 
 $nice_hair_acf_files = [
-    '/blocks.php',
+    '/blocks/loader.php',
     '/fields.php',
     '/options/loader.php',
     '/custom-hair-colors.php',
