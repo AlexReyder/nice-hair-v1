@@ -479,66 +479,6 @@ function nice_hair_register_acf_options(): void
                 'default_value' => '2026 / Premium Hair Extensions in the Heart of Dubai',
             ],
             [
-                'key'          => 'field_nh_salon_footer_nav_column_1',
-                'label'        => 'РЎСЃС‹Р»РєРё, РєРѕР»РѕРЅРєР° 1',
-                'name'         => 'nh_footer_nav_column_1',
-                'label'        => "\xD0\x9D\xD0\xB0\xD0\xB2\xD0\xB8\xD0\xB3\xD0\xB0\xD1\x86\xD0\xB8\xD1\x8F\x2C\x20\xD0\xBA\xD0\xBE\xD0\xBB\xD0\xBE\xD0\xBD\xD0\xBA\xD0\xB0\x20\x31",
-                'type'         => 'repeater',
-                'layout'       => 'block',
-                'button_label' => 'Р”РѕР±Р°РІРёС‚СЊ СЃСЃС‹Р»РєСѓ РІ РєРѕР»РѕРЅРєСѓ 1',
-                'sub_fields'   => [
-                    [
-                        'key'           => 'field_nh_salon_footer_nav_column_1_link',
-                        'label'         => 'Ссылка',
-                        'name'          => 'item_link',
-                        'type'          => 'link',
-                        'return_format' => 'array',
-                        'required'      => 1,
-                    ],
-                ],
-                'button_label' => "\xD0\x94\xD0\xBE\xD0\xB1\xD0\xB0\xD0\xB2\xD0\xB8\xD1\x82\xD1\x8C\x20\xD1\x81\xD1\x81\xD1\x8B\xD0\xBB\xD0\xBA\xD1\x83\x20\xD0\xB2\x20\xD0\xBA\xD0\xBE\xD0\xBB\xD0\xBE\xD0\xBD\xD0\xBA\xD1\x83\x20\x31",
-            ],
-            [
-                'key'          => 'field_nh_salon_footer_nav_column_2',
-                'label'        => 'РЎСЃС‹Р»РєРё, РєРѕР»РѕРЅРєР° 2',
-                'name'         => 'nh_footer_nav_column_2',
-                'label'        => "\xD0\x9D\xD0\xB0\xD0\xB2\xD0\xB8\xD0\xB3\xD0\xB0\xD1\x86\xD0\xB8\xD1\x8F\x2C\x20\xD0\xBA\xD0\xBE\xD0\xBB\xD0\xBE\xD0\xBD\xD0\xBA\xD0\xB0\x20\x32",
-                'type'         => 'repeater',
-                'layout'       => 'block',
-                'button_label' => 'Р”РѕР±Р°РІРёС‚СЊ СЃСЃС‹Р»РєСѓ РІ РєРѕР»РѕРЅРєСѓ 2',
-                'sub_fields'   => [
-                    [
-                        'key'           => 'field_nh_salon_footer_nav_column_2_link',
-                        'label'         => 'Ссылка',
-                        'name'          => 'item_link',
-                        'type'          => 'link',
-                        'return_format' => 'array',
-                        'required'      => 1,
-                    ],
-                ],
-                'button_label' => "\xD0\x94\xD0\xBE\xD0\xB1\xD0\xB0\xD0\xB2\xD0\xB8\xD1\x82\xD1\x8C\x20\xD1\x81\xD1\x81\xD1\x8B\xD0\xBB\xD0\xBA\xD1\x83\x20\xD0\xB2\x20\xD0\xBA\xD0\xBE\xD0\xBB\xD0\xBE\xD0\xBD\xD0\xBA\xD1\x83\x20\x32",
-            ],
-            [
-                'key'          => 'field_nh_salon_footer_nav_column_3',
-                'label'        => 'РЎСЃС‹Р»РєРё, РєРѕР»РѕРЅРєР° 3',
-                'name'         => 'nh_footer_nav_column_3',
-                'label'        => "\xD0\x9D\xD0\xB0\xD0\xB2\xD0\xB8\xD0\xB3\xD0\xB0\xD1\x86\xD0\xB8\xD1\x8F\x2C\x20\xD0\xBA\xD0\xBE\xD0\xBB\xD0\xBE\xD0\xBD\xD0\xBA\xD0\xB0\x20\x33",
-                'type'         => 'repeater',
-                'layout'       => 'block',
-                'button_label' => 'Р”РѕР±Р°РІРёС‚СЊ СЃСЃС‹Р»РєСѓ РІ РєРѕР»РѕРЅРєСѓ 3',
-                'sub_fields'   => [
-                    [
-                        'key'           => 'field_nh_salon_footer_nav_column_3_link',
-                        'label'         => 'Ссылка',
-                        'name'          => 'item_link',
-                        'type'          => 'link',
-                        'return_format' => 'array',
-                        'required'      => 1,
-                    ],
-                ],
-                'button_label' => "\xD0\x94\xD0\xBE\xD0\xB1\xD0\xB0\xD0\xB2\xD0\xB8\xD1\x82\xD1\x8C\x20\xD1\x81\xD1\x81\xD1\x8B\xD0\xBB\xD0\xBA\xD1\x83\x20\xD0\xB2\x20\xD0\xBA\xD0\xBE\xD0\xBB\xD0\xBE\xD0\xBD\xD0\xBA\xD1\x83\x20\x33",
-            ],
-            [
                 'key'          => 'field_nh_salon_footer_nav_items',
                 'label'        => 'Пункты навигации',
                 'name'         => 'nh_footer_nav_items',
@@ -794,19 +734,6 @@ function nice_hair_register_acf_options(): void
 }
 add_action('acf/init', 'nice_hair_register_acf_options');
 
-function nice_hair_hide_legacy_salon_footer_nav_field(array $field): array|false
-{
-    $current_page = isset($_GET['page']) && is_string($_GET['page'])
-        ? sanitize_key(wp_unslash($_GET['page']))
-        : '';
-
-    if ($current_page === 'header-footer-salon') {
-        return false;
-    }
-
-    return $field;
-}
-add_filter('acf/prepare_field/name=nh_footer_nav_items', 'nice_hair_hide_legacy_salon_footer_nav_field');
 
 function nice_hair_results_settings_page_slug(): string
 {
