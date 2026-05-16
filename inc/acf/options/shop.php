@@ -2,100 +2,11 @@
 
 declare(strict_types=1);
 
-function nice_hair_shop_pricing_options_page_slug(): string
-{
-    return 'shop-pricing-config';
-}
 
-function nice_hair_get_shop_pricing_default_field_values(): array
-{
-    if (! function_exists('nice_hair_get_shop_pricing_defaults')) {
-        return [];
-    }
 
-    $defaults = nice_hair_get_shop_pricing_defaults();
-    $form_labels = function_exists('nice_hair_get_default_product_form_labels')
-        ? nice_hair_get_default_product_form_labels()
-        : [];
 
-    $custom_base_rows = [];
 
-    foreach ((array) ($defaults['custom_hair']['base_prices'] ?? []) as $quality => $lengths) {
-        foreach ((array) $lengths as $length => $price) {
-            $custom_base_rows[] = [
-                'item_quality'        => ucfirst((string) $quality),
-                'item_length'         => (float) $length,
-                'item_price_per_gram' => (float) $price,
-            ];
-        }
-    }
 
-    $form_surcharge_rows = [];
-
-    foreach ((array) ($defaults['custom_hair']['form_surcharges'] ?? []) as $form_key => $price) {
-        $normalized_key = function_exists('nice_hair_normalize_shop_key')
-            ? nice_hair_normalize_shop_key((string) $form_key)
-            : sanitize_title((string) $form_key);
-
-        $form_surcharge_rows[] = [
-            'item_extension_type' => (string) ($form_labels[$normalized_key] ?? ucwords(str_replace('_', ' ', (string) $normalized_key))),
-            'item_price_per_gram' => (float) $price,
-        ];
-    }
-
-    return [
-        'nh_shop_pricing_custom_base_prices' => $custom_base_rows,
-        'nh_shop_pricing_form_surcharges'    => $form_surcharge_rows,
-    ];
-}
-
-function nice_hair_maybe_bootstrap_shop_pricing_config(): void
-{
-    if (! function_exists('get_field') || ! function_exists('update_field')) {
-        return;
-    }
-
-    $pricing_post_id = function_exists('nice_hair_shop_pricing_post_id')
-        ? nice_hair_shop_pricing_post_id()
-        : 'nh_shop_pricing_config';
-    $legacy_post_id = function_exists('nice_hair_header_footer_post_id')
-        ? nice_hair_header_footer_post_id('shop')
-        : 'nh_header_footer_shop';
-    $default_values = nice_hair_get_shop_pricing_default_field_values();
-   $field_names = [
-    'nh_shop_pricing_custom_base_prices',
-    'nh_shop_pricing_form_surcharges',
-];
-
-    foreach ($field_names as $field_name) {
-        $current_value = get_field($field_name, $pricing_post_id);
-
-        if (function_exists('nice_hair_acf_has_value') && nice_hair_acf_has_value($current_value)) {
-            continue;
-        }
-
-        if (! function_exists('nice_hair_acf_has_value') && $current_value !== null && $current_value !== false && $current_value !== '' && $current_value !== []) {
-            continue;
-        }
-
-        $legacy_value = get_field($field_name, $legacy_post_id);
-        $value_to_store = null;
-
-        if (function_exists('nice_hair_acf_has_value') && nice_hair_acf_has_value($legacy_value)) {
-            $value_to_store = $legacy_value;
-        } elseif (! function_exists('nice_hair_acf_has_value') && $legacy_value !== null && $legacy_value !== false && $legacy_value !== '' && $legacy_value !== []) {
-            $value_to_store = $legacy_value;
-        } else {
-            $value_to_store = $default_values[$field_name] ?? null;
-        }
-
-        if ($value_to_store === null || $value_to_store === []) {
-            continue;
-        }
-
-        update_field($field_name, $value_to_store, $pricing_post_id);
-    }
-}
 
 function nice_hair_get_shop_header_catalog_default_field_values(): array
 {
@@ -157,18 +68,7 @@ function nice_hair_register_shop_acf_options(): void
         'post_id'     => nice_hair_header_footer_post_id('shop'),
     ]);
 
-    acf_add_options_page([
-        'page_title' => 'Shop Pricing Config',
-        'menu_title' => 'Shop Pricing',
-        'menu_slug'  => nice_hair_shop_pricing_options_page_slug(),
-        'capability' => 'edit_posts',
-        'redirect'   => false,
-        'icon_url'   => 'dashicons-chart-line',
-        'position'   => 33,
-        'post_id'    => function_exists('nice_hair_shop_pricing_post_id')
-            ? nice_hair_shop_pricing_post_id()
-            : 'nh_shop_pricing_config',
-    ]);
+
 
     if (! function_exists('acf_add_local_field_group')) {
         return;
@@ -509,114 +409,11 @@ function nice_hair_register_shop_acf_options(): void
 
 
 
-    acf_add_local_field_group([
-        'key'    => 'group_nh_shop_pricing_custom_hair',
-        'title'  => 'Shop Pricing: Custom Hair',
-        'fields' => [
-            [
-                'key'           => 'field_nh_shop_pricing_custom_note',
-                'label'         => 'Комментарий',
-                'name'          => 'nh_shop_pricing_custom_note',
-                'type'          => 'message',
-                'message'       => 'Используем эти таблицы как источник pricing-конфига для Custom Hair и доплаты за форму изделия.',
-                'new_lines'     => 'wpautop',
-                'esc_html'      => 0,
-            ],
-            [
-                'key'          => 'field_nh_shop_pricing_custom_base_prices',
-                'label'        => 'Custom hair - цена волос за 1 грамм',
-                'name'         => 'nh_shop_pricing_custom_base_prices',
-                'type'         => 'repeater',
-                'layout'       => 'table',
-                'button_label' => 'Добавить строку',
-                'sub_fields'   => [
-                    [
-                        'key'           => 'field_nh_shop_pricing_custom_base_quality',
-                        'label'         => 'Quality',
-                        'name'          => 'item_quality',
-                        'type'          => 'select',
-                        'choices'       => [
-                            'Lux'       => 'Lux',
-                            'Premium'   => 'Premium',
-                            'Exclusive' => 'Exclusive',
-                        ],
-                        'default_value' => 'Lux',
-                        'ui'            => 1,
-                    ],
-                    [
-                        'key'     => 'field_nh_shop_pricing_custom_base_length',
-                        'label'   => 'Длина',
-                        'name'    => 'item_length',
-                        'type'    => 'number',
-                        'min'     => 0,
-                        'step'    => 1,
-                        'append'  => 'cm',
-                    ],
-                    [
-                        'key'     => 'field_nh_shop_pricing_custom_base_price_per_gram',
-                        'label'   => 'Цена за 1 грамм',
-                        'name'    => 'item_price_per_gram',
-                        'type'    => 'number',
-                        'min'     => 0,
-                        'step'    => 0.01,
-                        'prepend' => '$',
-                    ],
-                ],
-            ],
-            [
-                'key'          => 'field_nh_shop_pricing_form_surcharges',
-                'label'        => 'Доплата за форму изделия - цена за 1 грамм',
-                'name'         => 'nh_shop_pricing_form_surcharges',
-                'type'         => 'repeater',
-                'layout'       => 'table',
-                'button_label' => 'Добавить строку',
-                'sub_fields'   => [
-                    [
-                        'key'          => 'field_nh_shop_pricing_form_surcharge_extension_type',
-                        'label'        => 'Extension type',
-                        'name'         => 'item_extension_type',
-                        'type'         => 'text',
-                        'instructions' => 'Используйте тот же label, что и у Woo attribute Extension Type.',
-                    ],
-                    [
-                        'key'     => 'field_nh_shop_pricing_form_surcharge_price_per_gram',
-                        'label'   => 'Цена за 1 грамм',
-                        'name'    => 'item_price_per_gram',
-                        'type'    => 'number',
-                        'min'     => 0,
-                        'step'    => 0.01,
-                        'prepend' => '$',
-                    ],
-                ],
-            ],
-        ],
-        'location' => [
-            [
-                [
-                    'param'    => 'options_page',
-                    'operator' => '==',
-                    'value'    => nice_hair_shop_pricing_options_page_slug(),
-                ],
-            ],
-        ],
-        'active' => true,
-    ]);
+
 }
 add_action('acf/init', 'nice_hair_register_shop_acf_options', 20);
 add_action('acf/init', 'nice_hair_maybe_bootstrap_shop_header_catalog_dropdown', 25);
-add_action('acf/init', 'nice_hair_maybe_bootstrap_shop_pricing_config', 30);
 
-function nice_hair_hide_legacy_shop_pricing_field(array $field): array|false
-{
-    $current_page = isset($_GET['page']) && is_string($_GET['page'])
-        ? sanitize_key(wp_unslash($_GET['page']))
-        : '';
 
-    if ($current_page !== nice_hair_shop_pricing_options_page_slug()) {
-        return $field;
-    }
 
-    return false;
-}
 
-add_filter('acf/prepare_field/name=nh_shop_pricing_keratin_transparent', 'nice_hair_hide_legacy_shop_pricing_field');

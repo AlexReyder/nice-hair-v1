@@ -42,6 +42,10 @@ $nice_hair_acf_option_files = [
         'new'    => __DIR__ . '/shop.php',
         'legacy' => dirname(__DIR__) . '/shop-options.php',
     ],
+    [
+    'new'    => __DIR__ . '/shop-pricing/loader.php',
+    'legacy' => '',
+],
 ];
 
 foreach ($nice_hair_acf_option_files as $nice_hair_acf_option_file) {
