@@ -58,7 +58,7 @@ $nh_custom_hair_guide_drawers = [
         'items'   => [
             [
                 'title' => 'Premium',
-                'text'  => 'Perfectly smooth and naturally flowing texture. Ideal for clients who prefer a sleek, timeless look or love styling versatility - straight, curled or waved. Holds shape beautifully while maintaining a refined, luxurious appearance.',
+                'text'  => 'Single-donor bundles (no mix). Dyed using our exclusive technology while preserving the highest hair quality. Fine, smooth, and soft texture. The choice for the discerning and sophisticated client.',
                 'image' => [
                     'src' => $nh_custom_hair_guide_base_url . '/quality drawer/premium.png',
                     'alt' => 'Premium hair quality',
@@ -66,7 +66,7 @@ $nh_custom_hair_guide_drawers = [
             ],
             [
                 'title' => 'Lux',
-                'text'  => 'Soft, natural movement with a gentle wave pattern. Balanced volume and texture that creates effortless dimension without looking over-styled. After washing, the hair forms a subtle, elegant wave.',
+                'text'  => 'Bulks are sourced from several donors (mix). Thick ends, dense tops. After washing - slightly wavy. Ideal for those who like maximum volume and thickness.',
                 'image' => [
                     'src' => $nh_custom_hair_guide_base_url . '/quality drawer/lux.png',
                     'alt' => 'Lux hair quality',
@@ -74,7 +74,7 @@ $nh_custom_hair_guide_drawers = [
             ],
             [
                 'title' => 'Exclusive',
-                'text'  => 'Defined, elastic curls with natural bounce and character. Lightweight yet full, with a soft, touchable feel and dynamic movement. Each bundle has its own unique curl pattern, giving an authentic and luxurious finish.',
+                'text'  => "Baby' s super-selected hair. Each bundle is unique. Exceptionally soft, fine, and shiny. Texture varies from bone straight to bouncy curls. Ideal for anyone seeking a rare, natural texture.",
                 'image' => [
                     'src' => $nh_custom_hair_guide_base_url . '/quality drawer/exclusive.png',
                     'alt' => 'Exclusive hair quality',
@@ -91,7 +91,7 @@ $nh_custom_hair_guide_drawers = [
         'items'   => [
             [
                 'title' => 'Soft straight',
-                'text'  => 'Single-donor bundles (no mix). Dyed using our exclusive technology while preserving the highest hair quality. Fine, smooth, and soft texture. The choice for the discerning and sophisticated client.',
+                'text'  => 'Perfectly smooth and naturally flowing texture. Ideal for clients who prefer a sleek, timeless look or love styling versatility - straight, curled or waved. Holds shape beautifully while maintaining a refined, luxurious appearance.',
                 'image' => [
                     'src' => $nh_custom_hair_guide_base_url . '/texture drawer/soft.png',
                     'alt' => 'Soft straight texture',
@@ -99,15 +99,15 @@ $nh_custom_hair_guide_drawers = [
             ],
             [
                 'title' => 'Silky wavy',
-                'text'  => 'Bulks are sourced from several donors (mix). Thick ends, dense tops. After washing - slightly wavy. Ideal for those who like maximum volume and thickness.',
+                'text'  => 'Soft, natural movement with a gentle wave pattern. Balanced volume and texture that creates effortless dimension without looking over-styled. After washing, the hair forms a subtle, elegant wave.',
                 'image' => [
-                    'src' => $nh_custom_hair_guide_base_url . '/texture drawer/silky.png',
+                    'src' => $nh_custom_hair_guide_base_url . '/texture drawer/silky.jpg',
                     'alt' => 'Silky wavy texture',
                 ],
             ],
             [
                 'title' => 'Amazing curly',
-                'text'  => 'Undyed, baby\'s super-selected hair. Each bundle is unique. Exceptionally soft, fine, and shiny. Texture varies from bone straight to bouncy curls. Ideal for anyone seeking a rare, natural texture.',
+                'text'  => 'Defined, elastic curls with natural bounce and character. Lightweight yet full, with a soft, touchable feel and dynamic movement. Each bundle has its own unique curl pattern, giving an authentic and luxurious finish.',
                 'image' => [
                     'src' => $nh_custom_hair_guide_base_url . '/texture drawer/curly.png',
                     'alt' => 'Amazing curly texture',

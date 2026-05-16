@@ -111,9 +111,6 @@ if ($nh_is_out_of_stock) {
 }
 
 $nh_show_icon_badges = $nh_status_label === ''
-    && ! $nh_is_keratin
-    && ! $nh_is_tools
-    && ! $nh_is_generic
     && ($product->is_on_sale() || $product->is_featured());
 ?>
 

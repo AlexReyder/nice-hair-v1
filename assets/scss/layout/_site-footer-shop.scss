@@ -4,6 +4,7 @@
   padding: 16px 0 22px;
   font-family: "Inter Tight", sans-serif;
   padding-top: var(--section-spacing);
+  overflow: hidden;
 
   :where(p, ul, li, form) {
     margin: 0;

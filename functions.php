@@ -40,6 +40,7 @@ $nice_hair_files = [
     '/inc/theme/popup-salon.php',
     '/inc/theme/running-line.php',
     '/inc/woocommerce/data-model.php',
+    '/inc/woocommerce/exclusive-product-forms.php',
     '/inc/woocommerce/custom-hair-colors.php',
     '/inc/woocommerce/archive.php',
     '/inc/woocommerce/setup.php',
