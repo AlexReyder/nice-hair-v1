@@ -86,6 +86,7 @@ function nice_hair_allowed_blocks(array|bool $allowed_block_types, WP_Block_Edit
         'acf/nh-faq',
         'acf/nh-stylists',
         'acf/nh-results',
+        'acf/nh-results-gallery-shop',
         'acf/nh-price-quiz',
         'acf/nh-discounts',
         'acf/nh-shop-categories',

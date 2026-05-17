@@ -5,6 +5,7 @@ import "./before-after.js";
 import "./faq.js";
 import "./stylists-slider.js";
 import "./results-slider.js";
+import "./results-gallery-shop.js";
 import "./shop-assortment-slider.js";
 import "./price-quiz.js";
 import "./header.js";

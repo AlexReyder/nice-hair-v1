@@ -14,6 +14,9 @@ $nice_hair_acf_block_files = [
     __DIR__ . '/results/register.php',
     __DIR__ . '/results/fields.php',
 
+    __DIR__ . '/results-gallery-shop/register.php',
+    __DIR__ . '/results-gallery-shop/fields.php',
+
     __DIR__ . '/price-quiz/register.php',
     __DIR__ . '/price-quiz/fields.php',
 

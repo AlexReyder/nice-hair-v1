@@ -6,7 +6,15 @@ declare(strict_types=1);
  * WooCommerce PhotoSwipe integration for custom theme galleries.
  */
 
-function nice_hair_post_has_shop_assortment_block(?WP_Post $post): bool
+function nice_hair_custom_photoswipe_gallery_block_names(): array
+{
+    return [
+        'acf/nh-shop-assortment',
+        'acf/nh-results-gallery-shop',
+    ];
+}
+
+function nice_hair_post_has_custom_photoswipe_gallery_block(?WP_Post $post): bool
 {
     if (! $post instanceof WP_Post || ! function_exists('has_block')) {
         return false;
@@ -16,10 +24,16 @@ function nice_hair_post_has_shop_assortment_block(?WP_Post $post): bool
         return false;
     }
 
-    return has_block('acf/nh-shop-assortment', $post);
+    foreach (nice_hair_custom_photoswipe_gallery_block_names() as $block_name) {
+        if (has_block($block_name, $post)) {
+            return true;
+        }
+    }
+
+    return false;
 }
 
-function nice_hair_should_enqueue_shop_assortment_photoswipe(): bool
+function nice_hair_should_enqueue_custom_photoswipe_gallery_assets(): bool
 {
     if (is_admin()) {
         return false;
@@ -27,7 +41,7 @@ function nice_hair_should_enqueue_shop_assortment_photoswipe(): bool
 
     $queried_id = function_exists('get_queried_object_id') ? (int) get_queried_object_id() : 0;
 
-    if ($queried_id > 0 && nice_hair_post_has_shop_assortment_block(get_post($queried_id))) {
+    if ($queried_id > 0 && nice_hair_post_has_custom_photoswipe_gallery_block(get_post($queried_id))) {
         return true;
     }
 
@@ -41,7 +55,7 @@ function nice_hair_should_enqueue_shop_assortment_photoswipe(): bool
         return false;
     }
 
-    return nice_hair_post_has_shop_assortment_block(get_post($shop_page_id));
+    return nice_hair_post_has_custom_photoswipe_gallery_block(get_post($shop_page_id));
 }
 
 function nice_hair_render_woocommerce_photoswipe_template(): void
@@ -64,9 +78,9 @@ function nice_hair_render_woocommerce_photoswipe_template(): void
     }
 }
 
-function nice_hair_enqueue_shop_assortment_photoswipe_assets(): void
+function nice_hair_enqueue_custom_photoswipe_gallery_assets(): void
 {
-    if (! nice_hair_should_enqueue_shop_assortment_photoswipe()) {
+    if (! nice_hair_should_enqueue_custom_photoswipe_gallery_assets()) {
         return;
     }
 
@@ -87,4 +101,4 @@ function nice_hair_enqueue_shop_assortment_photoswipe_assets(): void
         add_action('wp_footer', 'nice_hair_render_woocommerce_photoswipe_template', 20);
     }
 }
-add_action('wp_enqueue_scripts', 'nice_hair_enqueue_shop_assortment_photoswipe_assets', 20);
+add_action('wp_enqueue_scripts', 'nice_hair_enqueue_custom_photoswipe_gallery_assets', 20);
