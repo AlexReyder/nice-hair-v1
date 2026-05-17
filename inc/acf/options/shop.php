@@ -131,63 +131,7 @@ function nice_hair_register_shop_acf_options(): void
                     ],
                 ],
             ],
-            [
-                'key'           => 'field_nh_shop_header_contact_phone',
-                'label'         => "\u{0422}\u{0435}\u{043B}\u{0435}\u{0444}\u{043E}\u{043D}",
-                'name'          => 'nh_header_contact_phone',
-                'type'          => 'text',
-                'default_value' => '+971 58 598 8409',
-            ],
-            [
-                'key'           => 'field_nh_shop_header_contact_phone_link',
-                'label'         => "\u{0422}\u{0435}\u{043B}\u{0435}\u{0444}\u{043E}\u{043D} (\u{0441}\u{0441}\u{044B}\u{043B}\u{043A}\u{0430})",
-                'name'          => 'nh_header_contact_phone_link',
-                'type'          => 'text',
-                'default_value' => '+971585988409',
-            ],
-            [
-                'key'           => 'field_nh_shop_header_contact_address',
-                'label'         => "\u{0410}\u{0434}\u{0440}\u{0435}\u{0441}",
-                'name'          => 'nh_header_contact_address',
-                'type'          => 'textarea',
-                'rows'          => 3,
-                'new_lines'     => 'br',
-                'default_value' => 'Al Noor st, Al Sufouh, Al Sufouh 1, Dubai',
-            ],
-            [
-                'key'           => 'field_nh_shop_header_contact_hours',
-                'label'         => "\u{0412}\u{0440}\u{0435}\u{043C}\u{044F} \u{0440}\u{0430}\u{0431}\u{043E}\u{0442}\u{044B}",
-                'name'          => 'nh_header_contact_hours',
-                'type'          => 'text',
-                'default_value' => "We're open daily: 10 AM - 10 PM",
-            ],
-            [
-                'key'        => 'field_nh_shop_header_socials',
-                'label'      => "\u{0421}\u{043E}\u{0446}\u{0441}\u{0435}\u{0442}\u{0438}",
-                'name'       => 'nh_header_contact_socials',
-                'type'       => 'group',
-                'layout'     => 'row',
-                'sub_fields' => [
-                    [
-                        'key'   => 'field_nh_shop_header_socials_telegram',
-                        'label' => "\u{0422}\u{0435}\u{043B}\u{0435}\u{0433}\u{0440}\u{0430}\u{043C}",
-                        'name'  => 'telegram',
-                        'type'  => 'url',
-                    ],
-                    [
-                        'key'   => 'field_nh_shop_header_socials_instagram',
-                        'label' => "\u{0418}\u{043D}\u{0441}\u{0442}\u{0430}\u{0433}\u{0440}\u{0430}\u{043C}",
-                        'name'  => 'instagram',
-                        'type'  => 'url',
-                    ],
-                    [
-                        'key'   => 'field_nh_shop_header_socials_whatsapp',
-                        'label' => 'WhatsApp',
-                        'name'  => 'whatsapp',
-                        'type'  => 'url',
-                    ],
-                ],
-            ],
+          
         ],
         'location' => [
             [
@@ -277,61 +221,7 @@ function nice_hair_register_shop_acf_options(): void
                     ],
                 ],
             ],
-            [
-                'key'           => 'field_nh_shop_footer_address',
-                'label'         => "\u{0410}\u{0434}\u{0440}\u{0435}\u{0441}",
-                'name'          => 'nh_footer_address',
-                'type'          => 'text',
-                'default_value' => '[Al Noor st, Al Sufouh, Al Sufouh 1, Dubai]',
-            ],
-            [
-                'key'           => 'field_nh_shop_footer_hours',
-                'label'         => "\u{0412}\u{0440}\u{0435}\u{043C}\u{044F} \u{0440}\u{0430}\u{0431}\u{043E}\u{0442}\u{044B}",
-                'name'          => 'nh_footer_hours',
-                'type'          => 'text',
-                'default_value' => "We're open daily: 10 AM - 10 PM",
-            ],
-            [
-                'key'        => 'field_nh_shop_footer_socials',
-                'label'      => "\u{0421}\u{043E}\u{0446}\u{0441}\u{0435}\u{0442}\u{0438}",
-                'name'       => 'nh_footer_socials',
-                'type'       => 'group',
-                'layout'     => 'row',
-                'sub_fields' => [
-                    [
-                        'key'   => 'field_nh_shop_footer_socials_telegram',
-                        'label' => "\u{0422}\u{0435}\u{043B}\u{0435}\u{0433}\u{0440}\u{0430}\u{043C}",
-                        'name'  => 'telegram',
-                        'type'  => 'url',
-                    ],
-                    [
-                        'key'   => 'field_nh_shop_footer_socials_instagram',
-                        'label' => "\u{0418}\u{043D}\u{0441}\u{0442}\u{0430}\u{0433}\u{0440}\u{0430}\u{043C}",
-                        'name'  => 'instagram',
-                        'type'  => 'url',
-                    ],
-                    [
-                        'key'   => 'field_nh_shop_footer_socials_whatsapp',
-                        'label' => 'WhatsApp',
-                        'name'  => 'whatsapp',
-                        'type'  => 'url',
-                    ],
-                ],
-            ],
-            [
-                'key'           => 'field_nh_shop_footer_phone',
-                'label'         => "\u{0422}\u{0435}\u{043B}\u{0435}\u{0444}\u{043E}\u{043D} (\u{043E}\u{0442}\u{043E}\u{0431}\u{0440}\u{0430}\u{0436}\u{0435}\u{043D}\u{0438}\u{0435})",
-                'name'          => 'nh_footer_phone',
-                'type'          => 'text',
-                'default_value' => '+971 58 598 8409',
-            ],
-            [
-                'key'           => 'field_nh_shop_footer_phone_link',
-                'label'         => "\u{0422}\u{0435}\u{043B}\u{0435}\u{0444}\u{043E}\u{043D} (\u{0441}\u{0441}\u{044B}\u{043B}\u{043A}\u{0430})",
-                'name'          => 'nh_footer_phone_link',
-                'type'          => 'text',
-                'default_value' => '+971585988409',
-            ],
+            
             [
                 'key'           => 'field_nh_shop_footer_booking_link',
                 'label'         => "\u{041A}\u{043D}\u{043E}\u{043F}\u{043A}\u{0430} CTA",

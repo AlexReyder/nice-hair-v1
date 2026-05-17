@@ -141,88 +141,16 @@ function nice_hair_get_contact_option_field(string $field_name, mixed $fallback 
     return $fallback;
 }
 
-function nice_hair_get_contact_legacy_social_url(string $platform, string $context = ''): ?string
-{
-    $context = nice_hair_get_contact_context($context);
-    $group_fields = ['nh_footer_socials'];
 
-    if (in_array($context, ['salon', 'shop'], true)) {
-        $group_fields[] = 'nh_header_contact_socials';
-    }
 
-    foreach ($group_fields as $field_name) {
-        $group = nice_hair_get_layout_field($field_name, $context, null);
 
-        if (! is_array($group)) {
-            continue;
-        }
-
-        $value = $group[$platform] ?? null;
-
-        if (is_string($value) && trim($value) !== '') {
-            return trim($value);
-        }
-    }
-
-    return null;
-}
-
-function nice_hair_get_contact_legacy_value(string $field_name, string $context = ''): mixed
-{
-    $context = nice_hair_get_contact_context($context);
-
-    $field_candidates = match ($field_name) {
-        'nh_contact_phone_display' => $context === 'home'
-            ? ['nh_footer_phone', 'nh_header_mobile_phone']
-            : ['nh_footer_phone', 'nh_header_contact_phone'],
-        'nh_contact_phone_link' => $context === 'home'
-            ? ['nh_footer_phone_link', 'nh_header_mobile_phone_link']
-            : ['nh_footer_phone_link', 'nh_header_contact_phone_link'],
-        'nh_contact_address_display' => $context === 'home'
-            ? ['nh_header_mobile_address', 'nh_footer_address']
-            : ['nh_header_contact_address', 'nh_footer_address'],
-        'nh_contact_address_plain' => $context === 'home'
-            ? ['nh_footer_address', 'nh_header_mobile_address']
-            : ['nh_footer_address', 'nh_header_contact_address'],
-        'nh_contact_working_hours' => $context === 'home'
-            ? ['nh_footer_hours']
-            : ['nh_footer_hours', 'nh_header_contact_hours'],
-        default => [],
-    };
-
-    if ($field_candidates !== []) {
-        foreach ($field_candidates as $legacy_field_name) {
-            $value = nice_hair_get_layout_field($legacy_field_name, $context, null);
-
-            if (nice_hair_acf_has_value($value)) {
-                return $value;
-            }
-        }
-
-        return null;
-    }
-
-    return match ($field_name) {
-        'nh_contact_whatsapp_url' => nice_hair_get_contact_legacy_social_url('whatsapp', $context),
-        'nh_contact_instagram_url' => nice_hair_get_contact_legacy_social_url('instagram', $context),
-        'nh_contact_telegram_url' => nice_hair_get_contact_legacy_social_url('telegram', $context),
-        default => null,
-    };
-}
 
 function nice_hair_get_contact_field(string $field_name, string $context = '', mixed $fallback = null): mixed
 {
-    $context = nice_hair_get_contact_context($context);
     $option_value = nice_hair_get_contact_option_field($field_name, null);
 
     if (nice_hair_acf_has_value($option_value)) {
         return $option_value;
-    }
-
-    $legacy_value = nice_hair_get_contact_legacy_value($field_name, $context);
-
-    if (nice_hair_acf_has_value($legacy_value)) {
-        return nice_hair_contact_normalize_field_value($field_name, $legacy_value);
     }
 
     return $fallback;
