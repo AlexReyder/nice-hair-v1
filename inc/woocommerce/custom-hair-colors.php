@@ -252,60 +252,7 @@ function nice_hair_get_product_custom_hair_color_options(WC_Product|int|null $pr
     return nice_hair_sort_custom_hair_colors(array_values($colors_by_key));
 }
 
-function nice_hair_remove_legacy_custom_hair_color_options_acf_group(): void
-{
-    if (! function_exists('acf_get_local_field_groups') || ! function_exists('acf_remove_local_field_group')) {
-        return;
-    }
 
-    foreach (acf_get_local_field_groups() as $group) {
-        if (! is_array($group)) {
-            continue;
-        }
-
-        $group_key = (string) ($group['key'] ?? '');
-        $group_title = (string) ($group['title'] ?? '');
-
-        if ($group_key === '') {
-            continue;
-        }
-
-        $is_legacy_custom_hair_colors_group = str_contains($group_title, 'Custom Hair')
-            && (
-                str_contains($group_title, 'цветовые опции')
-                || str_contains($group_title, 'Color options')
-                || str_contains($group_title, 'color options')
-            );
-
-        if (! $is_legacy_custom_hair_colors_group && function_exists('acf_get_local_fields')) {
-            $fields = acf_get_local_fields($group_key);
-
-            if (is_array($fields)) {
-                foreach ($fields as $field) {
-                    if (! is_array($field)) {
-                        continue;
-                    }
-
-                    $field_name = (string) ($field['name'] ?? '');
-
-                    if (in_array($field_name, [
-                        'nh_custom_hair_color_options',
-                        'nh_custom_hair_colors',
-                        'nh_custom_hair_product_colors',
-                    ], true)) {
-                        $is_legacy_custom_hair_colors_group = true;
-                        break;
-                    }
-                }
-            }
-        }
-
-        if ($is_legacy_custom_hair_colors_group) {
-            acf_remove_local_field_group($group_key);
-        }
-    }
-}
-add_action('acf/init', 'nice_hair_remove_legacy_custom_hair_color_options_acf_group', 1000);
 
 function nice_hair_get_custom_hair_request_value(string $key): string
 {

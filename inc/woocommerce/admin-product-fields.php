@@ -46,23 +46,18 @@ function nice_hair_admin_product_field_groups(): array
             'exclusive_hair',
         ],
 
-        /**
-         * Custom Hair fields.
-         *
-         * group_nh_product_custom_hair:
-         *   Main Custom Hair product fields from inc/acf/fields.php.
-         *
-         * group_nh_product_custom_hair_params:
-         *   Length / Hair Quality / Texture / Weight settings from
-         *   inc/acf/product-custom-hair-params.php.
-         *
-         * group_nh_product_custom_hair_colors:
-         *   Product-level Custom Hair color selector from
-         *   inc/acf/custom-hair-colors.php.
-         */
-        'group_nh_product_custom_hair' => [
-            'custom_hair',
-        ],
+     /**
+ * Custom Hair fields.
+ *
+ * group_nh_product_custom_hair_params:
+ *   Length / Hair Quality / Texture / Weight settings from
+ *   inc/acf/products/custom-hair/params.php.
+ *
+ * group_nh_product_custom_hair_colors:
+ *   Product-level Custom Hair color selector from
+ *   inc/acf/products/custom-hair/colors.php.
+ */
+       
         'group_nh_product_custom_hair_params' => [
             'custom_hair',
         ],

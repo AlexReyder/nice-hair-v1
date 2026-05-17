@@ -11,52 +11,52 @@ function nice_hair_register_acf_fields(): void
     }
 
     acf_add_local_field_group([
-            'key'      => 'group_nh_extension_type_how_to_use',
-            'title'    => 'Extension Type: How to Use',
-            'fields'   => [
+        'key'      => 'group_nh_extension_type_how_to_use',
+        'title'    => 'Extension Type: How to Use',
+        'fields'   => [
+            [
+                'key'           => 'field_nh_extension_preview_image',
+                'label'         => 'Preview Image',
+                'name'          => 'nh_extension_preview_image',
+                'type'          => 'image',
+                'return_format' => 'array',
+                'preview_size'  => 'medium',
+                'instructions'  => 'Image for product-form preview cards and selector thumbnails of this Extension Type.',
+            ],
+            [
+                'key'           => 'field_nh_extension_how_to_use_image',
+                'label'         => 'How to Use - Image',
+                'name'          => 'nh_extension_how_to_use_image',
+                'type'          => 'image',
+                'return_format' => 'array',
+                'preview_size'  => 'medium',
+                'instructions'  => 'Shared image for the "How to use" drawer of this Extension Type.',
+            ],
+            [
+                'key'          => 'field_nh_extension_how_to_use_text',
+                'label'        => 'How to Use - Description',
+                'name'         => 'nh_extension_how_to_use_text',
+                'type'         => 'textarea',
+                'rows'         => 6,
+                'instructions' => 'Shared description for the "How to use" drawer of this Extension Type.',
+            ],
+        ],
+        'location' => [
+            [
                 [
-                    'key'           => 'field_nh_extension_preview_image',
-                    'label'         => 'Preview Image',
-                    'name'          => 'nh_extension_preview_image',
-                    'type'          => 'image',
-                    'return_format' => 'array',
-                    'preview_size'  => 'medium',
-                    'instructions'  => 'Image for product-form preview cards and selector thumbnails of this Extension Type.',
-                ],
-                [
-                    'key'           => 'field_nh_extension_how_to_use_image',
-                    'label'         => 'How to Use - Image',
-                    'name'          => 'nh_extension_how_to_use_image',
-                    'type'          => 'image',
-                    'return_format' => 'array',
-                    'preview_size'  => 'medium',
-                    'instructions'  => 'Shared image for the "How to use" drawer of this Extension Type.',
-                ],
-                [
-                    'key'          => 'field_nh_extension_how_to_use_text',
-                    'label'        => 'How to Use - Description',
-                    'name'         => 'nh_extension_how_to_use_text',
-                    'type'         => 'textarea',
-                    'rows'         => 6,
-                    'instructions' => 'Shared description for the "How to use" drawer of this Extension Type.',
+                    'param'    => 'taxonomy',
+                    'operator' => '==',
+                    'value'    => 'pa_extension_type',
                 ],
             ],
-            'location' => [
-                [
-                    [
-                        'param'    => 'taxonomy',
-                        'operator' => '==',
-                        'value'    => 'pa_extension_type',
-                    ],
-                ],
-            ],
-            'position'              => 'normal',
-            'style'                 => 'default',
-            'label_placement'       => 'top',
-            'instruction_placement' => 'label',
-            'active'                => true,
-            'menu_order'            => 15,
-        ]);
+        ],
+        'position'              => 'normal',
+        'style'                 => 'default',
+        'label_placement'       => 'top',
+        'instruction_placement' => 'label',
+        'active'                => true,
+        'menu_order'            => 15,
+    ]);
 }
 
 function nice_hair_get_exclusive_product_form_override_choices(): array
@@ -99,7 +99,6 @@ function nice_hair_load_shop_assortment_selected_forms_field(array $field): arra
 
     return $field;
 }
-
 
 function nice_hair_get_product_attribute_filter_choices(): array
 {
@@ -162,30 +161,17 @@ function nice_hair_load_product_category_filter_taxonomy_field(array $field): ar
 }
 
 add_action('acf/init', 'nice_hair_register_acf_fields');
+
 add_filter(
     'acf/load_field/key=field_nh_exclusive_product_form_key',
     'nice_hair_load_exclusive_product_form_override_field'
 );
+
 add_filter(
     'acf/load_field/key=field_nh_shop_assortment_selected_forms',
     'nice_hair_load_shop_assortment_selected_forms_field'
 );
-add_filter(
-    'acf/load_field/key=field_nh_custom_hair_available_lengths',
-    'nice_hair_load_custom_hair_length_field'
-);
-add_filter(
-    'acf/load_field/key=field_nh_custom_hair_available_qualities',
-    'nice_hair_load_custom_hair_quality_field'
-);
-add_filter(
-    'acf/load_field/key=field_nh_custom_hair_available_textures',
-    'nice_hair_load_custom_hair_texture_field'
-);
-add_filter(
-    'acf/load_field/key=field_nh_custom_hair_color_group',
-    'nice_hair_load_custom_hair_color_group_field'
-);
+
 add_filter(
     'acf/load_field/key=field_nh_category_filter_taxonomy',
     'nice_hair_load_product_category_filter_taxonomy_field'

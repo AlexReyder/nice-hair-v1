@@ -5,10 +5,19 @@ declare(strict_types=1);
 /**
  * Product/category ACF field groups loader.
  *
- * Generated product field group files live in this directory and are loaded
- * automatically. Keep this loader small: each field group should remain in its
- * own file to make product ACF changes isolated and reviewable.
+ * Product modules can be either flat PHP files in this directory
+ * or nested modules with their own loader.php.
  */
+
+$nice_hair_product_acf_module_loaders = [
+    __DIR__ . '/custom-hair/loader.php',
+];
+
+foreach ($nice_hair_product_acf_module_loaders as $nice_hair_product_acf_module_loader) {
+    if (file_exists($nice_hair_product_acf_module_loader)) {
+        require_once $nice_hair_product_acf_module_loader;
+    }
+}
 
 $nice_hair_product_acf_field_files = glob(__DIR__ . '/*.php') ?: [];
 sort($nice_hair_product_acf_field_files);

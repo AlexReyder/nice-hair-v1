@@ -1805,21 +1805,22 @@ function nice_hair_get_custom_hair_product_form_data(WC_Product|int|null $produc
 
 function nice_hair_get_custom_hair_color_options(WC_Product|int|null $product = null): array
 {
+    if (! function_exists('nice_hair_get_product_custom_hair_color_options')) {
+        return [];
+    }
+
     $resolved = nice_hair_resolve_product($product);
 
     if (! $resolved instanceof WC_Product) {
         return [];
     }
 
-    $rows = function_exists('get_field')
-        ? get_field('nh_custom_hair_color_options', $resolved->get_id())
-        : [];
+    $rows = nice_hair_get_product_custom_hair_color_options($resolved);
 
     if (! is_array($rows) || $rows === []) {
         return [];
     }
 
-    $group_map = nice_hair_get_custom_hair_color_group_choice_map();
     $options = [];
 
     foreach ($rows as $row) {
@@ -1827,29 +1828,49 @@ function nice_hair_get_custom_hair_color_options(WC_Product|int|null $product = 
             continue;
         }
 
-        $label = trim((string) ($row['color_label'] ?? ''));
-        $raw_value = trim((string) ($row['color_value'] ?? ''));
-        $key = nice_hair_normalize_shop_key($raw_value !== '' ? $raw_value : $label);
+        $key = nice_hair_normalize_shop_key((string) ($row['key'] ?? ''));
 
         if ($key === '' || isset($options[$key])) {
             continue;
         }
 
-        $group_key = nice_hair_normalize_shop_key((string) ($row['color_group'] ?? ''));
-        $main_image = nice_hair_normalize_media_field_value($row['main_image'] ?? null);
+        $label = trim((string) ($row['label'] ?? ''));
+        $value = trim((string) ($row['value'] ?? ''));
 
-        if ($label === '') {
-            $label = $raw_value !== '' ? $raw_value : nice_hair_humanize_shop_key($key);
+        if ($label === '' && $value === '') {
+            continue;
         }
 
+        if ($label === '') {
+            $label = nice_hair_humanize_shop_key($key);
+        }
+
+        if ($value === '') {
+            $value = $label;
+        }
+
+        $main_image = nice_hair_normalize_media_field_value($row['main_image'] ?? null);
+        $preview_image = nice_hair_normalize_media_field_value($row['preview_image'] ?? null);
+
+        if (! is_array($preview_image)) {
+            $preview_image = $main_image;
+        }
+
+        $group_key = nice_hair_normalize_shop_key((string) ($row['group_key'] ?? ''));
+
         $options[$key] = [
-            'key' => $key,
-            'value' => $raw_value !== '' ? $raw_value : $label,
-            'label' => $label,
-            'group_key' => isset($group_map[$group_key]) ? $group_key : '',
-            'group_label' => isset($group_map[$group_key]) ? $group_map[$group_key] : '',
-            'main_image' => $main_image,
-            'has_image' => $main_image !== null && ! empty($main_image['url']),
+            'key'           => $key,
+            'value'         => $value,
+            'label'         => $label,
+            'group_key'     => $group_key,
+            'group_label'   => $group_key !== '' ? nice_hair_humanize_shop_key($group_key) : '',
+            'preview_image' => $preview_image,
+            'main_image'    => $main_image,
+            'has_image'     => is_array($main_image) && ! empty($main_image['url']),
+            'sort_order'    => isset($row['sort_order']) && is_numeric($row['sort_order'])
+                ? (int) $row['sort_order']
+                : 100,
+            'source'        => (string) ($row['source'] ?? ''),
         ];
     }
 

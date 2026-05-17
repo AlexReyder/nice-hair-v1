@@ -14,8 +14,7 @@ $nice_hair_acf_files = [
     '/blocks/loader.php',
     '/fields.php',
     '/options/loader.php',
-    '/custom-hair-colors.php',
-    '/product-custom-hair-params.php',
+    
 ];
 
 foreach ($nice_hair_acf_files as $nice_hair_acf_file) {
