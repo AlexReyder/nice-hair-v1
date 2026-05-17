@@ -6,25 +6,86 @@ $eyebrow = trim((string) get_field('nh_shop_assortment_eyebrow'));
 $title = trim((string) get_field('nh_shop_assortment_title'));
 $description = trim((string) get_field('nh_shop_assortment_description'));
 $field_anchor = trim((string) get_field('nh_shop_assortment_anchor'));
-$selected_forms_raw = get_field('nh_shop_assortment_selected_forms');
-$selected_forms = is_array($selected_forms_raw) ? $selected_forms_raw : [];
-$cards = function_exists('nice_hair_get_shop_assortment_cards')
-    ? nice_hair_get_shop_assortment_cards($selected_forms)
-    : [];
-$has_navigation = count($cards) > 1;
+$gallery_rows = get_field('nh_shop_assortment_gallery');
+$gallery_rows = is_array($gallery_rows) ? $gallery_rows : [];
+$preview_mode = isset($is_preview) ? (bool) $is_preview : false;
+
+$gallery_items = [];
+
+foreach ($gallery_rows as $gallery_row) {
+    if (! is_array($gallery_row)) {
+        continue;
+    }
+
+    $image = is_array($gallery_row['item_image'] ?? null) ? $gallery_row['item_image'] : [];
+
+    if ($image === []) {
+        continue;
+    }
+
+    $image_id = isset($image['ID'])
+        ? (int) $image['ID']
+        : (isset($image['id']) ? (int) $image['id'] : 0);
+
+    $image_url = (string) ($image['sizes']['large'] ?? $image['url'] ?? '');
+    $full_image_url = (string) ($image['url'] ?? $image_url);
+
+    if ($image_id > 0) {
+        $resolved_large_url = wp_get_attachment_image_url($image_id, 'large');
+        $resolved_full_url = wp_get_attachment_image_url($image_id, 'full');
+
+        if (is_string($resolved_large_url) && $resolved_large_url !== '') {
+            $image_url = $resolved_large_url;
+        }
+
+        if (is_string($resolved_full_url) && $resolved_full_url !== '') {
+            $full_image_url = $resolved_full_url;
+        }
+    }
+
+    if ($image_url === '') {
+        continue;
+    }
+
+    if ($full_image_url === '') {
+        $full_image_url = $image_url;
+    }
+
+    $image_alt = trim((string) ($image['alt'] ?? ''));
+
+    if ($image_alt === '') {
+        $image_alt = trim((string) ($image['title'] ?? ''));
+    }
+
+    if ($image_alt === '') {
+        $image_alt = __('Assortment gallery image', 'nice-hair');
+    }
+
+    $gallery_items[] = [
+        'id'       => $image_id,
+        'url'      => $image_url,
+        'full_url' => $full_image_url,
+        'alt'      => $image_alt,
+    ];
+}
+
+$has_navigation = count($gallery_items) > 1;
 $resolved_anchor = ! empty($block['anchor'])
     ? (string) $block['anchor']
     : $field_anchor;
 $anchor = $resolved_anchor !== '' ? sanitize_title($resolved_anchor) : 'shop-assortment';
 $class_name = ! empty($block['className']) ? ' ' . $block['className'] : '';
-$preview_mode = isset($is_preview) ? (bool) $is_preview : false;
 
-if ($cards === [] && ! $preview_mode) {
+if ($gallery_items === [] && ! $preview_mode) {
     return;
 }
 ?>
 
-<section class="nh-shop-assortment<?php echo esc_attr($class_name); ?>" id="<?php echo esc_attr($anchor); ?>">
+<section
+    class="nh-shop-assortment<?php echo esc_attr($class_name); ?>"
+    id="<?php echo esc_attr($anchor); ?>"
+    data-nh-shop-assortment-gallery
+>
     <div class="nh-shop-assortment__shell">
         <header class="nh-shop-assortment__header">
             <?php if ($eyebrow !== '') : ?>
@@ -46,11 +107,11 @@ if ($cards === [] && ! $preview_mode) {
 
                 <div class="nh-shop-assortment__tools">
                     <?php if ($has_navigation) : ?>
-                        <div class="nh-shop-assortment__nav" role="group" aria-label="<?php esc_attr_e('Assortment navigation', 'nice-hair'); ?>">
+                        <div class="nh-shop-assortment__nav" role="group" aria-label="<?php esc_attr_e('Assortment gallery navigation', 'nice-hair'); ?>">
                             <button
                                 class="nh-shop-assortment__nav-btn nh-shop-assortment__nav-btn--prev"
                                 type="button"
-                                aria-label="<?php esc_attr_e('Previous assortment item', 'nice-hair'); ?>"
+                                aria-label="<?php esc_attr_e('Previous assortment image', 'nice-hair'); ?>"
                                 data-nh-shop-assortment-prev
                             >
                                 <span class="nh-shop-assortment__nav-icon" aria-hidden="true"></span>
@@ -58,7 +119,7 @@ if ($cards === [] && ! $preview_mode) {
                             <button
                                 class="nh-shop-assortment__nav-btn nh-shop-assortment__nav-btn--next"
                                 type="button"
-                                aria-label="<?php esc_attr_e('Next assortment item', 'nice-hair'); ?>"
+                                aria-label="<?php esc_attr_e('Next assortment image', 'nice-hair'); ?>"
                                 data-nh-shop-assortment-next
                             >
                                 <span class="nh-shop-assortment__nav-icon" aria-hidden="true"></span>
@@ -69,42 +130,35 @@ if ($cards === [] && ! $preview_mode) {
             </div>
         </header>
 
-        <?php if ($cards !== []) : ?>
+        <?php if ($gallery_items !== []) : ?>
             <div class="nh-shop-assortment__slider swiper" data-nh-shop-assortment-swiper>
                 <div class="swiper-wrapper nh-shop-assortment__track">
-                    <?php foreach ($cards as $card) : ?>
-                        <?php
-                        $image = is_array($card['image'] ?? null) ? $card['image'] : [];
-                        $image_url = (string) ($image['url'] ?? '');
-                        $image_alt = (string) ($image['alt'] ?? ($card['label'] ?? ''));
-                        $card_url = (string) ($card['url'] ?? '');
-                        $card_label = (string) ($card['label'] ?? '');
-
-                        if ($card_url === '' || $card_label === '') {
-                            continue;
-                        }
-                        ?>
+                    <?php foreach ($gallery_items as $gallery_item) : ?>
                         <div class="swiper-slide nh-shop-assortment__slide">
-                            <a class="nh-shop-assortment__card" href="<?php echo esc_url($card_url); ?>">
+                            <button
+                                class="nh-shop-assortment__card"
+                                type="button"
+                                aria-label="<?php esc_attr_e('Open assortment image fullscreen', 'nice-hair'); ?>"
+                                data-nh-shop-assortment-gallery-item
+                                data-nh-shop-assortment-gallery-src="<?php echo esc_url($gallery_item['full_url']); ?>"
+                                data-nh-shop-assortment-gallery-alt="<?php echo esc_attr($gallery_item['alt']); ?>"
+                            >
                                 <span class="nh-shop-assortment__media">
-                                    <?php if ($image_url !== '') : ?>
-                                        <img
-                                            class="nh-shop-assortment__image"
-                                            src="<?php echo esc_url($image_url); ?>"
-                                            alt="<?php echo esc_attr($image_alt); ?>"
-                                            loading="lazy"
-                                        />
-                                    <?php endif; ?>
+                                    <img
+                                        class="nh-shop-assortment__image"
+                                        src="<?php echo esc_url($gallery_item['url']); ?>"
+                                        alt="<?php echo esc_attr($gallery_item['alt']); ?>"
+                                        loading="lazy"
+                                    />
                                 </span>
-                                <span class="nh-shop-assortment__label"><?php echo esc_html($card_label); ?></span>
-                            </a>
+                            </button>
                         </div>
                     <?php endforeach; ?>
                 </div>
             </div>
         <?php else : ?>
             <div class="nh-shop-assortment__empty">
-                <?php esc_html_e('There are no published Custom Hair products matching the current assortment filter yet.', 'nice-hair'); ?>
+                <?php esc_html_e('Добавьте фотографии галереи в настройках блока Our Assortment.', 'nice-hair'); ?>
             </div>
         <?php endif; ?>
     </div>

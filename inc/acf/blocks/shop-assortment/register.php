@@ -11,10 +11,10 @@ function nice_hair_register_shop_assortment_acf_block(): void
     acf_register_block_type([
         'name'            => 'nh-shop-assortment',
         'title'           => __('Ассортимент магазина', 'nice-hair'),
-        'description'     => __('Слайдер форм товаров Custom Hair для страницы Shop.', 'nice-hair'),
+        'description'     => __('Галерея фотографий для блока Our Assortment на странице Shop.', 'nice-hair'),
         'category'        => 'nice-hair',
         'icon'            => 'images-alt2',
-        'keywords'        => ['assortment', 'shop', 'custom hair', 'slider', 'forms', 'ассортимент', 'магазин', 'слайдер'],
+        'keywords'        => ['assortment', 'shop', 'gallery', 'slider', 'ассортимент', 'магазин', 'галерея', 'слайдер'],
         'render_template' => 'template-parts/blocks/shop-assortment/shop-assortment.php',
         'mode'            => 'auto',
         'supports'        => [
