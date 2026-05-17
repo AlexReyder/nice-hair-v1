@@ -9,16 +9,13 @@ declare(strict_types=1);
  */
 
 $nice_hair_acf_option_files = [
-    __DIR__ . '/layout.php',
-     __DIR__ . '/results.php',
+    __DIR__ . '/layout-settings/loader.php',
+    __DIR__ . '/results.php',
     __DIR__ . '/contact.php',
     __DIR__ . '/popup.php',
     __DIR__ . '/popup-salon.php',
     __DIR__ . '/running-line.php',
-    __DIR__ . '/shop.php',
-    __DIR__ . '/shop-pricing/helpers.php',
-    __DIR__ . '/shop-pricing/fields.php',
-    __DIR__ . '/shop-pricing/bootstrap.php',
+    __DIR__ . '/shop-pricing/loader.php',
 ];
 
 foreach ($nice_hair_acf_option_files as $nice_hair_acf_option_file) {
