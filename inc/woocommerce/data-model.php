@@ -1799,7 +1799,7 @@ function nice_hair_get_custom_hair_texture_rules(WC_Product|int|null $product = 
 
     $quality_choice_map = nice_hair_get_custom_hair_quality_choice_map();
     $texture_choice_map = nice_hair_get_custom_hair_texture_choice_map();
-    $flat_allowed_textures = nice_hair_get_custom_hair_flat_allowed_textures($resolved);
+
     $rules = [];
 
     foreach ($rows as $row) {
@@ -1824,11 +1824,7 @@ function nice_hair_get_custom_hair_texture_rules(WC_Product|int|null $product = 
         foreach ($raw_textures as $raw_texture) {
             $texture_key = nice_hair_normalize_shop_key((string) $raw_texture);
 
-            if (
-                $texture_key === ''
-                || ! isset($texture_choice_map[$texture_key])
-                || ! in_array($texture_key, $flat_allowed_textures, true)
-            ) {
+            if ($texture_key === '' || ! isset($texture_choice_map[$texture_key])) {
                 continue;
             }
 
@@ -1837,9 +1833,14 @@ function nice_hair_get_custom_hair_texture_rules(WC_Product|int|null $product = 
 
         $textures = array_values(array_unique($textures));
 
-        if ($textures !== []) {
-            $rules[$quality_key] = $textures;
+        if ($textures === []) {
+            continue;
         }
+
+        $rules[$quality_key] = array_values(array_unique(array_merge(
+            $rules[$quality_key] ?? [],
+            $textures
+        )));
     }
 
     return $rules;
@@ -1849,24 +1850,25 @@ function nice_hair_get_custom_hair_allowed_textures(
     WC_Product|int|null $product = null,
     string $quality = ''
 ): array {
-    $flat_allowed_textures = nice_hair_get_custom_hair_flat_allowed_textures($product);
     $rules = nice_hair_get_custom_hair_texture_rules($product);
 
     if ($rules === []) {
-        return $flat_allowed_textures;
+        return nice_hair_get_custom_hair_flat_allowed_textures($product);
     }
 
     $quality_key = nice_hair_normalize_shop_key($quality);
 
     if ($quality_key !== '') {
-        return array_values(array_intersect($rules[$quality_key] ?? [], $flat_allowed_textures));
+        return array_values($rules[$quality_key] ?? []);
     }
 
     $union = [];
 
     foreach ($rules as $textures) {
         foreach ($textures as $texture_key) {
-            if (in_array($texture_key, $flat_allowed_textures, true)) {
+            $texture_key = nice_hair_normalize_shop_key((string) $texture_key);
+
+            if ($texture_key !== '') {
                 $union[] = $texture_key;
             }
         }
