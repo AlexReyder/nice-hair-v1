@@ -30,10 +30,12 @@ function nice_hair_register_price_quiz_cpt(): void
         'show_in_rest'    => false,
         'menu_position'   => 32,
         'menu_icon'       => 'dashicons-format-chat',
-        'capability_type' => 'post',
-        'capabilities'    => [
-            'create_posts' => 'do_not_allow',
-        ],
+       'capability_type' => ['nh_submission', 'nh_submissions'],
+        'capabilities'    => function_exists('nice_hair_submission_cpt_capabilities')
+            ? nice_hair_submission_cpt_capabilities()
+            : [
+                'create_posts' => 'do_not_allow',
+            ],
         'map_meta_cap'    => true,
         'hierarchical'    => false,
         'supports'        => [],
