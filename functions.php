@@ -65,27 +65,22 @@ add_action('admin_notices', function (): void {
         return;
     }
 
-    $caps = [
-        'read',
-        'read_nh_submission',
-        'read_nh_submissions',
-        'edit_nh_submission',
-        'edit_nh_submissions',
-        'edit_others_nh_submissions',
-        'edit_private_nh_submissions',
-        'edit_published_nh_submissions',
-        'read_private_nh_submissions',
-        'manage_nh_submission_statuses',
-    ];
-
     echo '<div class="notice notice-info"><pre>';
 
-    foreach ($caps as $cap) {
-        printf(
-            "%s: %s\n",
-            esc_html($cap),
-            current_user_can($cap) ? 'yes' : 'no'
-        );
+    foreach (['nh_price_quiz', 'nh_salon_request'] as $post_type) {
+        $object = get_post_type_object($post_type);
+
+        if (! $object) {
+            echo esc_html($post_type . ': post type object not found') . "\n\n";
+            continue;
+        }
+
+        echo esc_html($post_type) . "\n";
+        echo 'edit_posts cap: ' . esc_html($object->cap->edit_posts) . "\n";
+        echo 'can edit_posts cap: ' . (current_user_can($object->cap->edit_posts) ? 'yes' : 'no') . "\n";
+        echo 'read_private_posts cap: ' . esc_html($object->cap->read_private_posts) . "\n";
+        echo 'can read_private_posts cap: ' . (current_user_can($object->cap->read_private_posts) ? 'yes' : 'no') . "\n";
+        echo "\n";
     }
 
     echo '</pre></div>';
