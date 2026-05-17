@@ -153,6 +153,9 @@ $nh_quality_options = isset($nh_configurator['quality_options']) && is_array($nh
 $nh_texture_options = isset($nh_configurator['texture_options']) && is_array($nh_configurator['texture_options'])
     ? $nh_configurator['texture_options']
     : [];
+    $nh_textures_by_quality = isset($nh_configurator['textures_by_quality']) && is_array($nh_configurator['textures_by_quality'])
+    ? $nh_configurator['textures_by_quality']
+    : [];
 $nh_weight_config = isset($nh_configurator['weight_config']) && is_array($nh_configurator['weight_config'])
     ? $nh_configurator['weight_config']
     : ['min' => 30, 'step' => 10, 'default' => 30];
@@ -352,6 +355,8 @@ $nh_custom_config_payload = [
         'texture' => $nh_selected_texture,
         'weight' => $nh_selected_weight,
     ],
+    'textureOptions' => $nh_texture_options,
+    'texturesByQuality' => $nh_textures_by_quality,
     'colors' => $nh_js_color_options,
 ];
 ?>
@@ -607,7 +612,7 @@ $nh_custom_config_payload = [
                         <?php endif; ?>
 
                         <?php if ($nh_texture_options !== []) : ?>
-                            <div class="nh-single-product__config-row">
+                            <div class="nh-single-product__config-row" data-nh-custom-texture-row>
                                 <div class="nh-single-product__config-heading">
                                     <span class="nh-single-product__option-label">[Texture:]</span>
                                     <button type="button"
@@ -622,13 +627,12 @@ $nh_custom_config_payload = [
                                 <div class="nh-single-product__option-list">
                                     <?php foreach ($nh_texture_options as $nh_texture_option) : ?>
                                         <button
-                                            type="button"
-                                            class="nh-single-product__option-chip<?php echo $nh_selected_texture === (string) ($nh_texture_option['key'] ?? '') ? ' is-active' : ''; ?>"
-                                            data-nh-custom-choice
-                                            data-nh-custom-choice-group="texture"
-                                            data-value="<?php echo esc_attr((string) ($nh_texture_option['key'] ?? '')); ?>">
-                                            <?php echo esc_html((string) ($nh_texture_option['label'] ?? '')); ?>
-                                        </button>
+    type="button"
+    class="nh-single-product__option-chip<?php echo $nh_selected_texture === (string) ($nh_texture_option['key'] ?? '') ? ' is-active' : ''; ?>"
+    data-nh-custom-choice
+    data-nh-custom-texture-option
+    data-nh-custom-choice-group="texture"
+    data-value="<?php echo esc_attr((string) ($nh_texture_option['key'] ?? '')); ?>">
                                     <?php endforeach; ?>
                                 </div>
                             </div>

@@ -67,17 +67,35 @@ function nice_hair_get_custom_hair_attribute_choices(string $taxonomy): array
     return $choices;
 }
 
-function nice_hair_load_custom_hair_attribute_choices(array $field): array
+function nice_hair_get_custom_hair_attribute_taxonomy_for_field(array $field): string
 {
+    $field_key = (string) ($field['key'] ?? '');
     $field_name = (string) ($field['name'] ?? '');
 
-    $taxonomy_by_field = [
+    $taxonomy_by_key = [
+        'field_nh_custom_hair_available_lengths'       => 'pa_length',
+        'field_nh_custom_hair_available_qualities'     => 'pa_hair_quality',
+        'field_nh_custom_hair_available_textures'      => 'pa_texture',
+        'field_nh_custom_hair_texture_rule_quality'    => 'pa_hair_quality',
+        'field_nh_custom_hair_texture_rule_textures'   => 'pa_texture',
+    ];
+
+    if (isset($taxonomy_by_key[$field_key])) {
+        return $taxonomy_by_key[$field_key];
+    }
+
+    $taxonomy_by_name = [
         'nh_custom_hair_available_lengths'   => 'pa_length',
         'nh_custom_hair_available_qualities' => 'pa_hair_quality',
         'nh_custom_hair_available_textures'  => 'pa_texture',
     ];
 
-    $taxonomy = $taxonomy_by_field[$field_name] ?? '';
+    return $taxonomy_by_name[$field_name] ?? '';
+}
+
+function nice_hair_apply_custom_hair_attribute_choices(array $field): array
+{
+    $taxonomy = nice_hair_get_custom_hair_attribute_taxonomy_for_field($field);
 
     if ($taxonomy === '') {
         return $field;
@@ -97,6 +115,22 @@ function nice_hair_load_custom_hair_attribute_choices(array $field): array
     return $field;
 }
 
-add_filter('acf/load_field/name=nh_custom_hair_available_lengths', 'nice_hair_load_custom_hair_attribute_choices');
-add_filter('acf/load_field/name=nh_custom_hair_available_qualities', 'nice_hair_load_custom_hair_attribute_choices');
-add_filter('acf/load_field/name=nh_custom_hair_available_textures', 'nice_hair_load_custom_hair_attribute_choices');
+add_filter('acf/load_field/key=field_nh_custom_hair_available_lengths', 'nice_hair_apply_custom_hair_attribute_choices', 50);
+add_filter('acf/load_field/key=field_nh_custom_hair_available_qualities', 'nice_hair_apply_custom_hair_attribute_choices', 50);
+add_filter('acf/load_field/key=field_nh_custom_hair_available_textures', 'nice_hair_apply_custom_hair_attribute_choices', 50);
+add_filter('acf/load_field/key=field_nh_custom_hair_texture_rule_quality', 'nice_hair_apply_custom_hair_attribute_choices', 50);
+add_filter('acf/load_field/key=field_nh_custom_hair_texture_rule_textures', 'nice_hair_apply_custom_hair_attribute_choices', 50);
+
+add_filter('acf/prepare_field/key=field_nh_custom_hair_available_lengths', 'nice_hair_apply_custom_hair_attribute_choices', 50);
+add_filter('acf/prepare_field/key=field_nh_custom_hair_available_qualities', 'nice_hair_apply_custom_hair_attribute_choices', 50);
+add_filter('acf/prepare_field/key=field_nh_custom_hair_available_textures', 'nice_hair_apply_custom_hair_attribute_choices', 50);
+add_filter('acf/prepare_field/key=field_nh_custom_hair_texture_rule_quality', 'nice_hair_apply_custom_hair_attribute_choices', 50);
+add_filter('acf/prepare_field/key=field_nh_custom_hair_texture_rule_textures', 'nice_hair_apply_custom_hair_attribute_choices', 50);
+
+add_filter('acf/load_field/name=nh_custom_hair_available_lengths', 'nice_hair_apply_custom_hair_attribute_choices', 50);
+add_filter('acf/load_field/name=nh_custom_hair_available_qualities', 'nice_hair_apply_custom_hair_attribute_choices', 50);
+add_filter('acf/load_field/name=nh_custom_hair_available_textures', 'nice_hair_apply_custom_hair_attribute_choices', 50);
+
+add_filter('acf/prepare_field/name=nh_custom_hair_available_lengths', 'nice_hair_apply_custom_hair_attribute_choices', 50);
+add_filter('acf/prepare_field/name=nh_custom_hair_available_qualities', 'nice_hair_apply_custom_hair_attribute_choices', 50);
+add_filter('acf/prepare_field/name=nh_custom_hair_available_textures', 'nice_hair_apply_custom_hair_attribute_choices', 50);

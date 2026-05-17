@@ -616,6 +616,12 @@
     const lengthInput = form.querySelector("[data-nh-custom-length-input]");
     const qualityInput = form.querySelector("[data-nh-custom-quality-input]");
     const textureInput = form.querySelector("[data-nh-custom-texture-input]");
+    const textureRow = singleProduct.querySelector(
+      "[data-nh-custom-texture-row]",
+    );
+    const textureButtons = Array.from(
+      singleProduct.querySelectorAll("[data-nh-custom-texture-option]"),
+    );
 
     const allowedValues = {
       length: Array.from(
@@ -640,6 +646,73 @@
         return button.dataset.value || "";
       }),
     };
+
+    const textureRuleMap =
+      config.texturesByQuality &&
+      typeof config.texturesByQuality === "object" &&
+      !Array.isArray(config.texturesByQuality)
+        ? config.texturesByQuality
+        : {};
+
+    const hasTextureRuleMap = Object.keys(textureRuleMap).length > 0;
+
+    function getAllowedTexturesForQuality(qualityKey) {
+      const allTextureValues = allowedValues.texture.filter(Boolean);
+
+      if (!hasTextureRuleMap) {
+        return allTextureValues;
+      }
+
+      const ruleValues = Array.isArray(textureRuleMap[qualityKey])
+        ? textureRuleMap[qualityKey]
+        : [];
+
+      return ruleValues.filter(function (textureKey) {
+        return allTextureValues.includes(textureKey);
+      });
+    }
+
+    function resolveTextureForQuality(qualityKey, requestedTexture) {
+      const allowedTextures = getAllowedTexturesForQuality(qualityKey);
+
+      if (requestedTexture && allowedTextures.includes(requestedTexture)) {
+        return requestedTexture;
+      }
+
+      const initialTexture = config.selections?.texture || "";
+
+      if (initialTexture && allowedTextures.includes(initialTexture)) {
+        return initialTexture;
+      }
+
+      return allowedTextures[0] || "";
+    }
+
+    function updateTextureButtonsForQuality(qualityKey, selectedTexture) {
+      const allowedTextures = getAllowedTexturesForQuality(qualityKey);
+      const allowedLookup = new Set(allowedTextures);
+
+      textureButtons.forEach(function (button) {
+        const textureKey = button.dataset.value || "";
+        const isAvailable = allowedLookup.has(textureKey);
+
+        button.hidden = !isAvailable;
+        button.disabled = !isAvailable;
+        button.setAttribute("aria-disabled", isAvailable ? "false" : "true");
+
+        if (!isAvailable) {
+          button.classList.remove("is-active");
+        } else {
+          button.classList.toggle("is-active", textureKey === selectedTexture);
+        }
+      });
+
+      if (textureRow) {
+        textureRow.hidden = allowedTextures.length === 0;
+      }
+
+      return allowedTextures;
+    }
 
     function normalizeWeight(rawValue) {
       const min = parseInt(config.weight?.min, 10) || 30;
@@ -702,9 +775,15 @@
         const isActive = state[group] === value;
         button.classList.toggle("is-active", isActive);
       });
+
+      updateTextureButtonsForQuality(state.quality, state.texture);
     }
 
     function calculatePrice(state) {
+      if (!state.texture) {
+        return null;
+      }
+
       const qualityMap = config.basePriceMap?.[state.quality] || null;
       const basePrice = qualityMap ? qualityMap[state.length] : null;
       const surcharge = Number(config.productForm?.surchargePerGram);
@@ -722,6 +801,9 @@
 
     function renderState(nextState, options) {
       const shouldUpdateImage = !options || options.updateImage !== false;
+      const nextQuality = allowedValues.quality.includes(nextState.quality)
+        ? nextState.quality
+        : config.selections?.quality || allowedValues.quality[0] || "";
       const state = {
         color:
           nextState.color && colorInput
@@ -730,12 +812,8 @@
         length: allowedValues.length.includes(nextState.length)
           ? nextState.length
           : config.selections?.length || allowedValues.length[0] || "",
-        quality: allowedValues.quality.includes(nextState.quality)
-          ? nextState.quality
-          : config.selections?.quality || allowedValues.quality[0] || "",
-        texture: allowedValues.texture.includes(nextState.texture)
-          ? nextState.texture
-          : config.selections?.texture || allowedValues.texture[0] || "",
+        quality: nextQuality,
+        texture: resolveTextureForQuality(nextQuality, nextState.texture),
         weight: normalizeWeight(nextState.weight),
       };
 
@@ -806,7 +884,7 @@
         event.preventDefault();
 
         const group = button.dataset.nhCustomChoiceGroup || "";
-        if (!group) return;
+        if (!group || button.disabled || button.hidden) return;
 
         renderState(
           {

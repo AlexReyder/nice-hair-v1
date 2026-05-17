@@ -380,7 +380,7 @@ function nice_hair_resolve_custom_hair_posted_configuration(WC_Product $product)
     $color_options = nice_hair_get_product_custom_hair_color_options($product, []);
     $length_options = is_array($configurator['length_options'] ?? null) ? $configurator['length_options'] : [];
     $quality_options = is_array($configurator['quality_options'] ?? null) ? $configurator['quality_options'] : [];
-    $texture_options = is_array($configurator['texture_options'] ?? null) ? $configurator['texture_options'] : [];
+    $all_texture_options = is_array($configurator['texture_options'] ?? null) ? $configurator['texture_options'] : [];
     $weight_config = is_array($configurator['weight_config'] ?? null) ? $configurator['weight_config'] : [];
 
     $posted_color = nice_hair_get_custom_hair_request_value('nh_custom_hair_color');
@@ -414,11 +414,6 @@ function nice_hair_resolve_custom_hair_posted_configuration(WC_Product $product)
         $posted_quality !== '' ? $posted_quality : (string) ($selection_defaults['quality'] ?? '')
     );
 
-    $texture_option = nice_hair_find_custom_hair_config_option_or_first(
-        $texture_options,
-        $posted_texture !== '' ? $posted_texture : (string) ($selection_defaults['texture'] ?? '')
-    );
-
     if (! is_array($length_option) || ! is_array($quality_option)) {
         return new WP_Error(
             'nh_custom_hair_required_options_missing',
@@ -428,7 +423,56 @@ function nice_hair_resolve_custom_hair_posted_configuration(WC_Product $product)
 
     $length_key = (string) ($length_option['key'] ?? '');
     $quality_key = (string) ($quality_option['key'] ?? '');
-    $texture_key = is_array($texture_option) ? (string) ($texture_option['key'] ?? '') : '';
+
+    $allowed_texture_keys = function_exists('nice_hair_get_custom_hair_allowed_textures')
+        ? nice_hair_get_custom_hair_allowed_textures($product, $quality_key)
+        : [];
+
+    $texture_options = [];
+
+    foreach ($all_texture_options as $texture_option_candidate) {
+        if (! is_array($texture_option_candidate)) {
+            continue;
+        }
+
+        $texture_key_candidate = nice_hair_normalize_shop_key((string) ($texture_option_candidate['key'] ?? ''));
+
+        if ($texture_key_candidate !== '' && in_array($texture_key_candidate, $allowed_texture_keys, true)) {
+            $texture_options[] = $texture_option_candidate;
+        }
+    }
+
+    if ($texture_options === []) {
+        return new WP_Error(
+            'nh_custom_hair_texture_unavailable',
+            __('No texture is available for the selected Hair Quality.', 'nice-hair')
+        );
+    }
+
+    if ($posted_texture !== '') {
+        $texture_option = nice_hair_find_custom_hair_config_option_by_key($texture_options, $posted_texture);
+
+        if (! is_array($texture_option)) {
+            return new WP_Error(
+                'nh_custom_hair_texture_unavailable',
+                __('The selected Texture is not available for the selected Hair Quality.', 'nice-hair')
+            );
+        }
+    } else {
+        $texture_option = nice_hair_find_custom_hair_config_option_or_first(
+            $texture_options,
+            (string) ($selection_defaults['texture'] ?? '')
+        );
+    }
+
+    if (! is_array($texture_option)) {
+        return new WP_Error(
+            'nh_custom_hair_texture_unavailable',
+            __('The selected Texture is not available for the selected Hair Quality.', 'nice-hair')
+        );
+    }
+
+    $texture_key = (string) ($texture_option['key'] ?? '');
     $weight = nice_hair_normalize_custom_hair_weight_value($posted_weight, $weight_config);
 
     $base_price_map = is_array($configurator['base_price_map'] ?? null) ? $configurator['base_price_map'] : [];

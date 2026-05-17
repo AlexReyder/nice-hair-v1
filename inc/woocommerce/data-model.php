@@ -1653,12 +1653,16 @@ function nice_hair_get_custom_hair_quality_choice_map(): array
         return $choices;
     }
 
+    $choices = function_exists('nice_hair_get_custom_hair_attribute_choices')
+        ? nice_hair_get_custom_hair_attribute_choices('pa_hair_quality')
+        : [];
+
     $defaults = [
         'lux' => 'Lux',
         'premium' => 'Premium',
         'exclusive' => 'Exclusive',
     ];
-    $choices = [];
+
     $config = nice_hair_get_shop_pricing_config();
 
     foreach (array_keys((array) ($config['custom_hair']['base_prices'] ?? [])) as $quality_key) {
@@ -1668,7 +1672,9 @@ function nice_hair_get_custom_hair_quality_choice_map(): array
             continue;
         }
 
-        $choices[$normalized_key] = $defaults[$normalized_key] ?? nice_hair_humanize_shop_key($normalized_key);
+        if (! isset($choices[$normalized_key])) {
+            $choices[$normalized_key] = $defaults[$normalized_key] ?? nice_hair_humanize_shop_key($normalized_key);
+        }
     }
 
     if ($choices === []) {
@@ -1680,11 +1686,25 @@ function nice_hair_get_custom_hair_quality_choice_map(): array
 
 function nice_hair_get_custom_hair_texture_choice_map(): array
 {
-    return [
-        'soft_straight' => 'Soft straight',
-        'silky_wavy' => 'Silky wavy',
-        'amazing_curly' => 'Amazing curly',
-    ];
+    static $choices = null;
+
+    if (is_array($choices)) {
+        return $choices;
+    }
+
+    $choices = function_exists('nice_hair_get_custom_hair_attribute_choices')
+        ? nice_hair_get_custom_hair_attribute_choices('pa_texture')
+        : [];
+
+    if ($choices === []) {
+        $choices = [
+            'soft_straight' => 'Soft straight',
+            'silky_wavy' => 'Silky wavy',
+            'amazing_curly' => 'Amazing curly',
+        ];
+    }
+
+    return $choices;
 }
 
 function nice_hair_get_custom_hair_color_group_choice_map(): array
@@ -1711,7 +1731,11 @@ function nice_hair_get_custom_hair_allowed_choice_keys(
     $raw_value = function_exists('get_field')
         ? get_field($field_name, $resolved->get_id())
         : get_post_meta($resolved->get_id(), $field_name, true);
-    $values = is_array($raw_value) ? $raw_value : (is_string($raw_value) && $raw_value !== '' ? [$raw_value] : []);
+
+    $values = is_array($raw_value)
+        ? $raw_value
+        : (is_string($raw_value) && $raw_value !== '' ? [$raw_value] : []);
+
     $allowed = [];
 
     foreach ($values as $value) {
@@ -1750,13 +1774,123 @@ function nice_hair_get_custom_hair_allowed_qualities(WC_Product|int|null $produc
     );
 }
 
-function nice_hair_get_custom_hair_allowed_textures(WC_Product|int|null $product = null): array
+function nice_hair_get_custom_hair_flat_allowed_textures(WC_Product|int|null $product = null): array
 {
     return nice_hair_get_custom_hair_allowed_choice_keys(
         $product,
         'nh_custom_hair_available_textures',
         nice_hair_get_custom_hair_texture_choice_map()
     );
+}
+
+function nice_hair_get_custom_hair_texture_rules(WC_Product|int|null $product = null): array
+{
+    $resolved = nice_hair_resolve_product($product);
+
+    if (! $resolved instanceof WC_Product || ! function_exists('get_field')) {
+        return [];
+    }
+
+    $rows = get_field('nh_custom_hair_texture_rules', $resolved->get_id());
+
+    if (! is_array($rows) || $rows === []) {
+        return [];
+    }
+
+    $quality_choice_map = nice_hair_get_custom_hair_quality_choice_map();
+    $texture_choice_map = nice_hair_get_custom_hair_texture_choice_map();
+    $flat_allowed_textures = nice_hair_get_custom_hair_flat_allowed_textures($resolved);
+    $rules = [];
+
+    foreach ($rows as $row) {
+        if (! is_array($row)) {
+            continue;
+        }
+
+        $quality_key = isset($row['item_quality'])
+            ? nice_hair_normalize_shop_key((string) $row['item_quality'])
+            : '';
+
+        if ($quality_key === '' || ! isset($quality_choice_map[$quality_key])) {
+            continue;
+        }
+
+        $raw_textures = is_array($row['item_textures'] ?? null)
+            ? $row['item_textures']
+            : [];
+
+        $textures = [];
+
+        foreach ($raw_textures as $raw_texture) {
+            $texture_key = nice_hair_normalize_shop_key((string) $raw_texture);
+
+            if (
+                $texture_key === ''
+                || ! isset($texture_choice_map[$texture_key])
+                || ! in_array($texture_key, $flat_allowed_textures, true)
+            ) {
+                continue;
+            }
+
+            $textures[] = $texture_key;
+        }
+
+        $textures = array_values(array_unique($textures));
+
+        if ($textures !== []) {
+            $rules[$quality_key] = $textures;
+        }
+    }
+
+    return $rules;
+}
+
+function nice_hair_get_custom_hair_allowed_textures(
+    WC_Product|int|null $product = null,
+    string $quality = ''
+): array {
+    $flat_allowed_textures = nice_hair_get_custom_hair_flat_allowed_textures($product);
+    $rules = nice_hair_get_custom_hair_texture_rules($product);
+
+    if ($rules === []) {
+        return $flat_allowed_textures;
+    }
+
+    $quality_key = nice_hair_normalize_shop_key($quality);
+
+    if ($quality_key !== '') {
+        return array_values(array_intersect($rules[$quality_key] ?? [], $flat_allowed_textures));
+    }
+
+    $union = [];
+
+    foreach ($rules as $textures) {
+        foreach ($textures as $texture_key) {
+            if (in_array($texture_key, $flat_allowed_textures, true)) {
+                $union[] = $texture_key;
+            }
+        }
+    }
+
+    return array_values(array_unique($union));
+}
+
+function nice_hair_get_custom_hair_textures_by_quality(WC_Product|int|null $product = null): array
+{
+    $quality_keys = nice_hair_get_custom_hair_allowed_qualities($product);
+    $result = [];
+
+    foreach ($quality_keys as $quality_key) {
+        $quality_key = nice_hair_normalize_shop_key((string) $quality_key);
+
+        if ($quality_key === '') {
+            continue;
+        }
+
+        $result[$quality_key] = nice_hair_get_custom_hair_allowed_textures($product, $quality_key);
+    }
+
+    return $result;
 }
 
 function nice_hair_get_custom_hair_product_form_data(WC_Product|int|null $product = null): array
@@ -1963,10 +2097,10 @@ function nice_hair_get_custom_hair_default_selection(
     array $quality_keys = [],
     array $texture_keys = [],
     array $weight_config = [],
-    string $form_key = ''
+    string $form_key = '',
+    WC_Product|int|null $product = null
 ): array {
     $default_color = is_array($color_options[0] ?? null) ? (string) ($color_options[0]['key'] ?? '') : '';
-    $default_texture = (string) ($texture_keys[0] ?? '');
     $default_quality = (string) ($quality_keys[0] ?? '');
     $default_length = (string) ($length_keys[0] ?? '');
 
@@ -1981,6 +2115,12 @@ function nice_hair_get_custom_hair_default_selection(
             }
         }
     }
+
+    $quality_texture_keys = $product !== null && $default_quality !== ''
+        ? nice_hair_get_custom_hair_allowed_textures($product, $default_quality)
+        : $texture_keys;
+
+    $default_texture = (string) ($quality_texture_keys[0] ?? ($texture_keys[0] ?? ''));
 
     return [
         'color' => $default_color,
@@ -1999,19 +2139,23 @@ function nice_hair_resolve_custom_hair_selection(WC_Product|int|null $product = 
     $length_choice_map = nice_hair_get_custom_hair_length_choice_map();
     $quality_choice_map = nice_hair_get_custom_hair_quality_choice_map();
     $texture_choice_map = nice_hair_get_custom_hair_texture_choice_map();
+
     $length_keys = nice_hair_get_custom_hair_allowed_lengths($resolved);
     $quality_keys = nice_hair_get_custom_hair_allowed_qualities($resolved);
-    $texture_keys = nice_hair_get_custom_hair_allowed_textures($resolved);
+    $all_texture_keys = nice_hair_get_custom_hair_allowed_textures($resolved);
     $weight_config = nice_hair_get_custom_hair_weight_config($resolved);
     $product_form = nice_hair_get_custom_hair_product_form_data($resolved);
+
     $defaults = nice_hair_get_custom_hair_default_selection(
         $color_options,
         $length_keys,
         $quality_keys,
-        $texture_keys,
+        $all_texture_keys,
         $weight_config,
-        (string) ($product_form['key'] ?? '')
+        (string) ($product_form['key'] ?? ''),
+        $resolved
     );
+
     $request_valid = true;
 
     $requested_color = isset($request['color']) ? nice_hair_normalize_shop_key((string) $request['color']) : '';
@@ -2032,10 +2176,6 @@ function nice_hair_resolve_custom_hair_selection(WC_Product|int|null $product = 
         $request_valid = false;
     }
 
-    if ($requested_texture !== '' && ! in_array($requested_texture, $texture_keys, true)) {
-        $request_valid = false;
-    }
-
     if ($requested_weight !== null && $requested_weight !== '' && ! nice_hair_is_valid_custom_hair_weight($requested_weight, $weight_config)) {
         $request_valid = false;
     }
@@ -2043,15 +2183,29 @@ function nice_hair_resolve_custom_hair_selection(WC_Product|int|null $product = 
     $selected_color_key = $requested_color !== '' && isset($color_map[$requested_color])
         ? $requested_color
         : (string) ($defaults['color'] ?? '');
+
     $selected_length = $requested_length !== '' && in_array($requested_length, $length_keys, true)
         ? $requested_length
         : (string) ($defaults['length'] ?? '');
+
     $selected_quality = $requested_quality !== '' && in_array($requested_quality, $quality_keys, true)
         ? $requested_quality
         : (string) ($defaults['quality'] ?? '');
-    $selected_texture = $requested_texture !== '' && in_array($requested_texture, $texture_keys, true)
+
+    $quality_texture_keys = nice_hair_get_custom_hair_allowed_textures($resolved, $selected_quality);
+
+    if ($requested_texture !== '' && ! in_array($requested_texture, $quality_texture_keys, true)) {
+        $request_valid = false;
+    }
+
+    $default_texture = in_array((string) ($defaults['texture'] ?? ''), $quality_texture_keys, true)
+        ? (string) ($defaults['texture'] ?? '')
+        : (string) ($quality_texture_keys[0] ?? '');
+
+    $selected_texture = $requested_texture !== '' && in_array($requested_texture, $quality_texture_keys, true)
         ? $requested_texture
-        : (string) ($defaults['texture'] ?? '');
+        : $default_texture;
+
     $selected_weight = ($requested_weight !== null && $requested_weight !== '' && nice_hair_is_valid_custom_hair_weight($requested_weight, $weight_config))
         ? (int) round((float) $requested_weight)
         : (int) ($defaults['weight'] ?? 30);
@@ -2059,24 +2213,30 @@ function nice_hair_resolve_custom_hair_selection(WC_Product|int|null $product = 
     $selected_color = $selected_color_key !== '' && isset($color_map[$selected_color_key])
         ? $color_map[$selected_color_key]
         : null;
+
     $selected_form_key = (string) ($product_form['key'] ?? '');
     $selected_form_label = (string) ($product_form['label'] ?? '');
+
     $base_price_per_gram = ($selected_quality !== '' && $selected_length !== '')
         ? nice_hair_get_custom_hair_base_price_per_gram($selected_quality, $selected_length)
         : null;
+
     $surcharge_per_gram = $selected_form_key !== ''
         ? nice_hair_get_product_form_surcharge_per_gram($selected_form_key)
         : null;
+
     $has_complete_config = $resolved instanceof WC_Product
         && $selected_color !== null
         && $selected_length !== ''
         && $selected_quality !== ''
         && $selected_texture !== ''
+        && in_array($selected_texture, $quality_texture_keys, true)
         && $selected_form_key !== ''
         && ! empty($product_form['is_valid'])
         && $base_price_per_gram !== null
         && $surcharge_per_gram !== null
         && nice_hair_is_valid_custom_hair_weight($selected_weight, $weight_config);
+
     $total_price = $has_complete_config
         ? round(($base_price_per_gram + $surcharge_per_gram) * $selected_weight, 2)
         : null;
@@ -2110,7 +2270,9 @@ function nice_hair_resolve_custom_hair_selection(WC_Product|int|null $product = 
         'allowed' => [
             'lengths' => $length_keys,
             'qualities' => $quality_keys,
-            'textures' => $texture_keys,
+            'textures' => $quality_texture_keys,
+            'all_textures' => $all_texture_keys,
+            'textures_by_quality' => nice_hair_get_custom_hair_textures_by_quality($resolved),
         ],
     ];
 }
@@ -2123,9 +2285,11 @@ function nice_hair_get_custom_hair_configurator(WC_Product|int|null $product = n
     $length_choice_map = nice_hair_get_custom_hair_length_choice_map();
     $quality_choice_map = nice_hair_get_custom_hair_quality_choice_map();
     $texture_choice_map = nice_hair_get_custom_hair_texture_choice_map();
+
     $length_keys = nice_hair_get_custom_hair_allowed_lengths($resolved);
     $quality_keys = nice_hair_get_custom_hair_allowed_qualities($resolved);
     $texture_keys = nice_hair_get_custom_hair_allowed_textures($resolved);
+    $textures_by_quality = nice_hair_get_custom_hair_textures_by_quality($resolved);
     $weight_config = nice_hair_get_custom_hair_weight_config($resolved);
     $selection = nice_hair_resolve_custom_hair_selection($resolved);
 
@@ -2184,6 +2348,7 @@ function nice_hair_get_custom_hair_configurator(WC_Product|int|null $product = n
         'length_options' => $length_options,
         'quality_options' => $quality_options,
         'texture_options' => $texture_options,
+        'textures_by_quality' => $textures_by_quality,
         'weight_config' => $weight_config,
         'base_price_map' => $base_price_map,
         'default_selection' => $selection['selection'] ?? [],
