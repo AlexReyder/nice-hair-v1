@@ -103,35 +103,4 @@ function nice_hair_register_contact_acf_options(): void
 }
 add_action('acf/init', 'nice_hair_register_contact_acf_options', 15);
 
-function nice_hair_hide_legacy_contact_acf_field(array $field): array|false
-{
-    $current_page = isset($_GET['page']) && is_string($_GET['page'])
-        ? sanitize_key(wp_unslash($_GET['page']))
-        : '';
 
-    $pages = [
-        'header-footer-default',
-        'header-footer-salon',
-        'header-footer-shop',
-    ];
-
-    if (! in_array($current_page, $pages, true)) {
-        return $field;
-    }
-
-    return false;
-}
-
-add_filter('acf/prepare_field/name=nh_header_mobile_phone', 'nice_hair_hide_legacy_contact_acf_field');
-add_filter('acf/prepare_field/name=nh_header_mobile_phone_link', 'nice_hair_hide_legacy_contact_acf_field');
-add_filter('acf/prepare_field/name=nh_header_mobile_address', 'nice_hair_hide_legacy_contact_acf_field');
-add_filter('acf/prepare_field/name=nh_header_contact_phone', 'nice_hair_hide_legacy_contact_acf_field');
-add_filter('acf/prepare_field/name=nh_header_contact_phone_link', 'nice_hair_hide_legacy_contact_acf_field');
-add_filter('acf/prepare_field/name=nh_header_contact_address', 'nice_hair_hide_legacy_contact_acf_field');
-add_filter('acf/prepare_field/name=nh_header_contact_hours', 'nice_hair_hide_legacy_contact_acf_field');
-add_filter('acf/prepare_field/name=nh_header_contact_socials', 'nice_hair_hide_legacy_contact_acf_field');
-add_filter('acf/prepare_field/name=nh_footer_address', 'nice_hair_hide_legacy_contact_acf_field');
-add_filter('acf/prepare_field/name=nh_footer_hours', 'nice_hair_hide_legacy_contact_acf_field');
-add_filter('acf/prepare_field/name=nh_footer_phone', 'nice_hair_hide_legacy_contact_acf_field');
-add_filter('acf/prepare_field/name=nh_footer_phone_link', 'nice_hair_hide_legacy_contact_acf_field');
-add_filter('acf/prepare_field/name=nh_footer_socials', 'nice_hair_hide_legacy_contact_acf_field');
