@@ -105,6 +105,7 @@ $class_name = implode(' ', array_filter($classes));
 <section
     class="<?php echo esc_attr($class_name); ?>"
     id="<?php echo esc_attr($anchor); ?>"
+    data-nh-results-gallery-shop
     data-nh-results-gallery-shop-gallery
 >
     <div class="nh-salon-results__shell">
