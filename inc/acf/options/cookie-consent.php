@@ -37,7 +37,7 @@ function nice_hair_register_cookie_consent_acf_options(): void
             ],
             [
                 'key'           => 'field_nh_cookie_consent_version',
-                'label'         => 'Версия согласия',
+                'label'         => 'Версия cookie',
                 'name'          => 'nh_cookie_consent_version',
                 'type'          => 'number',
                 'instructions'  => 'Увеличьте версию, если изменились правила cookie. После этого плашка снова появится у пользователей, которые уже сделали выбор.',
