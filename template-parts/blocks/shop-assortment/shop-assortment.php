@@ -29,10 +29,13 @@ foreach ($gallery_rows as $gallery_row) {
 
     $image_url = (string) ($image['sizes']['large'] ?? $image['url'] ?? '');
     $full_image_url = (string) ($image['url'] ?? $image_url);
+    $image_width = isset($image['width']) && is_numeric($image['width']) ? (int) $image['width'] : 0;
+    $image_height = isset($image['height']) && is_numeric($image['height']) ? (int) $image['height'] : 0;
 
     if ($image_id > 0) {
         $resolved_large_url = wp_get_attachment_image_url($image_id, 'large');
         $resolved_full_url = wp_get_attachment_image_url($image_id, 'full');
+        $metadata = wp_get_attachment_metadata($image_id);
 
         if (is_string($resolved_large_url) && $resolved_large_url !== '') {
             $image_url = $resolved_large_url;
@@ -40,6 +43,16 @@ foreach ($gallery_rows as $gallery_row) {
 
         if (is_string($resolved_full_url) && $resolved_full_url !== '') {
             $full_image_url = $resolved_full_url;
+        }
+
+        if (is_array($metadata)) {
+            $metadata_width = isset($metadata['width']) && is_numeric($metadata['width']) ? (int) $metadata['width'] : 0;
+            $metadata_height = isset($metadata['height']) && is_numeric($metadata['height']) ? (int) $metadata['height'] : 0;
+
+            if ($metadata_width > 0 && $metadata_height > 0) {
+                $image_width = $metadata_width;
+                $image_height = $metadata_height;
+            }
         }
     }
 
@@ -49,6 +62,11 @@ foreach ($gallery_rows as $gallery_row) {
 
     if ($full_image_url === '') {
         $full_image_url = $image_url;
+    }
+
+    if ($image_width <= 0 || $image_height <= 0) {
+        $image_width = 1200;
+        $image_height = 900;
     }
 
     $image_alt = trim((string) ($image['alt'] ?? ''));
@@ -66,6 +84,8 @@ foreach ($gallery_rows as $gallery_row) {
         'url'      => $image_url,
         'full_url' => $full_image_url,
         'alt'      => $image_alt,
+        'width'    => $image_width,
+        'height'   => $image_height,
     ];
 }
 
@@ -135,13 +155,14 @@ if ($gallery_items === [] && ! $preview_mode) {
                 <div class="swiper-wrapper nh-shop-assortment__track">
                     <?php foreach ($gallery_items as $gallery_item) : ?>
                         <div class="swiper-slide nh-shop-assortment__slide">
-                            <button
+                            <a
                                 class="nh-shop-assortment__card"
-                                type="button"
+                                href="<?php echo esc_url($gallery_item['full_url']); ?>"
                                 aria-label="<?php esc_attr_e('Open assortment image fullscreen', 'nice-hair'); ?>"
                                 data-nh-shop-assortment-gallery-item
-                                data-nh-shop-assortment-gallery-src="<?php echo esc_url($gallery_item['full_url']); ?>"
-                                data-nh-shop-assortment-gallery-alt="<?php echo esc_attr($gallery_item['alt']); ?>"
+                                data-nh-shop-assortment-gallery-width="<?php echo esc_attr((string) $gallery_item['width']); ?>"
+                                data-nh-shop-assortment-gallery-height="<?php echo esc_attr((string) $gallery_item['height']); ?>"
+                                data-nh-shop-assortment-gallery-title="<?php echo esc_attr($gallery_item['alt']); ?>"
                             >
                                 <span class="nh-shop-assortment__media">
                                     <img
@@ -151,7 +172,7 @@ if ($gallery_items === [] && ! $preview_mode) {
                                         loading="lazy"
                                     />
                                 </span>
-                            </button>
+                            </a>
                         </div>
                     <?php endforeach; ?>
                 </div>

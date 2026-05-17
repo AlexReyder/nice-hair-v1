@@ -56,7 +56,7 @@ function nice_hair_register_shop_assortment_acf_fields(): void
                 'layout'       => 'block',
                 'collapsed'    => 'field_nh_shop_assortment_gallery_image',
                 'button_label' => 'Добавить фотографию',
-                'instructions' => 'Загрузите фотографии, которые будут показаны в слайдере блока Our Assortment. При клике на фотографию она откроется на весь экран.',
+                'instructions' => 'Загрузите фотографии, которые будут показаны в слайдере блока Our Assortment. При клике фотография откроется через WooCommerce PhotoSwipe.',
                 'sub_fields'   => [
                     [
                         'key'           => 'field_nh_shop_assortment_gallery_image',

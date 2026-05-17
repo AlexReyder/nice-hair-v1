@@ -39,6 +39,7 @@ $nice_hair_files = [
     '/inc/woocommerce/setup.php',
     '/inc/woocommerce/admin-product-fields.php',
     '/inc/woocommerce/consultation.php',
+    '/inc/woocommerce/photoswipe.php',
 ];
 
 foreach ($nice_hair_files as $nice_hair_file) {
