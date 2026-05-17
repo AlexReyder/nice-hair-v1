@@ -12,7 +12,6 @@ $nice_hair_files = [
     '/inc/editor/editor-assets.php',
     '/inc/editor/allowed-blocks.php',
     '/inc/acf/loader.php',
-    '/inc/admin/capabilities.php',
     '/inc/quiz/options.php',
     '/inc/quiz/cpt.php',
     '/inc/quiz/email.php',
@@ -60,28 +59,3 @@ add_filter('script_loader_tag', function (string $tag, string $handle, string $s
 }, 10, 3);
 
 
-add_action('admin_notices', function (): void {
-    if (! is_admin() || ! current_user_can('read')) {
-        return;
-    }
-
-    echo '<div class="notice notice-info"><pre>';
-
-    foreach (['nh_price_quiz', 'nh_salon_request'] as $post_type) {
-        $object = get_post_type_object($post_type);
-
-        if (! $object) {
-            echo esc_html($post_type . ': post type object not found') . "\n\n";
-            continue;
-        }
-
-        echo esc_html($post_type) . "\n";
-        echo 'edit_posts cap: ' . esc_html($object->cap->edit_posts) . "\n";
-        echo 'can edit_posts cap: ' . (current_user_can($object->cap->edit_posts) ? 'yes' : 'no') . "\n";
-        echo 'read_private_posts cap: ' . esc_html($object->cap->read_private_posts) . "\n";
-        echo 'can read_private_posts cap: ' . (current_user_can($object->cap->read_private_posts) ? 'yes' : 'no') . "\n";
-        echo "\n";
-    }
-
-    echo '</pre></div>';
-});

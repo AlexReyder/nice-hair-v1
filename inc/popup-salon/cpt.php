@@ -272,12 +272,10 @@ function nice_hair_register_popup_salon_cpt(): void
         'show_in_rest' => true,
         'menu_position' => 36,
         'menu_icon' => 'dashicons-welcome-view-site',
-       'capability_type' => ['nh_submission', 'nh_submissions'],
-        'capabilities' => function_exists('nice_hair_submission_cpt_capabilities')
-            ? nice_hair_submission_cpt_capabilities()
-            : [
-                'create_posts' => 'do_not_allow',
-            ],
+        'capability_type' => 'post',
+        'capabilities' => [
+            'create_posts' => 'do_not_allow',
+        ],
         'map_meta_cap' => true,
         'hierarchical' => false,
         'supports' => ['editor'],
@@ -298,12 +296,10 @@ function nice_hair_register_popup_salon_cpt(): void
         'show_ui' => true,
         'show_in_menu' => false,
         'show_in_rest' => false,
-        'capability_type' => ['nh_submission', 'nh_submissions'],
-        'capabilities' => function_exists('nice_hair_submission_cpt_capabilities')
-            ? nice_hair_submission_cpt_capabilities()
-            : [
-                'create_posts' => 'do_not_allow',
-            ],
+        'capability_type' => 'post',
+        'capabilities' => [
+            'create_posts' => 'do_not_allow',
+        ],
         'map_meta_cap' => true,
         'hierarchical' => false,
         'supports' => [],
