@@ -15,6 +15,7 @@ $nice_hair_acf_option_files = [
     __DIR__ . '/popup.php',
     __DIR__ . '/popup-salon.php',
     __DIR__ . '/running-line.php',
+    __DIR__ . '/cookie-consent.php',
     __DIR__ . '/shop-pricing/loader.php',
 ];
 

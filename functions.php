@@ -31,6 +31,7 @@ $nice_hair_files = [
     '/inc/theme/popup.php',
     '/inc/theme/popup-salon.php',
     '/inc/theme/running-line.php',
+    '/inc/theme/cookie-consent.php',
     '/inc/woocommerce/data-model.php',
     '/inc/woocommerce/exclusive-product-forms.php',
     '/inc/woocommerce/custom-hair-colors.php',

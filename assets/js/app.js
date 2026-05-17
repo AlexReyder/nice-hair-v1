@@ -17,3 +17,4 @@ import "./ready-filters.js";
 import "./checkout.js";
 import "./running-line.js";
 import "./popup-salon.js";
+import "./cookie-consent.js";
