@@ -12,7 +12,7 @@ $nice_hair_files = [
     '/inc/editor/editor-assets.php',
     '/inc/editor/allowed-blocks.php',
     '/inc/acf/loader.php',
-   
+    '/inc/admin/capabilities.php',
     '/inc/quiz/options.php',
     '/inc/quiz/cpt.php',
     '/inc/quiz/email.php',
@@ -32,7 +32,7 @@ $nice_hair_files = [
     '/inc/theme/popup-salon.php',
     '/inc/theme/running-line.php',
     '/inc/theme/cookie-consent.php',
-    '/inc/admin/capabilities.php',
+   
     '/inc/woocommerce/data-model.php',
     '/inc/woocommerce/exclusive-product-forms.php',
     '/inc/woocommerce/custom-hair-colors.php',
@@ -58,3 +58,35 @@ add_filter('script_loader_tag', function (string $tag, string $handle, string $s
 
     return $tag;
 }, 10, 3);
+
+
+add_action('admin_notices', function (): void {
+    if (! is_admin() || ! current_user_can('read')) {
+        return;
+    }
+
+    $caps = [
+        'read',
+        'read_nh_submission',
+        'read_nh_submissions',
+        'edit_nh_submission',
+        'edit_nh_submissions',
+        'edit_others_nh_submissions',
+        'edit_private_nh_submissions',
+        'edit_published_nh_submissions',
+        'read_private_nh_submissions',
+        'manage_nh_submission_statuses',
+    ];
+
+    echo '<div class="notice notice-info"><pre>';
+
+    foreach ($caps as $cap) {
+        printf(
+            "%s: %s\n",
+            esc_html($cap),
+            current_user_can($cap) ? 'yes' : 'no'
+        );
+    }
+
+    echo '</pre></div>';
+});

@@ -51,11 +51,18 @@ function nice_hair_submission_manager_capabilities(): array
 {
     return [
         'read',
+
+        'read_nh_submission',
         'read_nh_submissions',
+
+        'edit_nh_submission',
         'edit_nh_submissions',
         'edit_others_nh_submissions',
+        'edit_private_nh_submissions',
         'edit_published_nh_submissions',
+
         'read_private_nh_submissions',
+
         'manage_nh_submission_statuses',
     ];
 }
