@@ -296,10 +296,8 @@ function nice_hair_register_popup_salon_cpt(): void
         'show_ui' => true,
         'show_in_menu' => false,
         'show_in_rest' => false,
-        'capability_type' => 'post',
-        'capabilities' => [
-            'create_posts' => 'do_not_allow',
-        ],
+        'capability_type' => ['nh_submission', 'nh_submissions'],
+        'capabilities' => nice_hair_submission_post_type_capabilities(),
         'map_meta_cap' => true,
         'hierarchical' => false,
         'supports' => [],

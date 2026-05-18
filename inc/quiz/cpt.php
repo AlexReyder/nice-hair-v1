@@ -30,10 +30,8 @@ function nice_hair_register_price_quiz_cpt(): void
         'show_in_rest'    => false,
         'menu_position'   => 32,
         'menu_icon'       => 'dashicons-format-chat',
-        'capability_type' => 'post',
-        'capabilities'    => [
-            'create_posts' => 'do_not_allow',
-        ],
+        'capability_type' => ['nh_submission', 'nh_submissions'],
+        'capabilities'    => nice_hair_submission_post_type_capabilities(),
         'map_meta_cap'    => true,
         'hierarchical'    => false,
         'supports'        => [],
@@ -247,6 +245,7 @@ function nice_hair_price_quiz_admin_columns(array $columns): array
         'cb'                    => $columns['cb'] ?? '<input type="checkbox" />',
         'title'                 => __('Заявка', 'nice-hair'),
         'nh_submission_source'  => __('Источник', 'nice-hair'),
+        'nh_submission_status'  => __('Статус', 'nice-hair'),
         'nh_submission_name'    => __('Имя', 'nice-hair'),
         'nh_submission_contact' => __('Телефон / WhatsApp', 'nice-hair'),
         'nh_submission_details' => __('Детали', 'nice-hair'),
@@ -262,6 +261,10 @@ function nice_hair_price_quiz_render_column(string $column, int $post_id): void
     switch ($column) {
         case 'nh_submission_source':
             echo esc_html(nice_hair_submission_source_label((string) get_post_type($post_id), $post_id));
+            break;
+
+        case 'nh_submission_status':
+            echo esc_html(nice_hair_submission_status_label(nice_hair_get_submission_status($post_id)));
             break;
 
         case 'nh_submission_name':

@@ -13,6 +13,7 @@ $nice_hair_files = [
     '/inc/editor/allowed-blocks.php',
     '/inc/acf/loader.php',
     '/inc/quiz/options.php',
+    '/inc/quiz/status.php',
     '/inc/quiz/cpt.php',
     '/inc/quiz/email.php',
     '/inc/quiz/rest.php',
