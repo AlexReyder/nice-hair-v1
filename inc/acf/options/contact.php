@@ -12,7 +12,9 @@ function nice_hair_register_contact_acf_options(): void
         'page_title' => 'Контакты',
         'menu_title' => 'Контакты',
         'menu_slug'  => 'contact-settings',
-        'capability' => 'edit_posts',
+        'capability' => function_exists('nice_hair_admin_access_acf_capability')
+            ? nice_hair_admin_access_acf_capability('contact-settings')
+            : 'edit_posts',
         'redirect'   => false,
         'icon_url'   => 'dashicons-location-alt',
         'position'   => 31,

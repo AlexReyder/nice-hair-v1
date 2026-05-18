@@ -69,7 +69,9 @@ function nice_hair_register_shop_layout_settings_acf_options(): void
         'menu_title'  => 'Shop',
         'menu_slug'   => 'header-footer-shop',
         'parent_slug' => $parent_slug,
-        'capability'  => 'edit_posts',
+        'capability'  => function_exists('nice_hair_admin_access_acf_capability')
+            ? nice_hair_admin_access_acf_capability('header-footer-shop')
+            : 'edit_posts',
         'post_id'     => nice_hair_header_footer_post_id('shop'),
     ]);
 

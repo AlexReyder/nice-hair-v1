@@ -24,7 +24,9 @@ function nice_hair_register_price_quiz_options(): void
         'page_title' => __('Настройки блока квиз', 'nice-hair'),
         'menu_title' => __('Квиз блок', 'nice-hair'),
         'menu_slug'  => 'price-quiz-settings',
-        'capability' => 'edit_posts',
+        'capability' => function_exists('nice_hair_admin_access_acf_capability')
+            ? nice_hair_admin_access_acf_capability('price-quiz-settings')
+            : 'edit_posts',
         'redirect'   => false,
         'icon_url'   => 'dashicons-forms',
         'position'   => 31,

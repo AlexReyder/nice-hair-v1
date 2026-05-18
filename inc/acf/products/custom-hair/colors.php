@@ -22,7 +22,9 @@ function nice_hair_register_custom_hair_colors_acf(): void
             'page_title' => 'Цвета Custom Hair',
             'menu_title' => 'Цвета Custom Hair',
             'menu_slug'  => 'custom-hair-colors',
-            'capability' => 'edit_posts',
+            'capability' => function_exists('nice_hair_admin_access_acf_capability')
+                ? nice_hair_admin_access_acf_capability('custom-hair-colors')
+                : 'edit_posts',
             'redirect'   => false,
             'icon_url'   => 'dashicons-art',
             'position'   => 34,

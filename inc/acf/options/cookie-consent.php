@@ -12,7 +12,9 @@ function nice_hair_register_cookie_consent_acf_options(): void
         'page_title' => 'Настройки cookie',
         'menu_title' => 'Настройки cookie',
         'menu_slug'  => 'cookie-consent-settings',
-        'capability' => 'edit_posts',
+        'capability' => function_exists('nice_hair_admin_access_acf_capability')
+            ? nice_hair_admin_access_acf_capability('cookie-consent-settings')
+            : 'edit_posts',
         'redirect'   => false,
         'icon_url'   => 'dashicons-privacy',
         'position'   => 36,

@@ -13,7 +13,9 @@ function nice_hair_register_popup_acf_options(): void
         'menu_title' => __('Настройки', 'nice-hair'),
         'menu_slug' => 'popup-settings',
         'parent_slug' => 'edit.php?post_type=nh_popup',
-        'capability' => 'edit_posts',
+        'capability' => function_exists('nice_hair_admin_access_acf_capability')
+            ? nice_hair_admin_access_acf_capability('popup-settings')
+            : 'edit_posts',
         'post_id' => 'nh_popup_settings',
     ]);
 

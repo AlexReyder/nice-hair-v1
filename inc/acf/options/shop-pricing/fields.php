@@ -12,7 +12,9 @@ function nice_hair_register_shop_pricing_acf_options(): void
         'page_title' => 'Shop Pricing Config',
         'menu_title' => 'Shop Pricing',
         'menu_slug'  => nice_hair_shop_pricing_options_page_slug(),
-        'capability' => 'edit_posts',
+        'capability' => function_exists('nice_hair_admin_access_acf_capability')
+            ? nice_hair_admin_access_acf_capability(nice_hair_shop_pricing_options_page_slug())
+            : 'edit_posts',
         'redirect'   => false,
         'icon_url'   => 'dashicons-chart-line',
         'position'   => 33,

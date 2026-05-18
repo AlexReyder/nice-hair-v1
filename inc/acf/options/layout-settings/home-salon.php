@@ -17,7 +17,9 @@ function nice_hair_register_home_salon_layout_settings_acf_options(): void
         'menu_title'  => __('Главная', 'nice-hair'),
         'menu_slug'   => 'header-footer-default',
         'parent_slug' => $parent_slug,
-        'capability'  => 'edit_posts',
+        'capability'  => function_exists('nice_hair_admin_access_acf_capability')
+            ? nice_hair_admin_access_acf_capability('header-footer-default')
+            : 'edit_posts',
         'post_id'     => nice_hair_header_footer_post_id('home'),
     ]);
 
@@ -26,7 +28,9 @@ function nice_hair_register_home_salon_layout_settings_acf_options(): void
         'menu_title'  => __('Salon', 'nice-hair'),
         'menu_slug'   => 'header-footer-salon',
         'parent_slug' => $parent_slug,
-        'capability'  => 'edit_posts',
+        'capability'  => function_exists('nice_hair_admin_access_acf_capability')
+            ? nice_hair_admin_access_acf_capability('header-footer-salon')
+            : 'edit_posts',
         'post_id'     => nice_hair_header_footer_post_id('salon'),
     ]);
 
