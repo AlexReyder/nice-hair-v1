@@ -70,9 +70,10 @@ function nice_hair_user_can_manage_submission_statuses(): bool
 function nice_hair_submission_post_type_capabilities(): array
 {
     return [
-        'edit_post'              => 'nh_edit_submission',
-        'read_post'              => 'nh_read_submission',
-        'delete_post'            => 'nh_delete_submission',
+        'edit_post'              => 'nh_view_submissions',
+        'read_post'              => 'nh_view_submissions',
+        'delete_post'            => 'nh_delete_submissions',
+        'read'                   => 'read',
         'edit_posts'             => 'nh_view_submissions',
         'edit_others_posts'      => 'nh_view_submissions',
         'edit_private_posts'     => 'nh_view_submissions',
