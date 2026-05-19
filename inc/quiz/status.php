@@ -6,8 +6,9 @@ declare(strict_types=1);
  * Submission status model for `nh_price_quiz` and `nh_salon_request`.
  *
  * The status belongs to the submissions domain, not to the access plugin.
- * Access plugin only grants capabilities; the theme owns the status field,
- * status labels and admin rendering.
+ * The theme keeps submissions available to administrators by default; optional
+ * access plugins may override CPT capabilities and grant business capabilities
+ * to non-admin roles.
  */
 
 function nice_hair_submission_post_types(): array
@@ -62,66 +63,29 @@ function nice_hair_get_submission_status(int $post_id): string
 
 function nice_hair_user_can_manage_submission_statuses(): bool
 {
-    return current_user_can('nh_manage_submission_statuses')
-        || current_user_can('nh_edit_submissions')
-        || current_user_can('manage_options');
+    return current_user_can('manage_options')
+        || current_user_can('nh_manage_submission_statuses');
 }
 
-function nice_hair_submission_post_type_capabilities(): array
+function nice_hair_submission_admin_post_type_capabilities(): array
 {
     return [
-        'edit_post'              => 'nh_view_submissions',
-        'read_post'              => 'nh_view_submissions',
-        'delete_post'            => 'nh_delete_submissions',
-        'read'                   => 'read',
-        'edit_posts'             => 'nh_view_submissions',
-        'edit_others_posts'      => 'nh_view_submissions',
-        'edit_private_posts'     => 'nh_view_submissions',
-        'edit_published_posts'   => 'nh_view_submissions',
-        'read_private_posts'     => 'nh_view_submissions',
-        'delete_posts'           => 'nh_delete_submissions',
-        'delete_others_posts'    => 'nh_delete_submissions',
-        'delete_private_posts'   => 'nh_delete_submissions',
-        'delete_published_posts' => 'nh_delete_submissions',
+        'edit_post'              => 'manage_options',
+        'read_post'              => 'manage_options',
+        'delete_post'            => 'manage_options',
+        'edit_posts'             => 'manage_options',
+        'edit_others_posts'      => 'manage_options',
+        'edit_private_posts'     => 'manage_options',
+        'edit_published_posts'   => 'manage_options',
+        'read_private_posts'     => 'manage_options',
+        'delete_posts'           => 'manage_options',
+        'delete_others_posts'    => 'manage_options',
+        'delete_private_posts'   => 'manage_options',
+        'delete_published_posts' => 'manage_options',
         'publish_posts'          => 'do_not_allow',
         'create_posts'           => 'do_not_allow',
     ];
 }
-
-function nice_hair_map_submission_meta_caps(array $caps, string $cap, int $user_id, array $args): array
-{
-    if (! in_array($cap, ['nh_edit_submission', 'nh_read_submission', 'nh_delete_submission'], true)) {
-        return $caps;
-    }
-
-    $post_id = isset($args[0]) ? (int) $args[0] : 0;
-    $post_type = $post_id > 0 ? (string) get_post_type($post_id) : '';
-
-    if (! in_array($post_type, nice_hair_submission_post_types(), true)) {
-        return ['do_not_allow'];
-    }
-
-    if ($cap === 'nh_delete_submission') {
-        return ['nh_delete_submissions'];
-    }
-
-    return ['nh_view_submissions'];
-}
-add_filter('map_meta_cap', 'nice_hair_map_submission_meta_caps', 10, 4);
-
-function nice_hair_grant_submission_caps_to_administrators(): void
-{
-    $administrator = get_role('administrator');
-
-    if (! $administrator) {
-        return;
-    }
-
-    foreach (['nh_view_submissions', 'nh_manage_submission_statuses', 'nh_delete_submissions'] as $capability) {
-        $administrator->add_cap($capability, true);
-    }
-}
-add_action('admin_init', 'nice_hair_grant_submission_caps_to_administrators', 5);
 
 function nice_hair_register_submission_status_acf_field(): void
 {
