@@ -64,6 +64,7 @@ function nice_hair_get_submission_status(int $post_id): string
 function nice_hair_user_can_manage_submission_statuses(): bool
 {
     return current_user_can('manage_options')
+        || current_user_can('edit_posts')
         || current_user_can('nh_manage_submission_statuses');
 }
 
