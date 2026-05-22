@@ -63,9 +63,12 @@ function nice_hair_get_submission_status(int $post_id): string
 
 function nice_hair_user_can_manage_submission_statuses(): bool
 {
-    return current_user_can('manage_options')
+    $can_manage = current_user_can('manage_options')
         || current_user_can('edit_posts')
-        || current_user_can('nh_manage_submission_statuses');
+        || current_user_can('nh_manage_submission_statuses')
+        || current_user_can('nh_edit_submissions');
+
+    return (bool) apply_filters('nice_hair_user_can_manage_submission_statuses', $can_manage);
 }
 
 function nice_hair_submission_admin_post_type_capabilities(): array

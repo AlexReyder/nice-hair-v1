@@ -23,6 +23,8 @@ foreach ($gallery_rows as $gallery_row) {
         continue;
     }
 
+    $item_label = trim((string) ($gallery_row['item_label'] ?? ''));
+
     $image_id = isset($image['ID'])
         ? (int) $image['ID']
         : (isset($image['id']) ? (int) $image['id'] : 0);
@@ -84,6 +86,7 @@ foreach ($gallery_rows as $gallery_row) {
         'url'      => $image_url,
         'full_url' => $full_image_url,
         'alt'      => $image_alt,
+        'label'    => $item_label,
         'width'    => $image_width,
         'height'   => $image_height,
     ];
@@ -154,6 +157,11 @@ if ($gallery_items === [] && ! $preview_mode) {
             <div class="nh-shop-assortment__slider swiper" data-nh-shop-assortment-swiper>
                 <div class="swiper-wrapper nh-shop-assortment__track">
                     <?php foreach ($gallery_items as $gallery_item) : ?>
+                        <?php
+                        $photo_swipe_title = $gallery_item['label'] !== ''
+                            ? $gallery_item['label']
+                            : $gallery_item['alt'];
+                        ?>
                         <div class="swiper-slide nh-shop-assortment__slide">
                             <a
                                 class="nh-shop-assortment__card"
@@ -162,7 +170,7 @@ if ($gallery_items === [] && ! $preview_mode) {
                                 data-nh-shop-assortment-gallery-item
                                 data-nh-shop-assortment-gallery-width="<?php echo esc_attr((string) $gallery_item['width']); ?>"
                                 data-nh-shop-assortment-gallery-height="<?php echo esc_attr((string) $gallery_item['height']); ?>"
-                                data-nh-shop-assortment-gallery-title="<?php echo esc_attr($gallery_item['alt']); ?>"
+                                data-nh-shop-assortment-gallery-title="<?php echo esc_attr($photo_swipe_title); ?>"
                             >
                                 <span class="nh-shop-assortment__media">
                                     <img
@@ -172,6 +180,10 @@ if ($gallery_items === [] && ! $preview_mode) {
                                         loading="lazy"
                                     />
                                 </span>
+
+                                <?php if ($gallery_item['label'] !== '') : ?>
+                                    <span class="nh-shop-assortment__label"><?php echo esc_html($gallery_item['label']); ?></span>
+                                <?php endif; ?>
                             </a>
                         </div>
                     <?php endforeach; ?>

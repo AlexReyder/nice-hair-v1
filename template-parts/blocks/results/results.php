@@ -6,10 +6,26 @@ $eyebrow = get_field('nh_results_eyebrow');
 $title   = get_field('nh_results_title');
 $text_1  = get_field('nh_results_text_1');
 $text_2  = get_field('nh_results_text_2');
-$hide_nav_desktop = (bool) get_field('nh_results_hide_nav_desktop', 'option');
-$hide_nav_tablet  = (bool) get_field('nh_results_hide_nav_tablet', 'option');
-$hide_nav_mobile  = (bool) get_field('nh_results_hide_nav_mobile', 'option');
-$items   = get_field('nh_results_items', 'option');
+
+$results_context = function_exists('nice_hair_get_results_context')
+    ? nice_hair_get_results_context($block ?? [])
+    : 'salon';
+
+$hide_nav_desktop = function_exists('nice_hair_get_results_option_field')
+    ? (bool) nice_hair_get_results_option_field('nh_results_hide_nav_desktop', $results_context, false)
+    : (bool) get_field('nh_results_hide_nav_desktop', 'option');
+
+$hide_nav_tablet = function_exists('nice_hair_get_results_option_field')
+    ? (bool) nice_hair_get_results_option_field('nh_results_hide_nav_tablet', $results_context, false)
+    : (bool) get_field('nh_results_hide_nav_tablet', 'option');
+
+$hide_nav_mobile = function_exists('nice_hair_get_results_option_field')
+    ? (bool) nice_hair_get_results_option_field('nh_results_hide_nav_mobile', $results_context, false)
+    : (bool) get_field('nh_results_hide_nav_mobile', 'option');
+
+$items = function_exists('nice_hair_get_results_option_field')
+    ? nice_hair_get_results_option_field('nh_results_items', $results_context, [])
+    : get_field('nh_results_items', 'option');
 
 if (empty($items) || ! is_array($items)) {
     return;
@@ -17,6 +33,12 @@ if (empty($items) || ! is_array($items)) {
 
 $anchor  = ! empty($block['anchor']) ? $block['anchor'] : 'results';
 $classes = ['nh-salon-results'];
+
+if ($results_context === 'shop') {
+    $classes[] = 'nh-salon-results--shop';
+} else {
+    $classes[] = 'nh-salon-results--salon';
+}
 
 if (! empty($block['className'])) {
     $classes[] = (string) $block['className'];
@@ -37,7 +59,7 @@ if ($hide_nav_mobile) {
 $class_name = implode(' ', array_filter($classes));
 ?>
 
-<section class="<?php echo esc_attr($class_name); ?>" id="<?php echo esc_attr($anchor); ?>">
+<section class="<?php echo esc_attr($class_name); ?>" id="<?php echo esc_attr($anchor); ?>" data-nh-results-context="<?php echo esc_attr($results_context); ?>">
     <div class="nh-salon-results__shell">
         <header class="nh-salon-results__header">
             <?php if ($eyebrow) : ?>
@@ -99,7 +121,7 @@ $class_name = implode(' ', array_filter($classes));
                     $capsules = $item['item_capsules'] ?? '';
                     $comment  = $item['item_comment']  ?? '';
 
-                    $sync_id = 'results-' . (int) $idx;
+                    $sync_id = 'results-' . esc_attr($results_context) . '-' . (int) $idx;
                     ?>
                     <div class="swiper-slide nh-salon-results__slide">
                         <article

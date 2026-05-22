@@ -196,8 +196,8 @@ $developer_url = is_string($credits['developer_url'] ?? null) && trim((string) $
                 <a href="<?php echo esc_url($privacy_url); ?>" class="nh-site-footer__privacy">Privacy Policy</a>
                                     <?php nice_hair_render_cookie_settings_button(); ?>
                 <div class="nh-site-footer__credits">
-                    <p>design: <a href="<?php echo esc_url($designer_url); ?>"><?php echo esc_html($designer_name); ?></a></p>
-                    <p>development: <a href="<?php echo esc_url($developer_url); ?>"><?php echo esc_html($developer_name); ?></a></p>
+                    <p>design: <a href="<?php echo esc_url($designer_url); ?>" target="_blank"><?php echo esc_html($designer_name); ?></a></p>
+                    <p>development: <a href="<?php echo esc_url($developer_url); ?>" target="_blank"><?php echo esc_html($developer_name); ?></a></p>
                 </div>
             </div>
         </div>
