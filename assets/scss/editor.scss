@@ -9,6 +9,7 @@
 @use "sections/shipping/shipping" as shipping-shipping-fe;
 @use "sections/shipping/payment" as shipping-payment-fe;
 @use "sections/shared/legal-page" as shared-legal-page-fe;
+@use "components/shop-whatsapp-cta";
 @use "components/faq" as comp-faq;
 @use "./editor/home-hero";
 @use "./editor/home-one-brand";

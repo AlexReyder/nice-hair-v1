@@ -129,6 +129,12 @@ if ($gallery_items === [] && ! $preview_mode) {
                 </div>
 
                 <div class="nh-shop-assortment__tools">
+                    <?php
+                    get_template_part('template-parts/shop/whatsapp-cta', null, [
+                        'class' => 'nh-shop-assortment__cta',
+                    ]);
+                    ?>
+
                     <?php if ($has_navigation) : ?>
                         <div class="nh-shop-assortment__nav" role="group" aria-label="<?php esc_attr_e('Assortment gallery navigation', 'nice-hair'); ?>">
                             <button

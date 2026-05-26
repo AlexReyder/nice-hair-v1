@@ -24,10 +24,15 @@ $nh_phone = trim((string) ($args['phone'] ?? ''));
 $nh_phone_link = trim((string) ($args['phone_link'] ?? ''));
 $nh_address = trim((string) ($args['address'] ?? ''));
 $nh_modifier = sanitize_html_class((string) ($args['modifier'] ?? ''));
+$nh_show_whatsapp_cta = in_array($nh_modifier, ['custom-hair', 'ready-to-install'], true);
 $nh_classes = ['nh-shop-category-hero'];
 
 if ($nh_modifier !== '') {
     $nh_classes[] = 'nh-shop-category-hero--' . $nh_modifier;
+}
+
+if ($nh_show_whatsapp_cta) {
+    $nh_classes[] = 'nh-shop-category-hero--has-whatsapp-cta';
 }
 
 if ($nh_title === '') {
@@ -86,6 +91,14 @@ if ($nh_title === '') {
 
         <?php if ($nh_description !== '') : ?>
             <p class="nh-shop-category-hero__subtitle"><?php echo esc_html($nh_description); ?></p>
+        <?php endif; ?>
+
+        <?php if ($nh_show_whatsapp_cta) : ?>
+            <?php
+            get_template_part('template-parts/shop/whatsapp-cta', null, [
+                'class' => 'nh-shop-category-hero__cta',
+            ]);
+            ?>
         <?php endif; ?>
     </div>
 </section>

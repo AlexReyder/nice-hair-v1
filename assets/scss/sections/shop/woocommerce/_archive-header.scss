@@ -41,9 +41,17 @@
   }
 }
 
+.nh-shop-category-hero--has-whatsapp-cta {
+  .nh-shop-category-hero__shell {
+    min-height: clamp(360px, 27vw, 470px);
+    padding-bottom: clamp(96px, 8vw, 150px);
+  }
+}
+
 .nh-shop-category-hero__top,
 .nh-shop-category-hero__title,
-.nh-shop-category-hero__subtitle {
+.nh-shop-category-hero__subtitle,
+.nh-shop-category-hero__cta {
   position: relative;
   z-index: 1;
 }
@@ -123,6 +131,13 @@
   font-size: clamp(14px, 1.1vw, 18px);
   line-height: 1.55;
   color: rgba(255, 255, 255, 0.45);
+}
+
+.nh-shop-category-hero__cta {
+  position: absolute;
+  right: 0;
+  top: clamp(168px, 14vw, 235px);
+  max-width: 390px;
 }
 
 .nh-shop-archive {
@@ -369,10 +384,25 @@
   }
 }
 
+@media (max-width: 1024px) {
+  .nh-shop-category-hero__cta {
+    right: 0;
+    top: clamp(180px, 22vw, 240px);
+    max-width: 360px;
+  }
+}
+
 @media (max-width: 767px) {
   .nh-shop-category-hero__shell {
     width: calc(100% - 40px);
     padding: 60px 0 0 0;
+  }
+
+  .nh-shop-category-hero--has-whatsapp-cta {
+    .nh-shop-category-hero__shell {
+      min-height: 0;
+      padding-bottom: 56px;
+    }
   }
 
   .nh-shop-category-hero__top {
@@ -390,5 +420,13 @@
 
   .nh-shop-category-hero__subtitle {
     max-width: 100%;
+  }
+
+  .nh-shop-category-hero__cta {
+    position: relative;
+    top: auto;
+    right: auto;
+    max-width: 100%;
+    margin-top: 18px;
   }
 }
